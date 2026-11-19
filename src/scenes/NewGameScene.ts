@@ -76,9 +76,8 @@ export class NewGameScene extends Phaser.Scene {
       position: 'fixed',
       left: '50%',
       transform: 'translateX(-50%)',
-      width: 'min(60vw, 420px)',
-      fontSize: 'min(5vw, 28px)',
-      padding: '8px 12px',
+      boxSizing: 'border-box',
+      padding: '0.2em 0.5em',
       textAlign: 'center',
       background: '#14111c',
       color: '#ece6f2',
@@ -87,9 +86,15 @@ export class NewGameScene extends Phaser.Scene {
       fontFamily: Theme.font,
       zIndex: '10',
     } as CSSStyleDeclaration);
+    // キャンバスの表示サイズに合わせて入力欄の位置・大きさを決める（1920×1080 基準の 600×80 相当）
     const place = () => {
       const r = this.game.canvas.getBoundingClientRect();
-      el.style.top = `${r.top + r.height * (730 / 1080)}px`;
+      const k = r.height / 1080;
+      el.style.top = `${r.top + 735 * k}px`;
+      el.style.left = `${r.left + r.width / 2}px`;
+      el.style.width = `${600 * k}px`;
+      el.style.height = `${84 * k}px`;
+      el.style.fontSize = `${44 * k}px`;
     };
     place();
     this.scale.on('resize', place);

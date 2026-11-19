@@ -71,7 +71,6 @@ export class TitleScene extends Phaser.Scene {
       { text: 'ロード', disabled: !anySlot },
     ];
     this.list.setItems(items);
-    if (!auto) this.list.select(1);
     this.list.onConfirm = (_it, i) => {
       if (i === 0) void this.loadSlot('auto');
       else if (i === 1) this.newGame();

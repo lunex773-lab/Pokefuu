@@ -153,8 +153,9 @@ export class ListView extends Phaser.GameObjects.Container implements InputConsu
   setItems(items: ListItem[], keepIndex = false): void {
     this.items = items;
     if (!keepIndex) {
-      this.index = 0;
-      this.scroll = 0;
+      // 選べない項目は飛ばして、最初に選べる項目を選択状態にする
+      this.index = Math.max(0, items.findIndex((it) => !it.disabled));
+      this.scroll = Math.max(0, this.index - this.visibleRows + 1);
     }
     this.index = Math.max(0, Math.min(this.index, items.length - 1));
     this.render();
