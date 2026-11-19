@@ -9,7 +9,7 @@
 **クリアまで約10〜12時間**（全8章＋Final）を目標に制作中です。現在は **Chapter 1「学校」・Chapter 2「住宅街」** まで遊べます。
 物語全体の構成とエンディング条件は [docs/STORY.md](docs/STORY.md) にあります。
 
-🎮 **遊ぶ（ブラウザ／スマホ横画面）**：GitHub Pages を有効にすると `https://<ユーザー名>.github.io/<リポジトリ名>/` で公開されます（main に push するたび自動更新）。
+🎮 **遊ぶ（ブラウザ／スマホ横画面）**：https://lunex773-lab.github.io/Pokefuu/ （main に push するたび自動で更新されます）
 
 ---
 
