@@ -161,7 +161,8 @@
    "script": "back_loop",
    "when": {
     "notFlag": "loop_broken"
-   }
+   },
+   "once": false
   },
   {
    "id": "first_enter",
@@ -178,6 +179,7 @@
  "warps": [
   {
    "id": "hidden_down",
+   "revealFlag": "revealed_back2f_door",
    "x": 13,
    "y": 3,
    "w": 1,
@@ -190,8 +192,7 @@
    "when": {
     "flag": "revealed_back2f_door"
    },
-   "transition": "distort",
-   "revealFlag": "revealed_back2f_door"
+   "transition": "distort"
   },
   {
    "id": "east_down",

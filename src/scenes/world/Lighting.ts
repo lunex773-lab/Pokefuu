@@ -99,7 +99,7 @@ export class Lighting {
       let inten = on ? 1 : 0;
       if (on && l.flicker) inten = 0.75 + Math.sin(this.flickerT * 13 + (l.phase ?? 0)) * 0.12 + Math.sin(this.flickerT * 31 + (l.phase ?? 0)) * 0.1;
       l.intensity = inten;
-      l.glow?.setAlpha(inten * Math.min(0.55, dark * 0.75)).setVisible(visible(l));
+      l.glow?.setAlpha(inten * Math.min(0.4, dark * 0.55)).setVisible(visible(l));
     }
 
     if (dark < 0.02) {

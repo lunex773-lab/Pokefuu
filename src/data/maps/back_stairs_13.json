@@ -158,7 +158,8 @@
    "script": "stairs_boss",
    "when": {
     "notFlag": "boss_cleared"
-   }
+   },
+   "once": false
   }
  ],
  "warps": [

@@ -183,8 +183,7 @@
    "script": "school_class_hint",
    "when": {
     "notFlag": "class_done"
-   },
-   "once": false
+   }
   }
  ],
  "warps": [

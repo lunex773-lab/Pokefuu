@@ -43,7 +43,7 @@ const gens: Record<string, Gen> = {
     pc.speckle(ox, oy, T, T, [c[1], c[2]], 0.35, rnd);
   },
   roadline: (pc, ox, oy, c, rnd) => {
-    gens.asphalt(pc, ox, oy, c, rnd, 0);
+    gens.asphalt(pc, ox, oy, [c[0], c[1], shadeHex(c[0], 0.88)], rnd, 0);
     pc.rect(ox + 4, oy + 15, 24, 2, c[2]);
   },
   crosswalk: (pc, ox, oy, c, rnd) => {

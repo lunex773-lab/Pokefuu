@@ -184,8 +184,10 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     this.spawnNpcs();
     this.shadows = new SunShadows(this);
     this.lighting = new Lighting(this, viewW, viewH);
+    // 裏層には電気が通っていない：電源式の光（街灯・窓）は灯らない
+    const tileLights = def.layer === 'back' ? this.map.tileLights().filter((l) => !l.power) : this.map.tileLights();
     this.lighting.setLights([
-      ...this.map.tileLights(),
+      ...tileLights,
       ...(def.lights ?? []).filter((l) => s.check(l.when)).map((l) => ({ ...l, x: (l.x + 0.5) * T, y: (l.y + 0.5) * T })),
     ]);
     this.weatherFx = new WeatherFx(this, viewW, viewH);

@@ -151,6 +151,9 @@
     "value": true
    },
    {
+    "cmd": "unlockWeather"
+   },
+   {
     "cmd": "say",
     "speaker": "ナナシ",
     "text": "……あっち。かべの むこう。……『視て』。"
@@ -430,6 +433,15 @@
      {
       "cmd": "say",
       "text": "（赤い目の『気配』に触れると怪異との戦闘になる。暗闇では見えにくい）"
+     },
+     {
+      "cmd": "say",
+      "text": "……二階の廊下のねじれが、ほどけた気がする。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "loop_broken",
+      "value": true
      },
      {
       "cmd": "setFlag",

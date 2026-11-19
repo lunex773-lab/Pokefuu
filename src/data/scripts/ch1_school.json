@@ -258,6 +258,21 @@
   ]
  },
  {
+  "id": "school_minato_after",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "……昨日のこと、夢じゃないよな。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "都市伝説調査会としては、続きを調べないわけにはいかない。……また付き合えよ、{name}。"
+   }
+  ]
+ },
+ {
   "id": "school_music_student",
   "commands": [
    {
@@ -418,9 +433,6 @@
     "cmd": "setFlag",
     "key": "ch1_entered_back",
     "value": true
-   },
-   {
-    "cmd": "unlockWeather"
    },
    {
     "cmd": "warp",

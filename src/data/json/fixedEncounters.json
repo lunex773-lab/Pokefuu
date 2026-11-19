@@ -18,11 +18,11 @@
   "enemies": [
    {
     "kaii": "yonakipiano",
-    "level": 9
+    "level": 8
    },
    {
     "kaii": "gakubuchi",
-    "level": 7
+    "level": 6
    }
   ],
   "canFlee": false
@@ -42,15 +42,15 @@
   "enemies": [
    {
     "kaii": "kageboushi",
-    "level": 9
+    "level": 8
    },
    {
     "kaii": "juusandan",
-    "level": 13
+    "level": 12
    },
    {
     "kaii": "kageboushi",
-    "level": 9
+    "level": 8
    }
   ],
   "canFlee": false,

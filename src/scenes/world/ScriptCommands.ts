@@ -1,5 +1,6 @@
 import { GameConfig } from '@/config/GameConfig';
 import { healFull, kaiiStats, MAX_EN } from '@/domain/creature/Kaii';
+import { SCRIPT_COMMANDS } from '@/domain/script/commands';
 import type { ScriptRunner } from '@/domain/script/ScriptRunner';
 import type { Direction, ScriptCommand, WeatherId } from '@/domain/types';
 import type { WorldScene } from '../WorldScene';
@@ -233,4 +234,9 @@ export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): voi
   runner.register('ending', (c) => {
     w.ctx.bus.emit('ending:reached', { id: str(c.id) });
   });
+
+  if (import.meta.env.DEV) {
+    const missing = SCRIPT_COMMANDS.filter((c) => !runner.has(c));
+    if (missing.length) console.warn('[Script] 未実装のコマンド:', missing);
+  }
 }

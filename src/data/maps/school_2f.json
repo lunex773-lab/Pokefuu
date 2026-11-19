@@ -102,6 +102,22 @@
    "when": {
     "notFlag": "class_done"
    }
+  },
+  {
+   "id": "minato_after",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 24,
+   "y": 3,
+   "facing": "right",
+   "script": "school_minato_after",
+   "when": {
+    "flag": "ch1_clear",
+    "phase": [
+     "evening",
+     "night"
+    ]
+   }
   }
  ],
  "interactables": [
