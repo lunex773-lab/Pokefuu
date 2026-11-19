@@ -124,7 +124,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       if (!c) return;
       const sp = this.ctx.reg.species(c.kaii.speciesId);
       const scale = sp.boss ? 5.5 : GameConfig.battleSpriteScale;
-      const y = sp.boss ? ENEMY_Y - 20 : ENEMY_Y;
+      const y = sp.boss ? ENEMY_Y + 25 : ENEMY_Y;
       const shadow = this.add.ellipse(ENEMY_X[i], y + 32 * scale - 10, 60 * scale, 10 * scale, 0x000000, 0.4);
       shadow.setDepth(1);
       const sprite = this.add.image(ENEMY_X[i], y, sp.sprite).setScale(scale).setDepth(2);

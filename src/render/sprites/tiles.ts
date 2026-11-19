@@ -489,7 +489,8 @@ export function buildTileAtlas(defs: TileDef[]): TileAtlas {
       pc.mapColors({ x, y, w: T, h: T }, backLayerColor);
       // 裏層の亀裂
       const r2 = seeded(hashString(def.id + 'back'));
-      if (def.gen !== 'empty' && r2() < 0.5) {
+      // 亀裂は壁など『立っているもの』だけに入れる（床に入れると模様が目立ちすぎる）
+      if (def.gen !== 'empty' && def.solid && r2() < 0.6) {
         let cx = x + Math.floor(r2() * T);
         for (let yy = y + Math.floor(r2() * 12); yy < y + T && r2() < 0.93; yy++) {
           if (pc.alpha(cx, yy) > 0) pc.set(cx, yy, mixHex('#5a0a18', '#000000', r2() * 0.4));

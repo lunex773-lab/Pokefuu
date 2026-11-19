@@ -135,13 +135,15 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     if (fades) await this.ui.fade('black', transition === 'distort' ? 500 : 260);
     const def = await this.ctx.reg.map(mapId);
     const prevLayer = this.mapDef?.layer;
+    const prevFixed = this.mapDef?.fixedPhase;
     this.teardownMap();
     this.mapDef = def;
     this.buildMap(def, tx, ty, facing);
     const s = this.session;
     s.state.player.position = { mapId, x: tx, y: ty, facing };
     s.clock.setOverride(def.fixedPhase);
-    if (prevLayer !== def.layer || (def.weather && !def.weather.includes(s.weather.current))) this.rollWeather();
+    // 層や「歪んだ時間帯」が変わったら天候を引き直す（赤い月などの発生機会）
+    if (prevLayer !== def.layer || prevFixed !== def.fixedPhase || (def.weather && !def.weather.includes(s.weather.current))) this.rollWeather();
     this.applyEnvironment(true);
     this.ui.location = def.name;
     this.ui.backLayer = def.layer === 'back';
