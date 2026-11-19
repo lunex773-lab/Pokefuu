@@ -113,6 +113,7 @@ export class AudioManager {
     this.ambLayers = [];
     this.timers.forEach((id) => window.clearTimeout(id));
     this.timers = [];
+    if (p.kind === 'none') return;
 
     if (p.back) {
       this.ambLayers.push(this.drone(46 + p.danger * 2, 0.05 + p.danger * 0.012));

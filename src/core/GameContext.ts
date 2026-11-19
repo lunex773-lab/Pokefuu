@@ -15,6 +15,8 @@ export interface Settings extends AudioSettings {
   textSpeed: number;
   screenShake: boolean;
   showFps: boolean;
+  /** high = ポストエフェクトあり / low = なし（軽量） / auto = FPSを見て自動で切替 */
+  quality: 'auto' | 'high' | 'low';
 }
 
 const defaultSettings: Settings = {
@@ -25,6 +27,7 @@ const defaultSettings: Settings = {
   textSpeed: 1,
   screenShake: true,
   showFps: false,
+  quality: 'auto',
 };
 
 /**

@@ -40,20 +40,19 @@ export function buildConeTexture(size = 128): HTMLCanvasElement {
   return c;
 }
 
-/** タイル可能な霧のノイズ */
+/** タイル可能な霧のノイズ（2オクターブのバリューノイズ） */
 export function buildFogTexture(size = 128): HTMLCanvasElement {
   const pc = new PixelCanvas(size, size);
   const rnd = seeded(4242);
-  const grid = 8;
-  const cells = size / grid;
-  const v: number[][] = [];
-  for (let y = 0; y < grid; y++) {
-    v.push([]);
-    for (let x = 0; x < grid; x++) v[y].push(rnd());
-  }
   const smooth = (t: number) => t * t * (3 - 2 * t);
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
+  const octave = (grid: number) => {
+    const v: number[][] = [];
+    for (let y = 0; y < grid; y++) {
+      v.push([]);
+      for (let x = 0; x < grid; x++) v[y].push(rnd());
+    }
+    const cells = size / grid;
+    return (x: number, y: number) => {
       const gx = x / cells;
       const gy = y / cells;
       const x0 = Math.floor(gx) % grid;
@@ -64,8 +63,15 @@ export function buildFogTexture(size = 128): HTMLCanvasElement {
       const ty = smooth(gy - Math.floor(gy));
       const a = v[y0][x0] * (1 - tx) + v[y0][x1] * tx;
       const b = v[y1][x0] * (1 - tx) + v[y1][x1] * tx;
-      const n = a * (1 - ty) + b * ty;
-      pc.set(x, y, [220, 222, 232, Math.floor(Math.max(0, n - 0.25) * 200)]);
+      return a * (1 - ty) + b * ty;
+    };
+  };
+  const o1 = octave(4);
+  const o2 = octave(8);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const n = o1(x, y) * 0.65 + o2(x, y) * 0.35;
+      pc.set(x, y, [220, 222, 232, Math.floor(Math.max(0, n - 0.3) * 260)]);
     }
   }
   return pc.toCanvas();

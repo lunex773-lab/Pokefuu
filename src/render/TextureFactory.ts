@@ -92,9 +92,11 @@ export class TextureFactory {
   }
 
   private buildFx(): void {
-    this.addCanvas(TEX.light, buildLightTexture(128));
-    this.addCanvas(TEX.cone, buildConeTexture(128));
-    this.addCanvas(TEX.fog, buildFogTexture(128));
+    // 光と霧はなめらかに見せたいので線形補間（ドット絵本体は最近傍のまま）
+    const linear = (t: Phaser.Textures.CanvasTexture | null) => t?.setFilter(Phaser.Textures.FilterMode.LINEAR);
+    linear(this.addCanvas(TEX.light, buildLightTexture(128)));
+    linear(this.addCanvas(TEX.cone, buildConeTexture(128)));
+    linear(this.addCanvas(TEX.fog, buildFogTexture(128)));
     this.addCanvas(TEX.rain, buildRainTexture());
     this.addCanvas(TEX.dot, buildDotTexture('#ffffff', 2));
     this.addCanvas(TEX.ember, buildDotTexture('#ff5070', 2));
