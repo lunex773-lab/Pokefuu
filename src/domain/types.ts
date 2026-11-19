@@ -162,6 +162,8 @@ export interface ItemDef {
     slot: 'light' | 'charm' | 'kaiiCharm';
     statMul?: Partial<Record<StatKey, number>>;
     lightRadius?: number;
+    /** 向いている方向を照らす（懐中電灯）。false なら足元を照らすだけ */
+    cone?: boolean;
     sanityDrainMul?: number;
   };
   icon: string;
@@ -323,6 +325,59 @@ export interface MapDef {
   onEnter?: string;
   /** 「視る」で見える歪みの演出点 */
   distortions?: { x: number; y: number }[];
+  /** BGM（music.json の曲ID）。省略時は層・屋内外から自動で決まる */
+  music?: string;
+  /** 夜（night / midnight）の BGM。省略時は music と同じ */
+  musicNight?: string;
+}
+
+// ---------------------------------------------------------------- 音楽（BGM）
+
+/** 手続き生成の楽器 */
+export type InstrumentId = 'musicbox' | 'piano' | 'pad' | 'bell' | 'pluck' | 'pulse' | 'breath' | 'bass';
+
+/** 1つのパート（声部） */
+export interface MusicVoiceDef {
+  inst: InstrumentId;
+  /**
+   * 音列のフレーズ。1要素＝1フレーズで、1周ごとに次のフレーズへ進む。
+   * 書式：音名＋オクターブ（A4, C#5, Bb3）、. は休符、:n で長さ（単位数・省略時1）、+ で和音、| は読みやすさ用の区切り（無視）
+   */
+  phrases: string[];
+  /** 音量（0〜1、楽器の基準音量に掛ける） */
+  vol: number;
+  /** 各音が鳴る確率（間引いて静けさを出す。省略時1） */
+  prob?: number;
+  /** 半音ずれた「狂った音」になる確率（不気味さ） */
+  sour?: number;
+  /** 音程の揺れ（セント）。古いテープ・壊れたオルゴールの感じ */
+  wobble?: number;
+  /** 1フレーズ演奏し終えたあとの休み（単位数）[最小, 最大]。他のパートと同期しない声部だけに使う */
+  rest?: [number, number];
+  /** 演奏開始までの待ち（単位数） */
+  delay?: number;
+  /** 移調（半音） */
+  transpose?: number;
+  /** フレーズの選び方（省略時 cycle＝順番） */
+  order?: 'cycle' | 'random';
+}
+
+export interface MusicTrackDef {
+  id: string;
+  name: string;
+  /** 1分あたりの「単位」の数（単位＝音列の長さ1） */
+  bpm: number;
+  /** 全体の音量 */
+  vol: number;
+  /** 残響の量（0〜1） */
+  reverb: number;
+  /** やまびこ（ディレイ）の量（0〜1） */
+  echo?: number;
+  /** やまびこの間隔（単位数、省略時3） */
+  echoUnits?: number;
+  /** こもらせる（遠くで鳴っている感じ）ローパスの周波数 Hz */
+  lowpass?: number;
+  voices: MusicVoiceDef[];
 }
 
 // ---------------------------------------------------------------- スクリプト（イベント）

@@ -44,7 +44,8 @@ export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): voi
     w.pulseFx(num(c.intensity, 1));
   });
   runner.register('sfx', (c) => w.ctx.audio.sfx(str(c.id)));
-  runner.register('music', (c) => w.ctx.audio.setMusic((c.id as string | null) ?? null));
+  // イベント中の BGM（null で無音）。イベントが終わると場所の BGM に戻る
+  runner.register('music', (c) => w.setMusicOverride((c.id as string | null) ?? null));
   runner.register('title', async (c) => {
     visual();
     await ui().titleCard(fmt(c.text), fmt(c.sub));

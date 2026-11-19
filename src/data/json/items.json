@@ -192,7 +192,8 @@
   "description": "明るい懐中電灯。暗闇を広く照らす。",
   "equip": {
    "slot": "light",
-   "lightRadius": 120
+   "lightRadius": 120,
+   "cone": true
   }
  },
  {

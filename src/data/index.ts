@@ -10,6 +10,7 @@ import glossary from './json/glossary.json';
 import items from './json/items.json';
 import kaii from './json/kaii.json';
 import memories from './json/memories.json';
+import music from './json/music.json';
 import npcSprites from './json/npcSprites.json';
 import recipes from './json/recipes.json';
 import shops from './json/shops.json';
@@ -32,6 +33,7 @@ export const gameData = {
   items,
   kaii,
   memories,
+  music,
   npcSprites,
   recipes,
   shops,

@@ -15,6 +15,7 @@ import { evaluate } from '@/domain/world/Conditions';
 import { resolveEnding } from '@/domain/progress/Endings';
 import { formatText } from '@/domain/script/format';
 import { phaseAt } from '@/domain/world/Clock';
+import { noteToMidi, parseSequence, resolveAreaMusic, sequenceUnits } from '@/domain/audio/music';
 
 const reg = createRegistry();
 let uid = 0;
@@ -388,5 +389,36 @@ describe('スクリプトランナー', () => {
     await r.run('main');
     expect(log).toEqual(['a', 'else', 'sub']);
     expect(r.running).toBe(false);
+  });
+});
+
+describe('BGM の音列', () => {
+  it('音名を MIDI 番号に変換できる', () => {
+    expect(noteToMidi('A4')).toBe(69);
+    expect(noteToMidi('C4')).toBe(60);
+    expect(noteToMidi('C#5')).toBe(73);
+    expect(noteToMidi('Bb3')).toBe(58);
+    expect(noteToMidi('A1')).toBe(33);
+    expect(() => noteToMidi('H2')).toThrow();
+  });
+
+  it('音列を読める（休符・長さ・和音・区切り）', () => {
+    const steps = parseSequence('E5:2 A5 | . C4+E4+G4:4 .:3');
+    expect(steps.map((s) => s.units)).toEqual([2, 1, 1, 4, 3]);
+    expect(steps[2].notes).toEqual([]);
+    expect(steps[3].notes).toEqual([60, 64, 67]);
+    expect(sequenceUnits(steps)).toBe(11);
+    expect(() => parseSequence('A4:0')).toThrow();
+  });
+
+  it('場所と時間帯で BGM が決まる（指定が無ければ層・屋内外から）', () => {
+    const base = { layer: 'reality' as const, indoor: false, dangerLevel: 0 };
+    expect(resolveAreaMusic({ ...base, music: 'town', musicNight: 'town_night' }, 'day')).toBe('town');
+    expect(resolveAreaMusic({ ...base, music: 'town', musicNight: 'town_night' }, 'midnight')).toBe('town_night');
+    expect(resolveAreaMusic({ ...base, music: 'home' }, 'night')).toBe('home');
+    expect(resolveAreaMusic(base, 'night')).toBe('town_night');
+    expect(resolveAreaMusic({ ...base, indoor: true }, 'day')).toBe('unease');
+    expect(resolveAreaMusic({ layer: 'back', indoor: true, dangerLevel: 3 }, 'midnight')).toBe('back');
+    expect(resolveAreaMusic({ layer: 'back', indoor: true, dangerLevel: 5 }, 'midnight')).toBe('back_deep');
   });
 });

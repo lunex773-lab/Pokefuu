@@ -11,7 +11,7 @@ project_build の「Claudeへの要求」に沿って設計しています。
 | ScriptableObject / DataAsset 相当 | 型付き JSON ＋ `DataRegistry`（参照窓口）。`tests/data.test.ts` で参照切れを検出 |
 | マルチプラットフォーム | Web 技術で実装。入力は `InputManager` で抽象化、保存先は `StorageAdapter` で差し替え可能。画面は高さ1080固定・幅は端末の縦横比で決定（`src/config/Screen.ts`）し、UI はセーフエリアの内側に置く |
 | スマホ60FPS維持 | ワールド解像度（640×360）でライティング、画面外の光源は描かない、FPS が落ちたら自動で画面エフェクトを無効化 |
-| メモリ最適化 | マップは章ごとに分割ビルド・遅延読み込み（直近4枚のみキャッシュ）。音声ファイルを持たない手続き生成オーディオ |
+| メモリ最適化 | マップは章ごとに分割ビルド・遅延読み込み（直近4枚のみキャッシュ）。音声ファイルを持たない手続き生成オーディオ（BGM も `music.json` の音列から合成） |
 | アニメーション管理 | 人物スプライトは `TextureFactory` で一括生成・アニメ登録（キー規約 `<sprite>_walk_<dir>`） |
 | セーブデータ管理 | バージョン付きスキーマ＋マイグレーション表＋チェックサム（破損検出）。3スロット＋オートセーブ |
 | 拡張性 | 新しい怪異・マップ・イベント・実績はデータ追加のみ。新しい演出は `ScriptCommands` に1つ登録するだけ |
@@ -48,6 +48,7 @@ src/
 │   ├── fx/DistortPipeline.ts   画面エフェクト（歪み・色収差・ビネット・グレイン）
 │   └── TextureFactory.ts       生成物を Phaser テクスチャに登録
 ├── audio/AudioManager.ts     手続き生成の環境音・効果音
+├── audio/MusicPlayer.ts      BGM の先読み予約再生と楽器の合成（音列の解析は domain/audio）
 ├── input/InputManager.ts     キーボード／仮想スティック／ボタンの統合
 ├── scenes/                   Phaser シーン（表示と入力だけ）
 │   ├── WorldScene.ts           探索

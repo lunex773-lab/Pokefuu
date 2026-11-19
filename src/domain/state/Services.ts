@@ -72,6 +72,12 @@ export class PlayerService {
     return (id && this.reg.items.get(id)?.equip?.lightRadius) || 48;
   }
 
+  /** 懐中電灯のように前方を照らせるか */
+  get lightCone(): boolean {
+    const id = this.state.player.equipment.light;
+    return !!(id && this.reg.items.get(id)?.equip?.cone);
+  }
+
   get sanityDrainMul(): number {
     const id = this.state.player.equipment.charm;
     return (id && this.reg.items.get(id)?.equip?.sanityDrainMul) || 1;

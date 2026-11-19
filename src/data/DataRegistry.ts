@@ -10,6 +10,7 @@ import type {
   KaiiSpeciesDef,
   MapDef,
   MemoryDef,
+  MusicTrackDef,
   NpcSpriteDef,
   RecipeDef,
   ScriptDef,
@@ -45,6 +46,7 @@ export interface GameData {
   glossary: GlossaryDef[];
   endings: EndingDef[];
   npcSprites: NpcSpriteDef[];
+  music: MusicTrackDef[];
 }
 
 export type MapLoader = (id: string) => Promise<MapDef>;
@@ -79,6 +81,7 @@ export class DataRegistry {
   readonly achievements: Map<string, AchievementDef>;
   readonly memories: Map<string, MemoryDef>;
   readonly npcSprites: Map<string, NpcSpriteDef>;
+  readonly music: Map<string, MusicTrackDef>;
   private scripts = new Map<string, ScriptDef>();
   private mapCache = new Map<string, MapDef>();
 
@@ -100,6 +103,7 @@ export class DataRegistry {
     this.achievements = indexBy(data.achievements, 'achievement');
     this.memories = indexBy(data.memories, 'memory');
     this.npcSprites = indexBy(data.npcSprites, 'npcSprite');
+    this.music = indexBy(data.music, 'music');
     this.tilesByChar = new Map();
     for (const t of data.tiles) {
       if (this.tilesByChar.has(t.char)) throw new Error(`[DataRegistry] duplicate tile char: ${t.char}`);

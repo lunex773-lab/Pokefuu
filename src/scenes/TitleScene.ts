@@ -21,6 +21,8 @@ export class TitleScene extends Phaser.Scene {
   create(): void {
     this.ctx = this.registry.get('ctx') as GameContext;
     this.started = false;
+    // 音声が使える状態（メニューから戻ってきた等）ならすぐ、まだなら最初のタップで子守唄が流れる
+    this.ctx.audio.setMusic('title');
     this.cameras.main.setBackgroundColor('#05040a');
     // 赤い月と霧、校舎のシルエット
     const mx = UI.W - 420;
@@ -103,7 +105,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private newGame(): void {
-    this.ctx.audio.setMusic(null);
+    // 名前入力の間も子守唄を流し続ける（家に着いたらイベント側で無音になる）
     this.scene.start('NewGame');
   }
 

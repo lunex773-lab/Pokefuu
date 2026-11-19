@@ -7,6 +7,8 @@
  "indoor": false,
  "dangerLevel": 0,
  "ambience": "town",
+ "music": "town",
+ "musicNight": "town_night",
  "weather": [
   "clear",
   "rain",

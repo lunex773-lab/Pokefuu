@@ -9,6 +9,7 @@
  "fixedPhase": "midnight",
  "palette": "back",
  "ambience": "back_house",
+ "music": "back",
  "weather": [
   "clear",
   "redmoon"

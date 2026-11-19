@@ -7,6 +7,7 @@
  "indoor": true,
  "dangerLevel": 0,
  "ambience": "home",
+ "music": "home",
  "ambientDarkness": 0.0,
  "ground": [
   "wwwwwwwwwwwwww",

@@ -7,6 +7,7 @@
  "indoor": true,
  "dangerLevel": 0,
  "ambience": "shop",
+ "music": "shop",
  "ground": [
   "qqqqqqqqqqqqq",
   "qqqqqqqqqqqqq",

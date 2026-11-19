@@ -51,6 +51,7 @@ export class GameContext {
     this.save = new SaveManager(storage, GameConfig.save.keyPrefix, GameConfig.save.version, migrations);
     this.settings = { ...defaultSettings };
     this.audio = new AudioManager(this.settings);
+    this.audio.setTracks(reg.data.music);
     this.bus.on('audio:sfx', ({ id, volume }) => this.audio.sfx(id, volume));
   }
 

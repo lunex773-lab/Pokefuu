@@ -9,6 +9,7 @@
  "fixedPhase": "evening",
  "palette": "back",
  "ambience": "back_town",
+ "music": "back",
  "weather": [
   "clear",
   "fog",

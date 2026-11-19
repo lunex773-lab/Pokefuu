@@ -33,6 +33,9 @@ export class MenuScene extends Phaser.Scene {
   private main!: ListView;
   private sub!: ListView;
   private subBg!: Phaser.GameObjects.Graphics;
+  private subBlock!: Phaser.GameObjects.Zone;
+  /** ポップアップ表示中だけ設定される（外側タップ・戻るで呼ぶ） */
+  private subCancel?: () => void;
   private title!: Phaser.GameObjects.Text;
   private detail!: Phaser.GameObjects.Text;
   private detailImg!: Phaser.GameObjects.Image;
@@ -68,8 +71,11 @@ export class MenuScene extends Phaser.Scene {
     this.money = label(this, L.mainX + L.mainW - 30, 58, '', Theme.size.s, Theme.color.gold).setOrigin(1, 0);
     this.detailImg = this.add.image(L.detailX + 330, 240, '__DEFAULT').setVisible(false);
     this.detail = label(this, L.detailX + 30, 60, '', Theme.size.s, Theme.color.text);
-    this.tabs = new ListView(this, L.tabsX + 20, 60, 360, 86, Math.min(11, Math.floor((panelH - 40) / 86)), sfx);
     this.main = new ListView(this, L.mainX + 20, 130, L.mainW - 40, 98, Math.floor((L.bottom - 150) / 98), sfx);
+    // ポップアップ表示中は後ろを触れなくし、外側をタップしたら閉じる
+    this.subBlock = this.add.zone(0, 0, UI.W, UI.H).setOrigin(0).setDepth(19).setInteractive();
+    this.subBlock.disableInteractive();
+    this.subBlock.on('pointerup', () => this.subCancel?.());
     this.subBg = this.add.graphics().setDepth(20);
     this.sub = new ListView(this, 0, 0, 560, 86, 7, sfx);
     this.sub.setDepth(21).setVisible(false);
@@ -90,7 +96,16 @@ export class MenuScene extends Phaser.Scene {
             { text: 'タイトルへ', open: () => this.toTitle() },
           ];
     tabs.push({ text: '閉じる', open: () => this.close() });
+    // 「閉じる」まで全部のタブが必ず画面に収まる行の高さにする（iPhone はホームバーの分だけ縦が狭い）
+    const tabRowH = Math.min(86, Math.floor((panelH - 50) / tabs.length));
+    this.tabs = new ListView(this, L.tabsX + 20, 60, 360, tabRowH, tabs.length, sfx);
     this.tabs.setItems(tabs.map((t) => ({ text: t.text })));
+    // 中央のリストを操作中でもタブはタップできる（タッチ操作ではキャンセルボタンが無いため）
+    this.tabs.onInactiveTap = () => {
+      if (this.subCancel) return false;
+      this.activateTabs();
+      return true;
+    };
     this.tabs.onSelect = (_it, i) => {
       if (i < tabs.length - 1 && !['タイトルへ'].includes(tabs[i].text)) tabs[i].open();
     };
@@ -118,6 +133,13 @@ export class MenuScene extends Phaser.Scene {
     this.tabs.active = false;
     this.main.active = true;
     this.ctx.input.push(this.main);
+  }
+
+  /** タブを操作できる状態に戻す（セーブ専用モードでも閉じない） */
+  private activateTabs(): void {
+    this.ctx.input.remove(this.main);
+    this.main.active = true;
+    this.tabs.active = true;
   }
 
   private focusTabs(): void {
@@ -164,16 +186,23 @@ export class MenuScene extends Phaser.Scene {
     this.sub.setPosition(x, y).setVisible(true);
     this.sub.setItems(items);
     this.ctx.input.push(this.sub);
+    this.subBlock.setInteractive();
     return new Promise((res) => {
       const done = (i: number) => {
         this.ctx.input.remove(this.sub);
         this.sub.setVisible(false);
         this.subBg.clear();
+        this.subBlock.disableInteractive();
+        this.subCancel = undefined;
         t.destroy();
         res(i);
       };
       this.sub.onConfirm = (_it, i) => done(i);
       this.sub.onCancel = () => done(-1);
+      this.subCancel = () => {
+        this.ctx.audio.sfx('cancel');
+        done(-1);
+      };
     });
   }
 
@@ -530,6 +559,7 @@ export class MenuScene extends Phaser.Scene {
     if (!(await this.confirm('タイトルに戻りますか？（セーブしていない進行は失われます）'))) return;
     this.ctx.audio.setAmbience({ kind: 'none', back: false, danger: 0, night: false, rain: 0 });
     this.ctx.audio.setHeartbeat(0);
+    this.ctx.audio.setMusic(null);
     this.scene.stop('World');
     this.scene.stop('UI');
     this.scene.start('Title');

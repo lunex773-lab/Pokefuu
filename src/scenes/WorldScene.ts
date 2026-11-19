@@ -4,6 +4,7 @@ import { Screen } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import type { GameSession } from '@/core/GameSession';
 import { weightedPick, randInt } from '@/core/Rng';
+import { resolveAreaMusic } from '@/domain/audio/music';
 import { ScriptRunner } from '@/domain/script/ScriptRunner';
 import type { KaiiData } from '@/domain/state/GameState';
 import type { Direction, EncounterEntry, MapDef, MapObject, MapWarp, TimePhase } from '@/domain/types';
@@ -60,6 +61,9 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
   private offs: (() => void)[] = [];
   busy = false;
   private hiddenNpcs = new Set<string>();
+  /** スクリプトが指定した BGM（undefined＝場所の BGM／null＝無音）。スクリプトが終わると解除 */
+  private musicOverride: string | null | undefined;
+  private scriptDepth = 0;
 
   constructor() {
     super('World');
@@ -161,6 +165,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       night: ['night', 'midnight'].includes(s.clock.phase),
       rain: s.weather.def().rain ?? 0,
     });
+    this.updateMusic();
     if (fades) await this.ui.fade('clear', transition === 'distort' ? 700 : 260);
     this.transitioning = false;
     if (def.onEnter && this.ctx.reg.hasScript(def.onEnter)) await this.runScript(def.onEnter);
@@ -303,6 +308,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     this.rollWeather();
     this.refreshDynamic();
     this.applyEnvironment();
+    this.updateMusic();
     if (this.mapDef && !this.mapDef.indoor) {
       this.ctx.audio.setAmbience({
         kind: 'town',
@@ -327,6 +333,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     const tintAlpha = (weather.tint ? weather.tintAlpha ?? 0 : phase.tintAlpha) * (def.indoor && !back ? 0.5 : 1);
     this.lighting.setParams({ darkness, tint, tintAlpha, powerOut: !!weather.powerOut }, immediate);
     this.lighting.playerLight.radius = s.player.lightRadius;
+    this.lighting.playerLight.cone = s.player.lightCone;
     this.weatherFx?.set((weather.fog ?? 0) * (def.indoor && !back ? 0.3 : 1), def.indoor ? 0 : weather.rain ?? 0, back);
     const overcast = weather.rain || weather.fog ? 0.3 : 1;
     if (!def.indoor) this.shadows?.draw(this.map!.casters(), phase.shadowAngle, phase.shadowLength, phase.shadowAlpha * overcast, T);
@@ -490,7 +497,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
             this.busy = false;
             this.applyEnvironment();
             this.refreshDynamic();
-            this.ctx.audio.setMusic(null);
+            this.updateMusic();
             void this.autosave();
             resolve(r);
           },
@@ -675,13 +682,35 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     }
     this.player.setAnim(false);
     this.ctx.input.clearHeld();
+    this.scriptDepth++;
     try {
       await this.runner.runCommands(this.ctx.reg.script(id).commands);
     } catch (e) {
       console.error(`[World] script error in ${id}`, e);
     } finally {
       this.ui.closeDialogue();
+      this.scriptDepth--;
+      // イベント中だけの BGM 指定（無音の演出など）は、イベントが終わったら場所の BGM に戻す
+      if (this.scriptDepth === 0 && this.musicOverride !== undefined) {
+        this.musicOverride = undefined;
+        this.updateMusic();
+      }
     }
+  }
+
+  // ------------------------------------------------------------ BGM
+
+  /** 場所と時間帯に合った BGM を流す（イベントが指定していればそちらを優先） */
+  updateMusic(): void {
+    if (!this.mapDef) return;
+    const id = this.musicOverride !== undefined ? this.musicOverride : resolveAreaMusic(this.mapDef, this.session.clock.phase);
+    this.ctx.audio.setMusic(id);
+  }
+
+  /** イベントスクリプトからの BGM 指定（null で無音） */
+  setMusicOverride(id: string | null): void {
+    this.musicOverride = id;
+    this.ctx.audio.setMusic(id);
   }
 
   async autosave(): Promise<void> {

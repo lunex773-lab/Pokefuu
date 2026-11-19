@@ -106,6 +106,8 @@ export class ListView extends Phaser.GameObjects.Container implements InputConsu
   onSelect?: (item: ListItem, index: number) => void;
   onConfirm?: (item: ListItem, index: number) => void;
   onCancel?: () => void;
+  /** 非アクティブ時にタップされたとき。true を返すとそのままタップを受け付ける（タッチ操作で戻れなくなるのを防ぐ） */
+  onInactiveTap?: () => boolean;
   active = true;
 
   constructor(
@@ -143,7 +145,8 @@ export class ListView extends Phaser.GameObjects.Container implements InputConsu
       }
     });
     zone.on('pointerup', (_p: Phaser.Input.Pointer, _lx: number, localY: number) => {
-      if (dragging || !this.active) return;
+      if (dragging) return;
+      if (!this.active && !this.onInactiveTap?.()) return;
       const i = this.scroll + Math.floor(localY / this.rowH);
       if (i < 0 || i >= this.items.length) return;
       this.select(i);

@@ -38,7 +38,14 @@ export class Lighting {
   private current = { darkness: 0, tintAlpha: 0 };
   private flickerT = 0;
   private readonly pad = 64;
-  playerLight = { radius: 72, dirX: 0, dirY: 1, on: true };
+  /**
+   * 主人公の明かり。暗い場所（夜・裏層・停電など）でだけ点く。
+   * cone=false：足元がうっすら見える円だけ（スマホのライト等）／cone=true：向いている方向を照らす（懐中電灯）
+   */
+  playerLight = { radius: 72, dirX: 0, dirY: 1, cone: false };
+  /** この暗さから点き始め、+LIGHT_FADE で最大になる（夕方くらいの薄暗さでは点かない） */
+  static readonly LIGHT_ON = 0.3;
+  static readonly LIGHT_FADE = 0.2;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -115,14 +122,24 @@ export class Lighting {
       this.stamp.setScale((l.radius * 2) / 128).setAlpha(l.intensity);
       this.rt.erase(this.stamp, l.x - ox, l.y - oy);
     }
-    if (this.playerLight.on) {
+    const amount = Lighting.playerLightAmount(dark);
+    if (amount > 0) {
       const r = this.playerLight.radius;
-      this.stamp.setScale((r * 1.1) / 128).setAlpha(0.85);
+      this.stamp.setScale((r * 1.1) / 128).setAlpha(0.85 * amount);
       this.rt.erase(this.stamp, player.x - ox, player.y - 8 - oy);
-      this.cone.setScale((r * 2.2) / 128).setRotation(Math.atan2(this.playerLight.dirY, this.playerLight.dirX)).setAlpha(0.95);
-      this.rt.erase(this.cone, player.x - ox, player.y - 10 - oy);
-      this.playerGlow.setPosition(player.x, player.y - 8).setScale((r * 0.9) / 64).setTint(0xfff0d0).setAlpha(dark * 0.22);
-    }
+      if (this.playerLight.cone) {
+        this.cone.setScale((r * 2.2) / 128).setRotation(Math.atan2(this.playerLight.dirY, this.playerLight.dirX)).setAlpha(0.95 * amount);
+        this.rt.erase(this.cone, player.x - ox, player.y - 10 - oy);
+      }
+      const glow = this.playerLight.cone ? 0.22 : 0.12;
+      this.playerGlow.setPosition(player.x, player.y - 8).setScale((r * 0.9) / 64).setTint(0xfff0d0).setAlpha(dark * glow * amount);
+    } else this.playerGlow.setAlpha(0);
+  }
+
+  /** 暗さ（0〜1）から主人公の明かりの強さ（0〜1）を求める */
+  static playerLightAmount(darkness: number): number {
+    const t = (darkness - Lighting.LIGHT_ON) / Lighting.LIGHT_FADE;
+    return Math.max(0, Math.min(1, t));
   }
 
   destroy(): void {

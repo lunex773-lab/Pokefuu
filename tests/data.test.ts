@@ -5,6 +5,7 @@
 import { describe, expect, it } from 'vitest';
 import { createRegistry, loadMap, mapIds } from '@/data';
 import { SCRIPT_COMMANDS } from '@/domain/script/commands';
+import { parseSequence, resolveAreaMusic, voiceLengths } from '@/domain/audio/music';
 import type { Condition, ScriptCommand } from '@/domain/types';
 
 const reg = createRegistry();
@@ -257,6 +258,47 @@ describe('マップ', async () => {
   });
 });
 
+describe('BGM', async () => {
+  const maps = await Promise.all(mapIds().map(loadMap));
+  const INSTRUMENTS = ['musicbox', 'piano', 'pad', 'bell', 'pluck', 'pulse', 'breath', 'bass'];
+
+  it('すべての曲の音列が読めて、楽器・音量が正しい', () => {
+    for (const t of reg.data.music) {
+      expect(t.bpm, t.id).toBeGreaterThan(20);
+      expect(t.voices.length, t.id).toBeGreaterThan(0);
+      for (const v of t.voices) {
+        expect(INSTRUMENTS, `${t.id} ${v.inst}`).toContain(v.inst);
+        expect(v.vol, t.id).toBeGreaterThan(0);
+        expect(v.vol, t.id).toBeLessThanOrEqual(1);
+        expect(v.phrases.length, t.id).toBeGreaterThan(0);
+        for (const p of v.phrases) expect(parseSequence(p).length, `${t.id}: ${p}`).toBeGreaterThan(0);
+      }
+    }
+  });
+
+  it('休みを挟まないパート同士は、フレーズの長さがそろっている（ずれて和音が濁らない）', () => {
+    for (const t of reg.data.music) {
+      const lens = voiceLengths(t)
+        .filter((_, i) => !t.voices[i].rest && t.voices[i].order !== 'random')
+        .flat();
+      const longest = Math.max(...lens);
+      for (const l of lens) expect(longest % l, `${t.id}: ${lens.join(',')}`).toBe(0);
+    }
+  });
+
+  it('タイトル・戦闘・ボス戦の曲がある', () => {
+    for (const id of ['title', 'battle', 'boss']) expect(reg.music.has(id), id).toBe(true);
+  });
+
+  it('どのマップ・どの時間帯でも、存在する曲が流れる', () => {
+    for (const m of maps) {
+      if (m.music) expect(reg.music.has(m.music), `${m.id} music`).toBe(true);
+      if (m.musicNight) expect(reg.music.has(m.musicNight), `${m.id} musicNight`).toBe(true);
+      for (const ph of reg.data.timePhases) expect(reg.music.has(resolveAreaMusic(m, ph.id)), `${m.id} ${ph.id}`).toBe(true);
+    }
+  });
+});
+
 describe('イベントスクリプト', () => {
   it('未知のコマンドを使っていない', () => {
     for (const s of reg.allScripts()) walk(s.commands, (c) => expect(known.has(c.cmd), `${s.id}: ${c.cmd}`).toBe(true));
@@ -273,6 +315,7 @@ describe('イベントスクリプト', () => {
         if (c.cmd === 'battle') expect(reg.fixedEncounters.has(String(c.encounter)), at).toBe(true);
         if (c.cmd === 'shop') expect(reg.shops.has(String(c.id)), at).toBe(true);
         if (c.cmd === 'warp') expect(ids.has(String(c.map)), at).toBe(true);
+        if (c.cmd === 'music' && c.id !== null && c.id !== undefined) expect(reg.music.has(String(c.id)), at).toBe(true);
         if (c.cmd === 'if') {
           const refs: string[] = [];
           conditionFlags(c.when as Condition, refs);

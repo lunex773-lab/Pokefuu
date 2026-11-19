@@ -1,7 +1,11 @@
+import type { MusicTrackDef } from '@/domain/types';
+import { MusicPlayer } from './MusicPlayer';
+
 /**
  * 手続き生成オーディオ（WebAudio）。
- * 方針：環境音重視・BGMは必要最低限・静寂を多用（project_build: BGM）。
+ * 方針：環境音重視・BGMは静かで不気味に・静寂を多用（project_build: BGM）。
  * 音声ファイルを使わないため、ダウンロード容量とメモリを最小化できる。
+ * BGM は music.json の音列を MusicPlayer が合成して鳴らす。
  */
 export interface AudioSettings {
   master: number;
@@ -28,8 +32,10 @@ export class AudioManager {
   private busAmb?: GainNode;
   private noise?: AudioBuffer;
   private ambLayers: Layer[] = [];
-  private musicLayer?: Layer;
-  private musicId: string | null = null;
+  private music?: MusicPlayer;
+  private musicTracks: MusicTrackDef[] = [];
+  /** 流したい曲（音声がまだ使えない間も覚えておき、使えるようになったら流す） */
+  private wantMusic: string | null = null;
   private ambKey = '';
   private timers: number[] = [];
   private heartbeatTimer?: number;
@@ -54,6 +60,11 @@ export class AudioManager {
         this.busAmb = this.gainTo(this.master);
         this.noise = this.makeNoise();
         this.applySettings(this.settings);
+        this.music = new MusicPlayer(this.ctx, this.busMusic, this.noise);
+        this.music.setTracks(this.musicTracks);
+        // 0.1秒ごとに 0.35秒先までの音を予約する
+        window.setInterval(() => this.music?.schedule(this.ctx!.currentTime + 0.35), 100);
+        this.music.play(this.wantMusic);
       }
       if (this.ctx.state === 'suspended') void this.ctx.resume();
     } catch {
@@ -384,44 +395,21 @@ export class AudioManager {
     this.heartbeatTimer = window.setInterval(() => this.sfx('heartbeat', 0.5 + intensity * 0.5), interval);
   }
 
-  // ------------------------------------------------------------ 音楽（最小限）
+  // ------------------------------------------------------------ 音楽
 
+  /** BGM の曲データ（music.json）を登録する */
+  setTracks(tracks: MusicTrackDef[]): void {
+    this.musicTracks = tracks;
+    this.music?.setTracks(tracks);
+  }
+
+  /** BGM を切り替える（null で無音）。同じ曲なら続けて流す */
   setMusic(id: string | null): void {
-    if (!this.ctx || id === this.musicId) return;
-    this.musicId = id;
-    this.musicLayer?.stop(this.ctx.currentTime + 1);
-    this.musicLayer = undefined;
-    if (!id) return;
-    const g = this.gainTo(this.busMusic!, 1);
-    let stopped = false;
-    const pulses: number[] = [];
-    const scale = id === 'title' ? [0, 3, 5, 7, 10, 12, 15] : [0, 1, 3, 6, 7, 8];
-    const root = id === 'boss' ? 98 : id === 'title' ? 262 : 110;
-    const tempo = id === 'boss' ? 380 : id === 'battle' ? 470 : 1100;
-    const play = () => {
-      if (stopped || !this.ctx) return;
-      if (id === 'title') {
-        if (Math.random() < 0.7) {
-          const n = scale[Math.floor(Math.random() * scale.length)];
-          this.tone(root * Math.pow(2, n / 12), 'sine', 0.035, 0.01, 2.4, g);
-          this.tone(root * 2 * Math.pow(2, n / 12), 'sine', 0.01, 0.01, 1.6, g);
-        }
-      } else {
-        this.tone(root / 2, 'triangle', 0.07, 0.01, 0.25, g);
-        if (Math.random() < 0.35) {
-          const n = scale[Math.floor(Math.random() * scale.length)];
-          this.tone(root * 2 * Math.pow(2, n / 12), id === 'boss' ? 'sawtooth' : 'square', 0.015, 0.01, 0.3, g);
-        }
-      }
-      pulses.push(window.setTimeout(play, tempo));
-    };
-    play();
-    this.musicLayer = {
-      stop: () => {
-        stopped = true;
-        pulses.forEach((p) => window.clearTimeout(p));
-        g.gain.setTargetAtTime(0, this.ctx!.currentTime, 0.3);
-      },
-    };
+    this.wantMusic = id;
+    this.music?.play(id);
+  }
+
+  get currentMusic(): string | null {
+    return this.wantMusic;
   }
 }

@@ -39,6 +39,7 @@
 - 文字とタイルの対応は `json/tiles.json` の `char`（マップごとに `legend` で上書き可）
 - `objects` の空白はタイルなし。`above` は人物より手前に描く（木の葉など）
 - `layer: "back"` で裏層。`palette: "back"` で裏層用の色に自動変換、`dangerLevel` で危険度、`fixedPhase` で時刻固定
+- `music` で BGM（`json/music.json` の曲ID）、`musicNight` で夜（夜・深夜）の BGM。省略すると「裏層（危険度5以上は back_deep）／屋外（昼 town・夜 town_night）／屋内（unease）」で自動的に決まる
 
 ```jsonc
 "npcs":         [ { "id": "x", "name": "名前", "sprite": "student_a", "x": 3, "y": 4, "script": "talk_x", "when": { "phase": ["day"] } } ],
@@ -74,7 +75,7 @@
 使えるコマンドの一覧は `src/domain/script/commands.ts`、実装は `src/scenes/world/ScriptCommands.ts` にあります。
 主なもの：`say` `choice` `if` `call` `end` `fade` `wait` `shake` `flash` `distort` `sfx` `title` `toast`
 `warp` `moveNpc` `hideNpc` `battle` `recruit` `resonanceTalk` `shop` `saveMenu` `autosave` `sleep` `parttime`
-`setFlag` `incFlag` `giveItem` `takeItem` `memory` `setTime` `setWeather` `sanity` `playerExp` `refreshMap`
+`setFlag` `incFlag` `giveItem` `takeItem` `memory` `setTime` `setWeather` `sanity` `playerExp` `refreshMap` `music`
 
 `{name}` は主人公の名前に置き換わります。
 
@@ -93,3 +94,27 @@
 | `json/achievements.json` | 実績（イベント一致／カウンター／フラグ） |
 | `json/memories.json` / `glossary.json` / `chapters.json` / `endings.json` | 記憶片・用語辞典・章・エンディング |
 | `json/npcSprites.json` | 人物の見た目（髪型・服の色など）→ ドット絵を自動生成 |
+| `json/music.json` | BGM（下記） |
+
+## BGM を追加する（`json/music.json`）
+
+音声ファイルは使わず、音列（楽譜）から WebAudio で合成します。
+
+```jsonc
+{
+  "id": "town", "name": "朝霧の通学路",
+  "bpm": 104,          // 1分あたりの「単位」の数（単位＝音列の長さ1。8分音符を単位にするなら 4分音符の速さ×2）
+  "vol": 1.0, "reverb": 0.5, "echo": 0.2, "echoUnits": 3, "lowpass": 2000,  // 残響・やまびこ・こもり具合
+  "voices": [
+    { "inst": "musicbox", "vol": 0.9, "wobble": 5, "sour": 0.05, "prob": 0.9,
+      "phrases": ["B5:2 G5:2 E5:4 | .:4 D5 E5 G5:2", "…"] },   // 1周ごとに次のフレーズへ
+    { "inst": "breath", "vol": 0.6, "rest": [8, 24], "order": "random", "phrases": ["E4:8"] }
+  ]
+}
+```
+
+- 音列：`A4` `C#5` `Bb3` が音、`.` が休符、`:n` で長さ（単位数）、`+` で和音、`|` は区切り（無視）
+- 楽器 `inst`：`musicbox`（オルゴール）`piano`（古いピアノ）`pad`（持続和音）`bell`（遠くの鐘）`pluck`（はじく音）`pulse`（鼓動）`breath`（ささやき）`bass`
+- 不気味さ：`sour`（半音ずれる確率）、`wobble`（音程の揺れ・セント）、`prob`（音を間引いて静けさを出す）
+- `rest`（1周ごとの休み）を付けたパートは他とずれていく。和音を支えるパートには付けず、フレーズの長さをそろえる（テストで検査）
+- イベント中は `{ "cmd": "music", "id": null }` で無音にできる（イベントが終わると場所の BGM に戻る）

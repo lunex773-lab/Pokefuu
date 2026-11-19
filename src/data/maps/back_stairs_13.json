@@ -9,6 +9,7 @@
  "fixedPhase": "midnight",
  "palette": "back",
  "ambience": "back_stairs",
+ "music": "back_deep",
  "weather": [
   "clear",
   "fog",
