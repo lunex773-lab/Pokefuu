@@ -186,6 +186,28 @@
    {
     "cmd": "if",
     "when": {
+     "all": [
+      {
+       "flagGte": {
+        "key": "wonders",
+        "value": 7
+       }
+      },
+      {
+       "notFlag": "wonders_done"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "call",
+      "script": "wonders_report"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
      "flag": "ch2_clear"
     },
     "then": [

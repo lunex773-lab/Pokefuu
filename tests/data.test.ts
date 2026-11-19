@@ -163,6 +163,13 @@ describe('イベントスクリプト', () => {
     const implemented = new Set(reg.data.chapters.filter((c) => c.status === 'implemented').map((c) => c.id));
     for (const m of reg.data.memories.filter((x) => implemented.has(x.chapter))) expect(given.has(m.id), m.id).toBe(true);
   });
+  it('七不思議（寄り道依頼）の7つはすべて記録できる', () => {
+    const recorded = new Set<string>();
+    for (const s of reg.allScripts()) walk(s.commands, (c) => {
+      if (c.cmd === 'setFlag' && String(c.key).startsWith('wonder_')) recorded.add(String(c.key));
+    });
+    expect(recorded.size).toBe(7);
+  });
   it('ボスは図鑑完成のために再戦できる（共鳴に失敗しても取り返せる）', async () => {
     const maps = await Promise.all(mapIds().map((id) => loadMap(id)));
     const bosses = reg.data.kaii.filter((k) => k.boss).map((k) => k.id);

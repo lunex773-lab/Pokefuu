@@ -333,5 +333,19 @@
   "category": "key",
   "icon": "collar",
   "description": "鈴のついた赤い首輪。迷い猫ミケのもの。"
+ },
+ {
+  "id": "nanafushigi_note",
+  "name": "七不思議ノート",
+  "category": "key",
+  "icon": "note7",
+  "description": "湊から預かった調査ノート。学校の七不思議を記録していく。"
+ },
+ {
+  "id": "missing_book",
+  "name": "裏層覚書",
+  "category": "key",
+  "icon": "oldbook",
+  "description": "十六年前に貸し出されたきり戻らなかった本。表紙に『人が忘れた世界』と書かれている。"
  }
 ]

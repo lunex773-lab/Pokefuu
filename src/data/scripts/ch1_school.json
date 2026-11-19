@@ -3,13 +3,65 @@
   "id": "school_teacher",
   "commands": [
    {
+    "cmd": "if",
+    "when": {
+     "flag": "class_morning_done"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "担任",
+      "text": "昼休みだからって羽目を外すなよ。午後の授業、遅れるな。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "担任",
+      "text": "おう、{name}。席に着けー。ホームルーム始めるぞ。"
+     },
+     {
+      "cmd": "say",
+      "text": "（自分の席は、窓際の後ろから二番目だ）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "school_homeroom",
+  "commands": [
+   {
     "cmd": "say",
-    "speaker": "担任",
-    "text": "おう、{name}。席に着けー。ホームルーム始めるぞ。"
+    "text": "教室に入ると、ざわめきが少しだけ止んだ。"
    },
    {
     "cmd": "say",
-    "text": "（自分の席は、窓際の後ろから二番目だ）"
+    "speaker": "担任",
+    "text": "おう、そろったか。ホームルーム始めるぞ。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "担任",
+    "text": "最近、夜の校舎に忍び込んでる奴がいるらしい。……肝試しだか何だか知らんが、やめておけ。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "担任",
+    "text": "それと、2階の西階段の踊り場。蛍光灯が切れてるから、一人で通るなよ。"
+   },
+   {
+    "cmd": "say",
+    "text": "窓際の、自分の席の隣。そこだけが空席だった。"
+   },
+   {
+    "cmd": "say",
+    "text": "……ずっと前から、空席だった気がする。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "homeroom_done",
+    "value": true
    }
   ]
  },
@@ -19,12 +71,103 @@
    {
     "cmd": "if",
     "when": {
-     "notFlag": "class_done"
+     "notFlag": "class_morning_done"
     },
     "then": [
      {
       "cmd": "say",
       "text": "自分の席に着いた。"
+     },
+     {
+      "cmd": "fade",
+      "to": "black",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "1時間目、2時間目、3時間目……"
+     },
+     {
+      "cmd": "say",
+      "text": "隣の空席に、誰かの消しゴムのかすが落ちていた。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "chime"
+     },
+     {
+      "cmd": "wait",
+      "ms": 1200
+     },
+     {
+      "cmd": "setTime",
+      "hour": 12,
+      "minute": 30
+     },
+     {
+      "cmd": "setFlag",
+      "key": "class_morning_done",
+      "value": true
+     },
+     {
+      "cmd": "refreshMap"
+     },
+     {
+      "cmd": "fade",
+      "to": "clear",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "昼休みだ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "{name}！ 放課後まで待ちきれねえ。昼のうちに七不思議の下調べしようぜ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "このノートに、学校の七不思議を全部記録してくれ。噂を聞いたり、現場を調べたりすればいい。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "十三階段は……放課後のお楽しみ、な。"
+     },
+     {
+      "cmd": "giveItem",
+      "item": "nanafushigi_note",
+      "qty": 1
+     },
+     {
+      "cmd": "setFlag",
+      "key": "wonders_quest",
+      "value": true
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議ノートを受け取った"
+     },
+     {
+      "cmd": "say",
+      "text": "（寄り道：学校の七不思議を7つ記録しよう。昼休みが終わったら、もう一度自分の席へ）"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "class_done"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "自分の席に着いた。午後の授業が始まる。"
      },
      {
       "cmd": "fade",
@@ -98,6 +241,49 @@
  {
   "id": "school_minato",
   "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "class_morning_done"
+    },
+    "then": [
+     {
+      "cmd": "if",
+      "when": {
+       "flagGte": {
+        "key": "wonders",
+        "value": 7
+       }
+      },
+      "then": [
+       {
+        "cmd": "call",
+        "script": "wonders_report"
+       },
+       {
+        "cmd": "end"
+       }
+      ]
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "七不思議、どこまで調べた？"
+     },
+     {
+      "cmd": "call",
+      "script": "wonders_hint"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "昼休みが終わったら、席に戻れよ。放課後は踊り場な！"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
    {
     "cmd": "if",
     "when": {
@@ -210,6 +396,38 @@
        {
         "cmd": "say",
         "text": "返事が、あった気がした。"
+       },
+       {
+        "cmd": "if",
+        "when": {
+         "all": [
+          {
+           "flag": "wonders_quest"
+          },
+          {
+           "notFlag": "wonder_stall"
+          }
+         ]
+        },
+        "then": [
+         {
+          "cmd": "setFlag",
+          "key": "wonder_stall",
+          "value": true
+         },
+         {
+          "cmd": "incFlag",
+          "key": "wonders"
+         },
+         {
+          "cmd": "sfx",
+          "id": "item"
+         },
+         {
+          "cmd": "toast",
+          "text": "七不思議を記録した：三番目の個室"
+         }
+        ]
        }
       ]
      },
@@ -261,6 +479,28 @@
   "id": "school_minato_after",
   "commands": [
    {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flagGte": {
+        "key": "wonders",
+        "value": 7
+       }
+      },
+      {
+       "notFlag": "wonders_done"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "call",
+      "script": "wonders_report"
+     }
+    ]
+   },
+   {
     "cmd": "say",
     "speaker": "湊",
     "text": "……昨日のこと、夢じゃないよな。"
@@ -279,6 +519,38 @@
     "cmd": "say",
     "speaker": "女子生徒",
     "text": "このピアノ、夜になると勝手に鳴るんだって。……弾きかけの曲を、ずっと。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_piano"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_piano",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：夜中に鳴るピアノ"
+     }
+    ]
    }
   ]
  },
@@ -288,6 +560,38 @@
    {
     "cmd": "say",
     "text": "古いピアノだ。鍵盤の一つが、押しても音が出ない。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_piano"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_piano",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：夜中に鳴るピアノ"
+     }
+    ]
    }
   ]
  },
@@ -297,6 +601,38 @@
    {
     "cmd": "say",
     "text": "音楽家の肖像画が並んでいる。……一枚だけ、顔が真っ黒に塗りつぶされている。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_portrait"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_portrait",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：音楽室の肖像画"
+     }
+    ]
    }
   ]
  },
@@ -310,6 +646,38 @@
    {
     "cmd": "say",
     "text": "……目が合った気がした。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_model"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_model",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：走る人体模型"
+     }
+    ]
    }
   ]
  },
@@ -400,6 +768,38 @@
    {
     "cmd": "say",
     "text": "……十三回。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_stairs"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_stairs",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：十三階段"
+     }
+    ]
    },
    {
     "cmd": "say",

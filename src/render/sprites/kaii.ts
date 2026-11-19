@@ -205,6 +205,37 @@ const kaiiDraw: Record<string, Draw> = {
     pc.outline('#4a1020');
     pc.rimShade();
   },
+  kaii_yorunodoriburu: (pc) => {
+    // 包帯を巻いたバスケットボール。怒った目
+    pc.ellipse(32, 54, 14, 4, '#1a1418', 140);
+    pc.circle(32, 32, 18, '#d8742a');
+    pc.circle(26, 26, 6, '#f0944a');
+    pc.line(14, 32, 50, 32, '#3a1a0a');
+    pc.line(32, 14, 32, 50, '#3a1a0a');
+    for (let a = -1.2; a < 1.2; a += 0.08) pc.set(32 + Math.sin(a) * 10, 32 + Math.cos(a) * 17, '#3a1a0a');
+    pc.poly([[16, 18], [48, 40], [46, 44], [14, 22]], '#f0ece0');
+    pc.rect(23, 30, 6, 3, '#ffe040');
+    pc.rect(36, 30, 6, 3, '#ffe040');
+    pc.line(22, 27, 29, 30, '#1a0a0a');
+    pc.line(43, 27, 36, 30, '#1a0a0a');
+    pc.hline(26, 38, 40, '#1a0a0a');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_housoushitsu: (pc) => {
+    // 古い校内スピーカーから伸びるマイクの舌
+    pc.rect(12, 8, 40, 30, '#8a7a62');
+    pc.rect(14, 10, 36, 26, '#6a5a44');
+    for (let y = 13; y < 34; y += 3) pc.hline(16, 47, y, '#4a3e2e');
+    pc.ellipse(32, 23, 9, 9, '#2a2420');
+    pc.ellipse(32, 23, 4, 4, '#ff5040');
+    pc.rect(30, 38, 4, 14, '#3a3a42');
+    pc.circle(32, 54, 6, '#5a5a62');
+    for (let x = 27; x < 38; x += 2) pc.vline(x, 50, 58, '#2a2a30');
+    pc.rect(10, 4, 44, 4, '#a89a82');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
   // ---------------------------------------------------------------- Chapter 2
   kaii_gojinochaimu: (pc) => {
     // 防災無線のスピーカーを頭にした子ども

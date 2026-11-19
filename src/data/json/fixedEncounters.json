@@ -28,6 +28,24 @@
   "canFlee": false
  },
  {
+  "id": "dribble",
+  "enemies": [
+   {
+    "kaii": "kageboushi",
+    "level": 8
+   },
+   {
+    "kaii": "yorunodoriburu",
+    "level": 11
+   },
+   {
+    "kaii": "kageboushi",
+    "level": 8
+   }
+  ],
+  "canFlee": false
+ },
+ {
   "id": "stall3",
   "enemies": [
    {

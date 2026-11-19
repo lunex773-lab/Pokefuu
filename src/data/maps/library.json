@@ -1,0 +1,124 @@
+{
+ "id": "library",
+ "name": "桜ヶ丘高校 図書室",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "school",
+ "ground": [
+  "wwwwwwwwwwwwww",
+  "wwwwwwwwwwwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwrrrrwwww",
+  "wwwwwwwwwwwwww",
+  "wwwwwwwwwwwwww"
+ ],
+ "objects": [
+  "##############",
+  "#ssss ssss  s#",
+  "#            #",
+  "#ssss  nn  CC#",
+  "#      nn  C #",
+  "#ssss  nn    #",
+  "#            #",
+  "#ss  P    ss #",
+  "#            #",
+  "######D#######"
+ ],
+ "above": [
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              "
+ ],
+ "lights": [
+  {
+   "x": 4,
+   "y": 3,
+   "radius": 100,
+   "color": "#fff0d8",
+   "power": true
+  },
+  {
+   "x": 9,
+   "y": 5,
+   "radius": 100,
+   "color": "#fff0d8",
+   "power": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "librarian",
+   "name": "司書",
+   "sprite": "librarian",
+   "x": 12,
+   "y": 4,
+   "facing": "left",
+   "script": "library_librarian",
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "counter",
+   "x": 11,
+   "y": 4,
+   "script": "library_librarian"
+  },
+  {
+   "id": "archive",
+   "x": 12,
+   "y": 1,
+   "script": "library_archive"
+  },
+  {
+   "id": "shelf_legend",
+   "x": 2,
+   "y": 1,
+   "script": "library_shelf_legend"
+  },
+  {
+   "id": "shelf_local",
+   "x": 7,
+   "y": 1,
+   "script": "library_shelf_local"
+  },
+  {
+   "id": "shelf_med",
+   "x": 2,
+   "y": 5,
+   "script": "library_shelf_med"
+  }
+ ],
+ "warps": [
+  {
+   "id": "out",
+   "x": 6,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "to": "school_1f",
+   "tx": 21,
+   "ty": 7,
+   "facing": "down"
+  }
+ ]
+}

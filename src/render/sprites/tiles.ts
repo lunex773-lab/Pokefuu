@@ -439,6 +439,18 @@ const gens: Record<string, Gen> = {
     pc.rect(ox, oy + 4, T, 22, c[0]);
     pc.speckle(ox, oy + 4, T, 22, [c[1], shadeHex(c[0], 1.2)], 0.35, rnd);
   },
+  curtain: (pc, ox, oy, c) => {
+    fill(pc, ox, oy, c[0]);
+    for (let x = 0; x < T; x += 6) {
+      pc.vline(ox + x, oy, oy + T - 1, c[1]);
+      pc.vline(ox + x + 3, oy, oy + T - 1, shadeHex(c[0], 1.15));
+    }
+    pc.rect(ox, oy, T, 3, c[2]);
+  },
+  court: (pc, ox, oy, c, rnd) => {
+    gens.wood(pc, ox, oy, c, rnd, 0);
+    pc.hline(ox, ox + T - 1, oy + 15, c[2]);
+  },
   bench: (pc, ox, oy, c) => {
     pc.rect(ox + 1, oy + 10, 30, 4, c[0]);
     pc.rect(ox + 1, oy + 16, 30, 4, c[0]);

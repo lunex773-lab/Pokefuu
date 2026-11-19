@@ -30,7 +30,7 @@
   "# k k k k k ##     #####     #",
   "# k k k k k ##     #####     #",
   "#           ##     #####     #",
-  "########## ##### #######    ##",
+  "########## ##### ####D##    ##",
   "# P                          #",
   "#l                         l #",
   "##########           #########",
@@ -133,6 +133,22 @@
    "when": {
     "notFlag": "class_done"
    }
+  },
+  {
+   "id": "bball",
+   "name": "バスケ部員",
+   "sprite": "student_d",
+   "x": 24,
+   "y": 8,
+   "facing": "left",
+   "script": "school_bball",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
   }
  ],
  "interactables": [
@@ -167,10 +183,10 @@
    "script": "school_shoebox"
   },
   {
-   "id": "staffroom",
-   "x": 21,
-   "y": 6,
-   "script": "school_staffroom"
+   "id": "lost_found",
+   "x": 27,
+   "y": 8,
+   "script": "school_lost_found"
   }
  ],
  "triggers": [
@@ -180,9 +196,9 @@
    "y": 6,
    "w": 1,
    "h": 1,
-   "script": "school_class_hint",
+   "script": "school_homeroom",
    "when": {
-    "notFlag": "class_done"
+    "notFlag": "class_morning_done"
    }
   }
  ],
@@ -208,6 +224,17 @@
    "tx": 25,
    "ty": 2,
    "facing": "down"
+  },
+  {
+   "id": "to_library",
+   "x": 21,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "to": "library",
+   "tx": 6,
+   "ty": 8,
+   "facing": "up"
   }
  ]
 }

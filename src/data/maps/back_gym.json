@@ -1,0 +1,146 @@
+{
+ "id": "back_gym",
+ "name": "裏・体育館",
+ "layer": "back",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 4,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_gym",
+ "weather": [
+  "clear",
+  "fog",
+  "redmoon"
+ ],
+ "ground": [
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwcccccccw",
+  "wrrrrrrrrrrrrrrwcccccccw",
+  "wrrrrrrrrrrrrrrwcccccccw",
+  "wwwwwww^^wwwwwwwcccccccw",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwww%wwwwwwwwwwwww%wwww",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "w++++++++++++++++++++++w",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwww%wwwwww",
+  "wwwwwwwwww%wwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwccwwwwwwwwwww"
+ ],
+ "objects": [
+  "&&&&&&&&&&&&&&&&&&&&&&&&",
+  "&@@@@@@@@@@@@@@& k v s &",
+  "&              &       &",
+  "&              &       &",
+  "&&&&&&&  &&&&&&&       &",
+  "&              &&&& &&&&",
+  "&o                     &",
+  "&                      &",
+  "&                      &",
+  "&                      &",
+  "&                      &",
+  "&                      &",
+  "&s                     &",
+  "&XX                   o&",
+  "&                      &",
+  "&&&&&&&&&&&  &&&&&&&&&&&"
+ ],
+ "above": [
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        ",
+  "                        "
+ ],
+ "encounters": {
+  "table": "back_gym",
+  "maxSymbols": 3
+ },
+ "interactables": [
+  {
+   "id": "stage_ball",
+   "x": 8,
+   "y": 2,
+   "script": "back_gym_ball",
+   "when": {
+    "notFlag": "dribble_done"
+   }
+  },
+  {
+   "id": "stage_ball2",
+   "x": 7,
+   "y": 2,
+   "script": "back_gym_ball",
+   "when": {
+    "notFlag": "dribble_done"
+   }
+  },
+  {
+   "id": "mic",
+   "x": 17,
+   "y": 1,
+   "script": "back_gym_mic"
+  },
+  {
+   "id": "book",
+   "x": 21,
+   "y": 1,
+   "script": "back_gym_book",
+   "when": {
+    "notFlag": "got_book"
+   }
+  },
+  {
+   "id": "storage",
+   "x": 1,
+   "y": 13,
+   "script": "back_gym_storage",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_gym_storage"
+   }
+  },
+  {
+   "id": "candle",
+   "x": 22,
+   "y": 13,
+   "script": "back_candle"
+  },
+  {
+   "id": "candle2",
+   "x": 1,
+   "y": 6,
+   "script": "back_candle"
+  }
+ ],
+ "warps": [
+  {
+   "id": "out",
+   "x": 11,
+   "y": 15,
+   "w": 2,
+   "h": 1,
+   "to": "back_school_1f",
+   "tx": 20,
+   "ty": 10,
+   "facing": "up"
+  }
+ ],
+ "onEnter": "back_gym_enter"
+}

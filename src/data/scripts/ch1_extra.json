@@ -1,0 +1,735 @@
+[
+ {
+  "id": "wonders_hint",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "七不思議ノートを開く。まだ記録していないのは――"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_stall"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・三番目の個室（1階トイレ）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_piano"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・夜中に鳴るピアノ（2階音楽室）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_portrait"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・音楽室の肖像画（2階音楽室）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_model"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・走る人体模型（2階理科室）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_book"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・返ってこない本（1階図書室）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_dribble"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・夜の体育館（バスケ部員）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "wonder_stairs"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "・十三階段（放課後のお楽しみ）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "wonders_report",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "おお……七不思議、全部そろってるじゃねえか！"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "これで調査会の会報が書ける。……お前、ほんとに全部見てきたんだな。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "礼だ。俺の懐中電灯、持ってけ。スマホのライトよりずっと明るいぞ。"
+   },
+   {
+    "cmd": "takeItem",
+    "item": "nanafushigi_note",
+    "qty": 1
+   },
+   {
+    "cmd": "giveItem",
+    "item": "flashlight",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "懐中電灯を手に入れた（メニューの装備で付け替え）"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "wonders_done",
+    "value": true
+   }
+  ]
+ },
+ {
+  "id": "library_librarian",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "book_done"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "司書",
+      "text": "返してくれて、ありがとう。……十六年ぶりに、棚が埋まったわ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "hasItem": "missing_book"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "司書",
+      "text": "……この本。どこで、これを？"
+     },
+     {
+      "cmd": "say",
+      "text": "司書は、表紙をそっとなでた。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "司書",
+      "text": "貸出カードの最後の欄……十六年前ね。判子は『黒雨』。……聞いたことのない名前だわ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "司書",
+      "text": "とにかく、ありがとう。お礼にこれを。昔、神社の人が置いていったものなの。"
+     },
+     {
+      "cmd": "takeItem",
+      "item": "missing_book",
+      "qty": 1
+     },
+     {
+      "cmd": "giveItem",
+      "item": "strong_ofuda",
+      "qty": 2
+     },
+     {
+      "cmd": "money",
+      "amount": 800
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "強い御札 ×2 と 800円を受け取った"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "book_done",
+      "value": true
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "book_quest"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "司書",
+      "text": "『裏層覚書』……もし見つけたら、返してね。"
+     },
+     {
+      "cmd": "if",
+      "when": {
+       "all": [
+        {
+         "flag": "wonders_quest"
+        },
+        {
+         "notFlag": "wonder_book"
+        }
+       ]
+      },
+      "then": [
+       {
+        "cmd": "setFlag",
+        "key": "wonder_book",
+        "value": true
+       },
+       {
+        "cmd": "incFlag",
+        "key": "wonders"
+       },
+       {
+        "cmd": "sfx",
+        "id": "item"
+       },
+       {
+        "cmd": "toast",
+        "text": "七不思議を記録した：返ってこない本"
+       }
+      ]
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "司書",
+    "text": "いらっしゃい。図書室では静かにね。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "司書",
+    "text": "……七不思議？ ああ、『返ってこない本』のことかしら。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "司書",
+    "text": "十六年前に貸し出されたきり、戻ってこない本があるの。題名は『裏層覚書』。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "司書",
+    "text": "変な話よね。貸出記録はあるのに、誰が借りたのか、誰も覚えていないの。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "司書",
+    "text": "もしどこかで見つけたら、返してくれると嬉しいわ。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "book_quest",
+    "value": true
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_book"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_book",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：返ってこない本"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "text": "（寄り道：『裏層覚書』を探して返そう）"
+   }
+  ]
+ },
+ {
+  "id": "library_archive",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "got_mem_newspaper"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "古い新聞の縮刷版が並んでいる。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "text": "古い地方紙の縮刷版が並んでいる。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "自分が生まれた年の縮刷版を開いてみる？",
+    "options": [
+     {
+      "text": "開く",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "ページをめくる。地域欄の、小さな記事。"
+       },
+       {
+        "cmd": "memory",
+        "id": "mem_newspaper"
+       },
+       {
+        "cmd": "setFlag",
+        "key": "got_mem_newspaper",
+        "value": true
+       },
+       {
+        "cmd": "say",
+        "text": "……双子。"
+       },
+       {
+        "cmd": "say",
+        "speaker": "ナナシ",
+        "text": "…………。"
+       }
+      ]
+     },
+     {
+      "text": "やめる",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "library_shelf_legend",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『全国の学校の怪談』『都市伝説大全』……オカルトの棚だ。"
+   },
+   {
+    "cmd": "say",
+    "text": "付箋の貼られたページがある。『鏡は、向こう側への入り口である』"
+   }
+  ]
+ },
+ {
+  "id": "library_shelf_local",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "郷土史の棚。『朝霧町のあゆみ』『封印神社と三百年の祭事』……"
+   },
+   {
+    "cmd": "say",
+    "text": "神社の本だけ、背表紙が日に焼けて白くなっている。"
+   }
+  ]
+ },
+ {
+  "id": "library_shelf_med",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "医学の棚。『新生児の看護』……どうしてこの本が、高校の図書室に。"
+   }
+  ]
+ },
+ {
+  "id": "school_bball",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "evening"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "バスケ部員",
+      "text": "部活？ 今日は体育館が使えないんだ。……夜にボールの音がするって、顧問が気味悪がってさ。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "バスケ部員",
+      "text": "知ってるか？ 夜の体育館で、ボールの弾む音がするんだ。誰もいないのに。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "バスケ部員",
+      "text": "昔、一度も試合に出られないまま引退した先輩がいたんだってさ。……その人、今もシュート練習してるんじゃないかって。"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "wonders_quest"
+      },
+      {
+       "notFlag": "wonder_dribble"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "wonder_dribble",
+      "value": true
+     },
+     {
+      "cmd": "incFlag",
+      "key": "wonders"
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "七不思議を記録した：夜の体育館"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "school_lost_found",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "落とし物ロッカーだ。名前のない上履き、片方だけの手袋……"
+   },
+   {
+    "cmd": "say",
+    "text": "一番奥に、色あせた小さな名札があった。名前の欄は、白いまま。"
+   }
+  ]
+ },
+ {
+  "id": "back_gym_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "back_gym_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "back_gym_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "体育館。誰もいないはずなのに、どこかでボールの弾む音がする。"
+     },
+     {
+      "cmd": "say",
+      "text": "ダン……ダン……ダン。音は、ステージのほうから聞こえる。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "……だれか、よんでる。あっちの へや。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_gym_ball",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "ステージの上で、ボールが一つ、ひとりでに弾んでいる。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "近づく？",
+    "options": [
+     {
+      "text": "近づく",
+      "then": []
+     },
+     {
+      "text": "やめておく",
+      "then": [
+       {
+        "cmd": "end"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "shake",
+    "ms": 400,
+    "intensity": 0.005
+   },
+   {
+    "cmd": "sfx",
+    "id": "encounter"
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "……いれ。いれ。いれ。いっぽんで いい。"
+   },
+   {
+    "cmd": "battle",
+    "encounter": "dribble"
+   },
+   {
+    "cmd": "say",
+    "text": "ボールの音が止んだ。ステージの床に、何かが残されている。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "strong_ofuda",
+    "qty": 1
+   },
+   {
+    "cmd": "giveItem",
+    "item": "cloth",
+    "qty": 2
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "強い御札と布切れ ×2 を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "dribble_done",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_gym_mic",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "got_mem_broadcast"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "放送室のマイク。電源は入っていない。……はずだ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "text": "放送室のマイクから、かすれた声が流れている。"
+   },
+   {
+    "cmd": "say",
+    "text": "『……出席を、とります』"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_broadcast"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_broadcast",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "……よばれ、なかった。"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_gym_book",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "放送室の棚に、古い本が一冊だけ立てかけてある。"
+   },
+   {
+    "cmd": "say",
+    "text": "表紙には『裏層覚書』。……副題に『人が忘れた世界』とある。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "missing_book",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "裏層覚書を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_book",
+    "value": true
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "book_quest"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "（裏表紙に『桜ヶ丘高校 図書室』の印がある）"
+     }
+    ]
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_gym_storage",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "用具入れの奥に、記憶の残滓が溜まっていた。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "memory_dust",
+    "qty": 3
+   },
+   {
+    "cmd": "giveItem",
+    "item": "red_thread",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "記憶の残滓 ×3 と赤い糸を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_gym_storage",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ }
+]

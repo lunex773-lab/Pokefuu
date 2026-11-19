@@ -270,5 +270,56 @@
     ]
    }
   ]
+ },
+ {
+  "id": "back_gym",
+  "groupWeights": [
+   4,
+   4,
+   2
+  ],
+  "entries": [
+   {
+    "kaii": "yorunodoriburu",
+    "min": 7,
+    "max": 9,
+    "weight": 4
+   },
+   {
+    "kaii": "housoushitsu",
+    "min": 7,
+    "max": 9,
+    "weight": 4
+   },
+   {
+    "kaii": "kageboushi",
+    "min": 7,
+    "max": 9,
+    "weight": 2
+   },
+   {
+    "kaii": "honemi",
+    "min": 8,
+    "max": 9,
+    "weight": 2
+   }
+  ],
+  "extra": [
+   {
+    "when": {
+     "weather": [
+      "redmoon"
+     ]
+    },
+    "entries": [
+     {
+      "kaii": "sanbanme",
+      "min": 9,
+      "max": 11,
+      "weight": 3
+     }
+    ]
+   }
+  ]
  }
 ]

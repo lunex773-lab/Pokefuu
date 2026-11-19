@@ -738,7 +738,7 @@
  },
  {
   "id": "gojinochaimu",
-  "no": 10,
+  "no": 12,
   "name": "ゴジノチャイム",
   "types": [
    "loneliness"
@@ -822,7 +822,7 @@
  },
  {
   "id": "kairanban",
-  "no": 11,
+  "no": 13,
   "name": "カイランバン",
   "types": [
    "obsession"
@@ -906,7 +906,7 @@
  },
  {
   "id": "nozokimado",
-  "no": 12,
+  "no": 14,
   "name": "ノゾキマド",
   "types": [
    "envy"
@@ -986,7 +986,7 @@
  },
  {
   "id": "utsushimi",
-  "no": 13,
+  "no": 15,
   "name": "ウツシミ",
   "types": [
    "fear"
@@ -1070,7 +1070,7 @@
  },
  {
   "id": "hanaichimonme",
-  "no": 14,
+  "no": 16,
   "name": "ハナイチモンメ",
   "types": [
    "envy",
@@ -1151,7 +1151,7 @@
  },
  {
   "id": "kaminarioyaji",
-  "no": 15,
+  "no": 17,
   "name": "カミナリオヤジ",
   "types": [
    "anger"
@@ -1240,7 +1240,7 @@
  },
  {
   "id": "harigamineko",
-  "no": 16,
+  "no": 18,
   "name": "ハリガミネコ",
   "types": [
    "guilt"
@@ -1320,7 +1320,7 @@
  },
  {
   "id": "akiyanonushi",
-  "no": 17,
+  "no": 19,
   "name": "アキヤノヌシ",
   "types": [
    "despair"
@@ -1400,7 +1400,7 @@
  },
  {
   "id": "akaikureyon",
-  "no": 18,
+  "no": 20,
   "name": "アカイクレヨン",
   "types": [
    "obsession",
@@ -1483,6 +1483,174 @@
      "text": "そこにいて",
      "value": 0,
      "reply": "（扉の隙間が、音もなく閉じた）"
+    }
+   ]
+  }
+ },
+ {
+  "id": "yorunodoriburu",
+  "no": 10,
+  "name": "ヨルノドリブル",
+  "types": [
+   "anger"
+  ],
+  "origin": "一度もコートに立てないまま引退した部員の、行き場のない悔しさ。",
+  "legend": "学校の怪談『夜の体育館』— 誰もいない体育館から、ボールの弾む音が聞こえる。",
+  "description": "包帯を巻いたバスケットボール。夜通し跳ね続け、ゴールに届かない一投を繰り返している。",
+  "base": {
+   "hp": 22,
+   "atk": 11,
+   "def": 8,
+   "spd": 11,
+   "mnd": 6
+  },
+  "growth": {
+   "hp": 3.2,
+   "atk": 2.0,
+   "def": 1.3,
+   "spd": 1.8,
+   "mnd": 1.0
+  },
+  "expYield": 40,
+  "sealRate": 1.0,
+  "sprite": "kaii_yorunodoriburu",
+  "learnset": [
+   {
+    "level": 1,
+    "skill": "touch"
+   },
+   {
+    "level": 1,
+    "skill": "shout"
+   },
+   {
+    "level": 7,
+    "skill": "slam"
+   },
+   {
+    "level": 10,
+    "skill": "buzzer"
+   },
+   {
+    "level": 14,
+    "skill": "command"
+   },
+   {
+    "level": 18,
+    "skill": "rage"
+   }
+  ],
+  "drops": [
+   {
+    "item": "cloth",
+    "chance": 0.3
+   },
+   {
+    "item": "bell",
+    "chance": 0.25
+   }
+  ],
+  "resonance": {
+   "prompt": "いちども コートに たてなかった。……ずっと、ベンチで みてた。",
+   "options": [
+    {
+     "text": "ずっと練習してたの、知ってるよ",
+     "value": 2,
+     "reply": "……しってて、くれたのか。"
+    },
+    {
+     "text": "次の試合があるさ",
+     "value": 1,
+     "reply": "つぎは、もう こない。"
+    },
+    {
+     "text": "才能がなかったんだよ",
+     "value": 0,
+     "reply": "（ボールの音が、ぴたりと止んだ）"
+    }
+   ]
+  }
+ },
+ {
+  "id": "housoushitsu",
+  "no": 11,
+  "name": "ホウソウシツ",
+  "types": [
+   "loneliness"
+  ],
+  "origin": "卒業式の日、名前を呼ばれることのなかった生徒の孤独。",
+  "legend": "学校の怪談『放送室の声』— 放課後、誰もいない放送室から自分の名前を呼ぶ声がする。",
+  "description": "古い校内スピーカーにマイクの舌が生えた怪異。出席簿にない名前を、くり返し呼び続ける。",
+  "base": {
+   "hp": 20,
+   "atk": 7,
+   "def": 8,
+   "spd": 10,
+   "mnd": 12
+  },
+  "growth": {
+   "hp": 3.0,
+   "atk": 1.2,
+   "def": 1.4,
+   "spd": 1.6,
+   "mnd": 2.1
+  },
+  "expYield": 40,
+  "sealRate": 1.0,
+  "sprite": "kaii_housoushitsu",
+  "learnset": [
+   {
+    "level": 1,
+    "skill": "touch"
+   },
+   {
+    "level": 1,
+    "skill": "murmur"
+   },
+   {
+    "level": 7,
+    "skill": "call_name"
+   },
+   {
+    "level": 10,
+    "skill": "roll_call"
+   },
+   {
+    "level": 14,
+    "skill": "far_call"
+   },
+   {
+    "level": 19,
+    "skill": "empty_room"
+   }
+  ],
+  "drops": [
+   {
+    "item": "memory_dust",
+    "chance": 0.3
+   },
+   {
+    "item": "mirror_shard",
+    "chance": 0.2
+   }
+  ],
+  "resonance": {
+   "prompt": "なまえを よびたい。……でも、だれの なまえを よべば いいの？",
+   "options": [
+    {
+     "text": "呼びたい名前を、一緒に探そう",
+     "value": 2,
+     "reply": "……いっしょに。"
+    },
+    {
+     "text": "呼ばなくてもいいんだよ",
+     "value": 1,
+     "reply": "よばなきゃ、きえて しまう。"
+    },
+    {
+     "text": "誰も聞いてない",
+     "value": 0,
+     "reply": "（スピーカーから、砂嵐だけが流れた）"
     }
    ]
   }

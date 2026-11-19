@@ -27,7 +27,7 @@
   "tttttttttttttttttttttttttttttttttttttttttt",
   "ttttttttttttttcccccccccccccttttttttttttttt",
   "ttttttttttttttcccccccccccccttttttttttttttt",
-  "tttttttttttttttttttttttttttttttttttttttttt"
+  "ttttttttttttttttttttcttttttttttttttttttttt"
  ],
  "objects": [
   "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
@@ -41,7 +41,7 @@
   "&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&",
   "&xxxxxxxxxxxxx XX  o  XX   xxxxxxxxxxxxxx&",
   "&xxxxxxxxxxxxxX           Xxxxxxxxxxxxxxx&",
-  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+  "&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&"
  ],
  "above": [
   "                                          ",
@@ -145,6 +145,17 @@
    "tx": 39,
    "ty": 5,
    "facing": "left"
+  },
+  {
+   "id": "to_gym",
+   "x": 20,
+   "y": 11,
+   "w": 1,
+   "h": 1,
+   "to": "back_gym",
+   "tx": 11,
+   "ty": 13,
+   "facing": "up"
   }
  ],
  "onEnter": "back_1f_enter"

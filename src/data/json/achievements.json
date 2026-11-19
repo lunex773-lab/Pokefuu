@@ -109,10 +109,10 @@
  {
   "id": "memories_ch1",
   "name": "欠けた記憶",
-  "description": "第1章の記憶片をすべて集めた。",
+  "description": "記憶片を6個集めた。",
   "counter": {
    "key": "memories",
-   "gte": 4
+   "gte": 6
   }
  },
  {
@@ -140,12 +140,12 @@
   "flag": "cat_found"
  },
  {
-  "id": "memories_9",
+  "id": "memories_11",
   "name": "欠けた記憶・弐",
-  "description": "記憶片を9個集めた。",
+  "description": "記憶片を11個集めた。",
   "counter": {
    "key": "memories",
-   "gte": 9
+   "gte": 11
   }
  },
  {
@@ -165,5 +165,17 @@
    "key": "kaii_recruited",
    "gte": 10
   }
+ },
+ {
+  "id": "wonders_done",
+  "name": "七不思議、全部見た",
+  "description": "湊と一緒に学校の七不思議をすべて記録した。",
+  "flag": "wonders_done"
+ },
+ {
+  "id": "book_done",
+  "name": "十六年ぶりの返却",
+  "description": "返ってこなかった本を図書室に返した。",
+  "flag": "book_done"
  }
 ]

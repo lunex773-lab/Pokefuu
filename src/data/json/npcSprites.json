@@ -229,5 +229,27 @@
   "bottomStyle": "pants",
   "accent": "#2a2a34",
   "accessory": "none"
+ },
+ {
+  "id": "librarian",
+  "skin": "#efc29a",
+  "hair": "#3a2a3a",
+  "hairStyle": "long",
+  "top": "#8a7aa8",
+  "bottom": "#4a4458",
+  "bottomStyle": "skirt",
+  "accent": "#f0e8f8",
+  "accessory": "glasses"
+ },
+ {
+  "id": "student_d",
+  "skin": "#e0b088",
+  "hair": "#1a1a20",
+  "hairStyle": "spiky",
+  "top": "#e8e8f0",
+  "bottom": "#2a3a8a",
+  "bottomStyle": "pants",
+  "accent": "#c83a3a",
+  "accessory": "none"
  }
 ]

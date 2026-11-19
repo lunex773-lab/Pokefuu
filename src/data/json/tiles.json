@@ -792,5 +792,28 @@
   ],
   "solid": true,
   "height": 1
+ },
+ {
+  "id": "curtain",
+  "char": "@",
+  "gen": "curtain",
+  "colors": [
+   "#8a1a24",
+   "#6a121a",
+   "#c8a040"
+  ],
+  "solid": true,
+  "height": 2
+ },
+ {
+  "id": "court",
+  "char": "+",
+  "gen": "court",
+  "colors": [
+   "#c89a5a",
+   "#b88a4a",
+   "#f0f0e8"
+  ],
+  "step": "wood"
  }
 ]
