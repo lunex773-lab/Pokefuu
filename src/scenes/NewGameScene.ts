@@ -87,9 +87,13 @@ export class NewGameScene extends Phaser.Scene {
       zIndex: '10',
     } as CSSStyleDeclaration);
     // キャンバスの表示サイズに合わせて入力欄の位置・大きさを決める（1920×1080 基準の 600×80 相当）
+    let last = '';
     const place = () => {
       const r = this.game.canvas.getBoundingClientRect();
       const k = r.height / 1080;
+      const key = `${r.left}|${r.top}|${r.width}|${r.height}`;
+      if (key === last) return;
+      last = key;
       el.style.top = `${r.top + 735 * k}px`;
       el.style.left = `${r.left + r.width / 2}px`;
       el.style.width = `${600 * k}px`;
@@ -97,8 +101,7 @@ export class NewGameScene extends Phaser.Scene {
       el.style.fontSize = `${44 * k}px`;
     };
     place();
-    this.scale.on('resize', place);
-    window.addEventListener('resize', place);
+    this.events.on('update', place);
     el.addEventListener('keydown', (e) => {
       e.stopPropagation();
       if (e.key === 'Enter') {
@@ -108,7 +111,7 @@ export class NewGameScene extends Phaser.Scene {
     });
     document.body.appendChild(el);
     this.inputEl = el;
-    this.events.once('shutdown', () => window.removeEventListener('resize', place));
+    this.events.once('shutdown', () => this.events.off('update', place));
   }
 
   private start(): void {

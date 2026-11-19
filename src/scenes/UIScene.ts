@@ -97,9 +97,9 @@ export class UIScene extends Phaser.Scene {
     const menu = this.add.container(1920 - 196, 20);
     const mg = this.add.graphics();
     drawPanel(mg, 0, 0, 172, 100, { alpha: 0.8, radius: 16 });
-    menu.add([mg, label(this, 86, 50, 'メニュー', Theme.size.s).setOrigin(0.5)]);
-    menu.setSize(172, 100).setInteractive(new Phaser.Geom.Rectangle(0, 0, 172, 100), Phaser.Geom.Rectangle.Contains);
-    menu.on('pointerup', () => this.ctx.input.dispatch('menu'));
+    const menuHit = this.add.zone(0, 0, 172, 100).setOrigin(0).setInteractive();
+    menu.add([mg, label(this, 86, 50, 'メニュー', Theme.size.s).setOrigin(0.5), menuHit]);
+    menuHit.on('pointerup', () => this.ctx.input.dispatch('menu'));
     this.hud.add(menu);
   }
 

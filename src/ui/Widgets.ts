@@ -43,13 +43,15 @@ export class Button extends Phaser.GameObjects.Container {
     super(scene, x, y);
     this.bg = scene.add.graphics();
     this.text = label(scene, w / 2, h / 2, caption, opts.size ?? Theme.size.m).setOrigin(0.5);
-    this.add([this.bg, this.text]);
+    // コンテナに直接 setInteractive すると当たり判定が表示位置からずれるため、
+    // 左上原点のゾーンを子として置き、そこでタップを受ける
+    const hit = scene.add.zone(0, 0, w, h).setOrigin(0).setInteractive({ useHandCursor: true });
+    this.add([this.bg, this.text, hit]);
     this.draw(false);
     this.setSize(w, h);
-    this.setInteractive(new Phaser.Geom.Rectangle(0, 0, w, h), Phaser.Geom.Rectangle.Contains);
-    this.on('pointerdown', () => this.enabled && this.draw(true));
-    this.on('pointerout', () => this.draw(false));
-    this.on('pointerup', () => {
+    hit.on('pointerdown', () => this.enabled && this.draw(true));
+    hit.on('pointerout', () => this.draw(false));
+    hit.on('pointerup', () => {
       if (!this.enabled) return;
       this.draw(false);
       this.opts.sfx?.('confirm');

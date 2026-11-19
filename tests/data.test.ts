@@ -109,6 +109,89 @@ describe('マップ', async () => {
     }
   });
 
+  it('どの到着地点からも、そのマップの出口（ワープ）へ歩いて行ける（閉じ込め防止）', () => {
+    const byId = new Map(maps.map((m) => [m.id, m]));
+    // 進行で開く扉・門（overrides）はすべて開いた状態で判定する（到着時点では開いているため）
+    const opened = new Map(
+      maps.map((m) => {
+        const ground = m.ground.map((r) => [...r]);
+        const objects = m.objects.map((r) => [...r]);
+        for (const o of m.overrides ?? []) {
+          if (o.layer === 'ground') ground[o.y][o.x] = o.char;
+          if (o.layer === 'objects') objects[o.y][o.x] = o.char;
+        }
+        return [m.id, { ground, objects }];
+      }),
+    );
+    const solidAt = (m: (typeof maps)[number], x: number, y: number) => {
+      const grid = opened.get(m.id)!;
+      const g = grid.ground[y]?.[x];
+      const o = grid.objects[y]?.[x];
+      if (g === undefined || o === undefined) return true;
+      const tg = m.legend?.[g] ? reg.tiles.get(m.legend[g]) : reg.tilesByChar.get(g);
+      const to = m.legend?.[o] ? reg.tiles.get(m.legend[o]) : reg.tilesByChar.get(o);
+      return !!(tg?.solid || to?.solid);
+    };
+    const reachable = (m: (typeof maps)[number], sx: number, sy: number) => {
+      const seen = new Set<string>([`${sx},${sy}`]);
+      const queue = [[sx, sy]];
+      while (queue.length) {
+        const [x, y] = queue.shift()!;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const nx = x + dx;
+          const ny = y + dy;
+          const k = `${nx},${ny}`;
+          if (seen.has(k) || solidAt(m, nx, ny)) continue;
+          seen.add(k);
+          queue.push([nx, ny]);
+        }
+      }
+      return seen;
+    };
+    // 各マップへの到着地点（他マップのワープ先）
+    const arrivals: { map: string; x: number; y: number; from: string }[] = [];
+    for (const m of maps) for (const w of m.warps ?? []) arrivals.push({ map: w.to, x: w.tx, y: w.ty, from: `${m.id}.${w.id}` });
+    for (const a of arrivals) {
+      const m = byId.get(a.map)!;
+      const seen = reachable(m, a.x, a.y);
+      // 通常の（隠し・上書きで開く以外の）ワープのうち、少なくとも1つへ行けること
+      const exits = (m.warps ?? []).filter((w) => !w.hidden && !solidAt(m, w.x, w.y));
+      const ok = exits.some((w) => {
+        for (let y = w.y; y < w.y + w.h; y++) for (let x = w.x; x < w.x + w.w; x++) if (seen.has(`${x},${y}`)) return true;
+        return false;
+      });
+      expect(ok, `${a.from} → ${a.map}(${a.x},${a.y}) から出口に行けない`).toBe(true);
+    }
+  });
+
+  it('朝霧町：家を出た地点から、学校・コンビニ・東の道へ歩いて行ける', () => {
+    const town = byIdTown();
+    const start = { x: 5, y: 17 };
+    const seen = new Set<string>();
+    const q = [[start.x, start.y]];
+    seen.add(`${start.x},${start.y}`);
+    const solid = (x: number, y: number) => {
+      const g = town.ground[y]?.[x];
+      const o = town.objects[y]?.[x];
+      if (g === undefined) return true;
+      return !!(reg.tilesByChar.get(g)?.solid || reg.tilesByChar.get(o)?.solid);
+    };
+    while (q.length) {
+      const [x, y] = q.shift()!;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const k = `${x + dx},${y + dy}`;
+        if (seen.has(k) || solid(x + dx, y + dy)) continue;
+        seen.add(k);
+        q.push([x + dx, y + dy]);
+      }
+    }
+    for (const id of ['to_school', 'to_conbini', 'to_yuunagi', 'to_home']) {
+      const w = town.warps!.find((x) => x.id === id)!;
+      expect(seen.has(`${w.x},${w.y}`), id).toBe(true);
+    }
+  });
+  const byIdTown = () => maps.find((m) => m.id === 'asagiri_town')!;
+
   it('参照しているスクリプト・NPCスプライト・エンカウント表が存在する', () => {
     for (const m of maps) {
       const scripts = [
