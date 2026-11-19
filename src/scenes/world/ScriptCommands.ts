@@ -1,6 +1,7 @@
 import { GameConfig } from '@/config/GameConfig';
 import { healFull, kaiiStats, MAX_EN } from '@/domain/creature/Kaii';
 import { SCRIPT_COMMANDS } from '@/domain/script/commands';
+import { formatText } from '@/domain/script/format';
 import type { ScriptRunner } from '@/domain/script/ScriptRunner';
 import type { Direction, ScriptCommand, WeatherId } from '@/domain/types';
 import type { WorldScene } from '../WorldScene';
@@ -18,7 +19,7 @@ const sleep = (scene: Phaser.Scene, ms: number) => new Promise<void>((r) => scen
 export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): void {
   const ui = () => w.ui;
   const s = () => w.session;
-  const fmt = (t: unknown) => str(t).split('{name}').join(s().state.player.name);
+  const fmt = (t: unknown) => formatText(str(t), s().state);
   const visual = () => ui().closeDialogue();
 
   // ---- 会話・演出

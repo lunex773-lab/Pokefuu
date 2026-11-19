@@ -1,0 +1,2210 @@
+[
+ {
+  "id": "ch2_prologue",
+  "commands": [
+   {
+    "cmd": "fade",
+    "to": "black",
+    "ms": 0
+   },
+   {
+    "cmd": "say",
+    "text": "……夢を見た。"
+   },
+   {
+    "cmd": "say",
+    "text": "夕焼けの坂道。誰かが、ベビーカーを押して上っていく。"
+   },
+   {
+    "cmd": "sfx",
+    "id": "chime"
+   },
+   {
+    "cmd": "wait",
+    "ms": 1600
+   },
+   {
+    "cmd": "fade",
+    "to": "clear",
+    "ms": 1200
+   },
+   {
+    "cmd": "say",
+    "text": "目を覚ますと、枕元にナナシが座っていた。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "……かえりたい。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "ゆうやけの、おうち。……チャイムが なる ところ。"
+   },
+   {
+    "cmd": "say",
+    "text": "階下からテレビの音が聞こえる。"
+   },
+   {
+    "cmd": "say",
+    "text": "『夕凪住宅街で、夕方から子どもが帰らないという通報が相次いでいます。いずれも翌朝、同じ空き家の前で見つかっていますが、本人たちは何も覚えていないとのことです』"
+   },
+   {
+    "cmd": "say",
+    "speaker": "母",
+    "text": "……夕凪。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "母",
+    "text": "昔ね、あそこに住んでいたのよ。{name}が、生まれた頃。"
+   },
+   {
+    "cmd": "say",
+    "text": "初めて聞く話だった。……いや。本当に、初めてだろうか。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "母",
+    "text": "もう昔の話。……あそこには、行かないでね。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch2_started",
+    "value": true
+   },
+   {
+    "cmd": "chapter",
+    "id": "ch2"
+   },
+   {
+    "cmd": "title",
+    "text": "Chapter 2",
+    "sub": "住宅街"
+   },
+   {
+    "cmd": "say",
+    "text": "（夕凪住宅街へは、朝霧町の東の道から行ける）"
+   },
+   {
+    "cmd": "autosave"
+   }
+  ]
+ },
+ {
+  "id": "town_east_blocked",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "この先は夕凪住宅街。……今は、行く理由がない。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "yuunagi_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "yuunagi_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "夕凪住宅街。古い家が並ぶ、静かな町。……見覚えは、ない。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "……ここ、しってる。"
+     },
+     {
+      "cmd": "say",
+      "text": "（バス停のそばに、湊がいる）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_arrive",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "よう、{name}。やっぱり来たか。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "ニュース見たろ？ 調査会としては放っとけないからな。先に聞き込みしてたんだ。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "噂はこうだ。夕方5時のチャイムが鳴り終わったとき、外にいた子が『裏側』に連れていかれる。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "で、連れていかれた子はみんな、翌朝同じ家の前で見つかってる。……あの、二階を板で塞いだ空き家の前で。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "俺は公園で聞き込みを続ける。お前はあの空き家を調べてみてくれ。近所の人なら、何か知ってるかもな。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch2_met_minato",
+    "value": true
+   },
+   {
+    "cmd": "moveNpc",
+    "npc": "minato_yuunagi",
+    "dx": 3,
+    "dy": 0
+   },
+   {
+    "cmd": "hideNpc",
+    "npc": "minato_yuunagi"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_minato_park",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch2_clear"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "見つかった子どもたち、昨日のことは何も覚えてないってさ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "……でも、全員が同じ夢を見てた。赤い部屋で、誰かとかくれんぼをする夢だ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch2_entered_back"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "裏側の町……表札のない家、か。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "俺にも見えたらいいんだけどな。……お前、ちゃんと帰ってこいよ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "聞き込みの結果だ。チャイムが鳴るのは夕方5時。空き家の二階が赤く光るのも、5時ちょうどらしい。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "待つなら公園のベンチで休んでりゃいい。……夕方まで、そう長くはないさ。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_saeki",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch2_clear"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "佐伯さん",
+      "text": "そう……あの部屋を、開けたのね。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "佐伯さん",
+      "text": "お母さんにね、たまには顔を見せるように言ってあげて。……ずっと、一人で背負ってきた人だから。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "got_old_key"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "佐伯さん",
+      "text": "夕方5時のチャイムが鳴ったら、あの家の二階には近づかないでね。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "佐伯さん",
+      "text": "……あそこは、開けちゃいけない部屋なの。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "佐伯さん",
+    "text": "……あら？ もしかして、{name}ちゃん？"
+   },
+   {
+    "cmd": "say",
+    "speaker": "佐伯さん",
+    "text": "まあ、大きくなって。わたし、隣に住んでた佐伯よ。覚えてないわよね、まだ赤ちゃんだったもの。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "佐伯さん",
+    "text": "あなたたちが引っ越してから、もう十五年になるのね……"
+   },
+   {
+    "cmd": "say",
+    "text": "あなた、たち。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "佐伯さん",
+    "text": "……ああ、いいえ。歳をとると、言い間違いが多くてね。"
+   },
+   {
+    "cmd": "say",
+    "text": "佐伯さんは一瞬だけ、空き家の二階を見上げた。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "佐伯さん",
+    "text": "あの家、ずっと空き家なのよ。合鍵を預かったままでね。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "合鍵を貸してもらう？",
+    "options": [
+     {
+      "text": "貸してください",
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "佐伯さん",
+        "text": "……そうね。あなたの家だものね。"
+       },
+       {
+        "cmd": "giveItem",
+        "item": "old_key",
+        "qty": 1
+       },
+       {
+        "cmd": "sfx",
+        "id": "item"
+       },
+       {
+        "cmd": "toast",
+        "text": "古い鍵を手に入れた"
+       },
+       {
+        "cmd": "say",
+        "speaker": "佐伯さん",
+        "text": "それと、これも持っていきなさい。お守りよ。"
+       },
+       {
+        "cmd": "giveItem",
+        "item": "juzu",
+        "qty": 1
+       },
+       {
+        "cmd": "sfx",
+        "id": "item"
+       },
+       {
+        "cmd": "toast",
+        "text": "数珠を手に入れた（装備で正気度の減りが半分）"
+       },
+       {
+        "cmd": "setFlag",
+        "key": "got_old_key",
+        "value": true
+       },
+       {
+        "cmd": "say",
+        "speaker": "佐伯さん",
+        "text": "夕方5時のチャイムが鳴ったら、二階には近づかないで。……約束よ。"
+       }
+      ]
+     },
+     {
+      "text": "今はいいです",
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "佐伯さん",
+        "text": "そう。気が向いたら、いつでも声をかけてね。"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_locked_old_house",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "玄関には鍵がかかっている。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "got_old_key"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "（鍵を持っている人がいるかもしれない。家の前の老婦人に話を聞いてみよう）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_nameplate",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "空き家の表札。文字はかすれて読めない。"
+   },
+   {
+    "cmd": "say",
+    "text": "指でなぞると、なぜか胸が痛んだ。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_busstop",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "バス停『夕凪二丁目』。時刻表の最終便の欄に、手書きで『17:00』と書き足されている。"
+   },
+   {
+    "cmd": "say",
+    "text": "……この町に、バスはもう走っていないはずなのに。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_park_sign",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『夕凪二丁目公園 ― 夕方5時のチャイムが鳴ったら、おうちに帰りましょう』"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_slide",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "すべり台。夕方、ここで誰かがずっと一人で遊んでいた気がする。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_shop_sign",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『駄菓子 ゆうなぎ』 ― 色あせた看板。今も営業しているらしい。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_garbage",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "ゴミ捨て場。カラスよけのネットの下に、古いぬいぐるみが捨てられている。"
+   },
+   {
+    "cmd": "say",
+    "text": "片方の目が、こちらを向いていた。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_bench",
+  "commands": [
+   {
+    "cmd": "choice",
+    "prompt": "公園のベンチだ。少し休む？",
+    "options": [
+     {
+      "text": "夕方まで待つ",
+      "then": [
+       {
+        "cmd": "if",
+        "when": {
+         "phase": [
+          "evening",
+          "night",
+          "midnight"
+         ]
+        },
+        "then": [
+         {
+          "cmd": "say",
+          "text": "もう、夕暮れだ。"
+         }
+        ],
+        "else": [
+         {
+          "cmd": "fade",
+          "to": "black",
+          "ms": 500
+         },
+         {
+          "cmd": "setTime",
+          "hour": 16,
+          "minute": 55
+         },
+         {
+          "cmd": "wait",
+          "ms": 400
+         },
+         {
+          "cmd": "fade",
+          "to": "clear",
+          "ms": 500
+         },
+         {
+          "cmd": "say",
+          "text": "ぼんやりしているうちに、空が赤く染まっていた。"
+         },
+         {
+          "cmd": "sfx",
+          "id": "chime"
+         },
+         {
+          "cmd": "wait",
+          "ms": 800
+         },
+         {
+          "cmd": "say",
+          "text": "どこか遠くで、5時のチャイムが鳴り始める。"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "text": "1時間休む",
+      "then": [
+       {
+        "cmd": "fade",
+        "to": "black",
+        "ms": 300
+       },
+       {
+        "cmd": "advanceTime",
+        "minutes": 60
+       },
+       {
+        "cmd": "fade",
+        "to": "clear",
+        "ms": 300
+       }
+      ]
+     },
+     {
+      "text": "やめる",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_kid_a",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "男の子",
+    "text": "5時のチャイムが鳴ったら、すぐ帰らなきゃいけないんだぜ。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "男の子",
+    "text": "鳴り終わるまで外にいると、『もう一人の自分』が先に家に帰っちゃうんだって！"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_kid_b",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "女の子",
+    "text": "あのね、あの空き家の窓から、ときどき女の子が見てるの。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "女の子",
+    "text": "……でもね、あのおうち、だれも住んでないんだよ。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_raincoat",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "…………。"
+   },
+   {
+    "cmd": "say",
+    "text": "黒い雨合羽の人物が、空き家のほうを見ている。雨は、降っていない。"
+   },
+   {
+    "cmd": "say",
+    "text": "目を離した一瞬で、その姿は消えていた。"
+   },
+   {
+    "cmd": "hideNpc",
+    "npc": "raincoat_night"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_housewife",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "kairan_done"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "主婦",
+      "text": "回覧板、ありがとうね。助かったわ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "hasItem": "kairanban_board"
+    },
+    "then": [
+     {
+      "cmd": "if",
+      "when": {
+       "flagGte": {
+        "key": "kairan_count",
+        "value": 3
+       }
+      },
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "主婦",
+        "text": "全部回してくれたのね！ ありがとう。お礼に、これを。"
+       },
+       {
+        "cmd": "takeItem",
+        "item": "kairanban_board",
+        "qty": 1
+       },
+       {
+        "cmd": "money",
+        "amount": 1500
+       },
+       {
+        "cmd": "giveItem",
+        "item": "dagashi",
+        "qty": 3
+       },
+       {
+        "cmd": "sfx",
+        "id": "item"
+       },
+       {
+        "cmd": "toast",
+        "text": "1500円と駄菓子の詰め合わせ ×3 を受け取った"
+       },
+       {
+        "cmd": "say",
+        "text": "返された回覧板の最後の確認欄に、知らない名前が書き足されていた。……にじんでいて、読めない。"
+       },
+       {
+        "cmd": "setFlag",
+        "key": "kairan_done",
+        "value": true
+       }
+      ],
+      "else": [
+       {
+        "cmd": "say",
+        "speaker": "主婦",
+        "text": "あと少しね。向かいのお宅と、東のお宅と、南のお宅よ。"
+       }
+      ]
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "主婦",
+    "text": "あら、学生さん？ ちょうどよかった。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "主婦",
+    "text": "この回覧板、ご近所の3軒に回してもらえないかしら。腰が痛くてねえ。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "引き受ける？",
+    "options": [
+     {
+      "text": "引き受ける",
+      "then": [
+       {
+        "cmd": "giveItem",
+        "item": "kairanban_board",
+        "qty": 1
+       },
+       {
+        "cmd": "toast",
+        "text": "回覧板を受け取った"
+       },
+       {
+        "cmd": "say",
+        "text": "（届け先：向かいの家・東の家・南の家。郵便受けに入れよう）"
+       }
+      ]
+     },
+     {
+      "text": "今は無理",
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "主婦",
+        "text": "そう……気が向いたらお願いね。"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_mail_a",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "郵便受けだ。チラシがあふれている。"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_mail_b",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "hasItem": "kairanban_board"
+      },
+      {
+       "notFlag": "kairan_b"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "郵便受けに回覧板を入れた。"
+     },
+     {
+      "cmd": "wait",
+      "ms": 500
+     },
+     {
+      "cmd": "say",
+      "text": "……と、すぐに中から押し戻されてきた。確認欄の判子が、一つ増えている。"
+     },
+     {
+      "cmd": "incFlag",
+      "key": "kairan_count"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "kairan_b",
+      "value": true
+     },
+     {
+      "cmd": "sfx",
+      "id": "select"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "郵便受けだ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_mail_c",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "hasItem": "kairanban_board"
+      },
+      {
+       "notFlag": "kairan_c"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "郵便受けに回覧板を入れた。"
+     },
+     {
+      "cmd": "wait",
+      "ms": 500
+     },
+     {
+      "cmd": "say",
+      "text": "……と、すぐに中から押し戻されてきた。確認欄の判子が、一つ増えている。"
+     },
+     {
+      "cmd": "incFlag",
+      "key": "kairan_count"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "kairan_c",
+      "value": true
+     },
+     {
+      "cmd": "sfx",
+      "id": "select"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "郵便受けだ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_mail_d",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "hasItem": "kairanban_board"
+      },
+      {
+       "notFlag": "kairan_d"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "郵便受けに回覧板を入れた。"
+     },
+     {
+      "cmd": "wait",
+      "ms": 500
+     },
+     {
+      "cmd": "say",
+      "text": "……と、すぐに中から押し戻されてきた。確認欄の判子が、一つ増えている。"
+     },
+     {
+      "cmd": "incFlag",
+      "key": "kairan_count"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "kairan_d",
+      "value": true
+     },
+     {
+      "cmd": "sfx",
+      "id": "select"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "郵便受けだ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_mayu",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "cat_found"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "まゆ",
+      "text": "ミケ、ちゃんと帰ってきたよ！ ありがとう！"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "hasItem": "mike_collar"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "まゆ",
+      "text": "それ……ミケの首輪！ ミケ、近くにいるんだ！"
+     },
+     {
+      "cmd": "takeItem",
+      "item": "mike_collar",
+      "qty": 1
+     },
+     {
+      "cmd": "say",
+      "speaker": "まゆ",
+      "text": "よかった……きっと、すぐ帰ってくるよね。おれいに、これあげる！"
+     },
+     {
+      "cmd": "giveItem",
+      "item": "charm_bell",
+      "qty": 1
+     },
+     {
+      "cmd": "giveItem",
+      "item": "bell",
+      "qty": 2
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "鈴の御守りと鈴 ×2 をもらった"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "cat_found",
+      "value": true
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "cat_quest"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "まゆ",
+      "text": "ミケ、夜になると公園のどこかで鳴いてるの。でも、暗くて見つからなくて……"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "まゆ",
+    "text": "ねえ、ミケ見なかった？ 三毛猫なの。もう三日も帰ってこなくて……"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "cat_quest",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "text": "（夜の公園を探してみよう。暗い場所は『視る』で探せる）"
+   }
+  ]
+ },
+ {
+  "id": "yuunagi_cat",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "茂みの奥で、三毛猫が丸くなっていた。"
+   },
+   {
+    "cmd": "say",
+    "text": "手を伸ばすと、猫は首輪だけを残して塀の向こうへ駆けていった。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "mike_collar",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "ミケの首輪を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_collar",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "dagashiya_owner",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "dagashi_talked"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "店主",
+      "text": "いらっしゃい。……おや、見ない顔だね。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "店主",
+      "text": "昔はね、このへんの子らは夕方になると公園で『はないちもんめ』をやったもんさ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "店主",
+      "text": "……最後まで、誰にも呼ばれない子が一人いてねえ。あの子は、どこへ帰ったんだか。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "dagashi_talked",
+      "value": true
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "店主",
+      "text": "いらっしゃい。"
+     }
+    ]
+   },
+   {
+    "cmd": "shop",
+    "id": "dagashiya"
+   }
+  ]
+ },
+ {
+  "id": "dagashiya_shelf",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "色とりどりの駄菓子が並んでいる。……一番上の棚に、同じ柄の小さなお面が二つ、埃をかぶっていた。"
+   }
+  ]
+ },
+ {
+  "id": "old_house_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "old_house_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "old_house_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "埃っぽい空気。家具は残ったまま、時間だけが止まっている。"
+     },
+     {
+      "cmd": "say",
+      "text": "……知らない家のはずなのに、どこに何があるのか、なぜか分かる。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "old_house_tatami",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "got_mem_crib"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "和室の畳に、何かの脚の跡が残っている。"
+     },
+     {
+      "cmd": "memory",
+      "id": "mem_crib_marks"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "got_mem_crib",
+      "value": true
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "畳に、ベビーベッドの脚の跡が二台分。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "old_house_pillar",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "柱に、背比べの線が刻まれている。"
+   },
+   {
+    "cmd": "say",
+    "text": "線は一本ずつしかない。……一人分だけ。"
+   }
+  ]
+ },
+ {
+  "id": "old_house_kitchen",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "流し台は乾ききっている。食器棚に、小さな茶碗が二つ並んでいた。"
+   }
+  ]
+ },
+ {
+  "id": "old_house_shoebox",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "靴箱は空っぽだ。"
+   }
+  ]
+ },
+ {
+  "id": "old_house_boarded",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch2_entered_back"
+    },
+    "then": [
+     {
+      "cmd": "choice",
+      "prompt": "板の隙間から、赤い光が漏れている。裏層へ行く？",
+      "options": [
+       {
+        "text": "行く",
+        "then": [
+         {
+          "cmd": "sfx",
+          "id": "distort"
+         },
+         {
+          "cmd": "warp",
+          "map": "back_yuunagi",
+          "x": 26,
+          "y": 13,
+          "facing": "down",
+          "transition": "distort"
+         }
+        ]
+       },
+       {
+        "text": "やめる",
+        "then": []
+       }
+      ]
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "evening",
+      "night",
+      "midnight"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "sfx",
+      "id": "chime"
+     },
+     {
+      "cmd": "wait",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "どこか遠くで、5時のチャイムが鳴っている。"
+     },
+     {
+      "cmd": "say",
+      "text": "二階を塞ぐ板の隙間から、夕焼けのような赤い光が漏れ出していた。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "……このうえ。"
+     },
+     {
+      "cmd": "choice",
+      "prompt": "板の隙間に、手を伸ばす？",
+      "options": [
+       {
+        "text": "手を伸ばす",
+        "then": [
+         {
+          "cmd": "distort",
+          "intensity": 1.2
+         },
+         {
+          "cmd": "sfx",
+          "id": "distort"
+         },
+         {
+          "cmd": "fade",
+          "to": "black",
+          "ms": 600
+         },
+         {
+          "cmd": "say",
+          "text": "板の向こうから、小さな手が、こちらの手を握り返した。"
+         },
+         {
+          "cmd": "setFlag",
+          "key": "ch2_entered_back",
+          "value": true
+         },
+         {
+          "cmd": "warp",
+          "map": "back_yuunagi",
+          "x": 26,
+          "y": 13,
+          "facing": "down",
+          "transition": "distort"
+         }
+        ]
+       },
+       {
+        "text": "やめておく",
+        "then": []
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "二階への階段は、板で打ち付けられている。隙間から、冷たい風が吹いてくる。"
+     },
+     {
+      "cmd": "say",
+      "text": "（夕方、5時のチャイムの頃にもう一度来てみよう。公園のベンチで時間をつぶせる）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_yuunagi_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "back_yuunagi_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "back_yuunagi_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "……気がつくと、夕焼けの通りに立っていた。"
+     },
+     {
+      "cmd": "say",
+      "text": "太陽は沈みかけたまま動かない。チャイムの残響が、いつまでも消えない。"
+     },
+     {
+      "cmd": "say",
+      "text": "どの家にも、玄関がない。表札もない。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "おうち……みえない。なまえが、ないから。"
+     },
+     {
+      "cmd": "say",
+      "text": "（町のどこかにある『表札』を4つ集めれば、あの家の門が開きそうだ）"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_yuunagi_kid",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "影の子",
+    "text": "はないちもんめ、しよ？"
+   },
+   {
+    "cmd": "say",
+    "speaker": "影の子",
+    "text": "あのこが ほしい。あのこじゃ わからん。……あなたは、いらない。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "影の子",
+    "text": "ひょうさつを あつめたら、おうちに はいれるよ。すべりだいと、どなるおじいさんと、ごみすてばと、かいらんばん。"
+   },
+   {
+    "cmd": "say",
+    "text": "影の子は、くすくす笑って夕焼けに溶けた。"
+   }
+  ]
+ },
+ {
+  "id": "back_yuunagi_busstop",
+  "commands": [
+   {
+    "cmd": "choice",
+    "prompt": "時刻表に『現実行き 17:00』とだけ書かれている。帰る？",
+    "options": [
+     {
+      "text": "帰る",
+      "then": [
+       {
+        "cmd": "sfx",
+        "id": "distort"
+       },
+       {
+        "cmd": "warp",
+        "map": "yuunagi",
+        "x": 3,
+        "y": 13,
+        "facing": "down",
+        "transition": "distort"
+       }
+      ]
+     },
+     {
+      "text": "まだ残る",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_shop_sign",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『駄菓子 ゆうなぎ』 ― 看板の文字が、ゆっくりと滲んでいく。"
+   }
+  ]
+ },
+ {
+  "id": "back_park_sign",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『夕方5時のチャイムが鳴ったら、おうちに帰りましょう』"
+   },
+   {
+    "cmd": "say",
+    "text": "……帰る家の名前を、思い出せたら。"
+   }
+  ]
+ },
+ {
+  "id": "back_np_got",
+  "commands": [
+   {
+    "cmd": "incFlag",
+    "key": "nameplates"
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flagGte": {
+      "key": "nameplates",
+      "value": 4
+     }
+    },
+    "then": [
+     {
+      "cmd": "toast",
+      "text": "表札が4つそろった"
+     },
+     {
+      "cmd": "say",
+      "text": "どこかで、重い門の開く音がした。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "……おうち。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "gate_open",
+      "value": true
+     },
+     {
+      "cmd": "refreshMap"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "toast",
+      "text": "表札を見つけた"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_np_slide",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "すべり台のてっぺんに、何かが置かれている。"
+   },
+   {
+    "cmd": "say",
+    "text": "……表札だ。名前の部分は、白く塗りつぶされている。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "np_slide",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_np_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_np_kaminari",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "庭に足を踏み入れた瞬間――"
+   },
+   {
+    "cmd": "shake",
+    "ms": 500,
+    "intensity": 0.006
+   },
+   {
+    "cmd": "sfx",
+    "id": "encounter"
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "こらぁっ！ わしの庭に入るなと言うとろうが！"
+   },
+   {
+    "cmd": "battle",
+    "encounter": "kaminari"
+   },
+   {
+    "cmd": "say",
+    "text": "雷雲が晴れると、庭の物干し竿に表札が引っかかっていた。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "np_kaminari",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_np_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_np_garbage",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "ゴミ袋の山の奥で、何かが光った。"
+   },
+   {
+    "cmd": "say",
+    "text": "……捨てられた表札だ。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "np_garbage",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_np_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_np_board",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "電柱に、回覧板が括りつけられている。無数の目が、こちらを見ている。"
+   },
+   {
+    "cmd": "say",
+    "text": "『問：この町のチャイムが鳴るのは、何時？』"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "答える",
+    "options": [
+     {
+      "text": "4時",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "回覧板の目が、一斉にこちらを睨んだ。"
+       },
+       {
+        "cmd": "sanity",
+        "delta": -5
+       }
+      ]
+     },
+     {
+      "text": "5時",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "目が、ゆっくりと閉じた。回覧板の裏に、表札が貼りつけてある。"
+       },
+       {
+        "cmd": "setFlag",
+        "key": "np_board",
+        "value": true
+       },
+       {
+        "cmd": "call",
+        "script": "back_np_got"
+       },
+       {
+        "cmd": "refreshMap"
+       }
+      ]
+     },
+     {
+      "text": "6時",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "回覧板の目が、一斉にこちらを睨んだ。"
+       },
+       {
+        "cmd": "sanity",
+        "delta": -5
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_old_gate",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "gate_open"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "門柱に、表札が4つ掛かっている。どれも、名前の部分だけが白い。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "門柱に、表札を掛ける場所が4つある。今は空っぽだ。"
+     },
+     {
+      "cmd": "say",
+      "text": "（表札：すべり台・どなるおじいさんの庭・ゴミ捨て場・回覧板）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_sunset_memory",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "夕焼けの坂に、うっすらと誰かの影が見える。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_sunset_road"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_sunset",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_old_house_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "back_old_house_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "back_old_house_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "家の中は、外よりも暗い。壁のあちこちに、赤いクレヨンの線が走っている。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "かくれんぼ。……みつけて。"
+     },
+     {
+      "cmd": "say",
+      "text": "（どこかに隠れている『おもちゃ』を3つ見つけよう。『視る』が役に立ちそうだ）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_toy_got",
+  "commands": [
+   {
+    "cmd": "incFlag",
+    "key": "toys"
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flagGte": {
+      "key": "toys",
+      "value": 3
+     }
+    },
+    "then": [
+     {
+      "cmd": "toast",
+      "text": "おもちゃを3つ見つけた"
+     },
+     {
+      "cmd": "say",
+      "text": "二階のほうで、板の外れる音がした。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "？？？",
+      "text": "……みーつけた。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "stairs_open",
+      "value": true
+     },
+     {
+      "cmd": "refreshMap"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "toast",
+      "text": "おもちゃを見つけた"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_toy_rattle",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "押し入れの隙間に、ガラガラが落ちていた。振ると、乾いた音がした。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "toy_rattle",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_toy_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_toy_bear",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "棚の陰に、小さなくまのぬいぐるみ。首に、色あせたリボンが結ばれている。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "toy_bear",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_toy_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_toy_blocks",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "食卓の下に、積み木が二人分、きちんと積まれていた。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "toy_blocks",
+    "value": true
+   },
+   {
+    "cmd": "call",
+    "script": "back_toy_got"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_techo",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "台所の引き出しに、何か入っている。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_boshi_techo"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_techo",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "…………。"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_shoes",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "靴箱の奥が、ぼんやりと光っている。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_two_shoes"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_shoes",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_pillar",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "柱に、背比べの線が刻まれている。"
+   },
+   {
+    "cmd": "say",
+    "text": "……こちらの柱には、線が二本ずつ並んでいた。"
+   },
+   {
+    "cmd": "sanity",
+    "delta": -2
+   }
+  ]
+ },
+ {
+  "id": "back_stairs_blocked",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "二階への階段は板で塞がれている。"
+   },
+   {
+    "cmd": "say",
+    "text": "板の向こうで、誰かが小さく数を数えている。……もういいかい。"
+   }
+  ]
+ },
+ {
+  "id": "nursery_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "nursery_first"
+    },
+    "then": [
+     {
+      "cmd": "setFlag",
+      "key": "nursery_first",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "そこは、子ども部屋だった。"
+     },
+     {
+      "cmd": "say",
+      "text": "ベビーベッドが二つ。壁という壁に、赤いクレヨンの文字。"
+     },
+     {
+      "cmd": "say",
+      "text": "『ここからだして』『ここからだして』『ここからだして』……"
+     },
+     {
+      "cmd": "sanity",
+      "delta": -5
+     },
+     {
+      "cmd": "say",
+      "text": "（危険度5。正気度が削られていく。準備が足りなければ、一度引き返そう）"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "nursery_crib",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "小さなベビーベッド。名札の欄は、空白だ。"
+   }
+  ]
+ },
+ {
+  "id": "nursery_boss",
+  "commands": [
+   {
+    "cmd": "shake",
+    "ms": 700,
+    "intensity": 0.006
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "……あけて。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "あけて、あけて、あけて、あけて、あけて"
+   },
+   {
+    "cmd": "say",
+    "text": "塞がれた扉そのものが、こちらを見ていた。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "……こわくない。わたしが、いるよ。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "挑む？",
+    "options": [
+     {
+      "text": "挑む",
+      "then": []
+     },
+     {
+      "text": "まだだ（引き返す）",
+      "then": [
+       {
+        "cmd": "movePlayer",
+        "dx": 0,
+        "dy": 2
+       },
+       {
+        "cmd": "end"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "battle",
+    "encounter": "boss_crayon"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch2_boss_cleared",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   },
+   {
+    "cmd": "call",
+    "script": "nursery_after"
+   }
+  ]
+ },
+ {
+  "id": "nursery_boss_rematch",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "扉の隙間から、また小さな手が伸びている。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "もう一度、向き合う？",
+    "options": [
+     {
+      "text": "向き合う",
+      "then": []
+     },
+     {
+      "text": "やめる",
+      "then": [
+       {
+        "cmd": "movePlayer",
+        "dx": 0,
+        "dy": 2
+       },
+       {
+        "cmd": "end"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "battle",
+    "encounter": "boss_crayon"
+   }
+  ]
+ },
+ {
+  "id": "nursery_after",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "赤い文字が、ゆっくりと薄れていく。"
+   },
+   {
+    "cmd": "say",
+    "text": "……一行だけ、消えずに残った。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_crayon"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "{sib}。"
+   },
+   {
+    "cmd": "say",
+    "text": "ナナシが、初めてそう呼んだ。"
+   },
+   {
+    "cmd": "fade",
+    "to": "black",
+    "ms": 900
+   },
+   {
+    "cmd": "setTime",
+    "hour": 19,
+    "minute": 30
+   },
+   {
+    "cmd": "warp",
+    "map": "yuunagi",
+    "x": 26,
+    "y": 8,
+    "facing": "down",
+    "transition": "fade"
+   },
+   {
+    "cmd": "say",
+    "text": "空き家の二階を塞いでいた板は、内側から外れていた。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "黒い雨合羽の人物",
+    "text": "……第二の封印、解除。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "黒い雨合羽の人物",
+    "text": "対象の裏層接続を確認。観測を継続する。"
+   },
+   {
+    "cmd": "say",
+    "text": "振り返ったときには、誰もいなかった。雨は、降っていない。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch2_clear",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊（電話）",
+    "text": "{name}！ 無事か？ 公園で寝てた子どもたち、みんな目を覚ましたってさ！"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊（電話）",
+    "text": "……なあ。お前の家、昔あそこだったんだな。佐伯さんに聞いた。"
+   },
+   {
+    "cmd": "playerExp",
+    "amount": 120
+   },
+   {
+    "cmd": "autosave"
+   },
+   {
+    "cmd": "title",
+    "text": "Chapter 2 Clear",
+    "sub": "開かずの部屋"
+   },
+   {
+    "cmd": "say",
+    "text": "―― Chapter 3「商店街」へ続く（制作中）――"
+   },
+   {
+    "cmd": "say",
+    "text": "（裏層へは、空き家の階段からいつでも行ける。表札の町で怪異を育てたり、記憶片を探したりできる）"
+   }
+  ]
+ },
+ {
+  "id": "stairs_boss_rematch",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "最上段に、再びそれがいた。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "もう一度、向き合う？",
+    "options": [
+     {
+      "text": "向き合う",
+      "then": []
+     },
+     {
+      "text": "やめる",
+      "then": [
+       {
+        "cmd": "movePlayer",
+        "dx": 0,
+        "dy": 2
+       },
+       {
+        "cmd": "end"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "battle",
+    "encounter": "boss_juusandan"
+   }
+  ]
+ }
+]

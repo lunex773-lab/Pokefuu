@@ -1,4 +1,38 @@
 [
-  { "id": "conbini", "name": "ヨツバマート", "items": ["dango", "candy", "senkou", "hanshi", "sumi", "salt", "cloth", "flashlight"] },
-  { "id": "vending", "name": "自動販売機", "items": ["cocoa"] }
+ {
+  "id": "conbini",
+  "name": "ヨツバマート",
+  "items": [
+   "dango",
+   "candy",
+   "senkou",
+   "hanshi",
+   "sumi",
+   "salt",
+   "cloth",
+   "flashlight"
+  ]
+ },
+ {
+  "id": "vending",
+  "name": "自動販売機",
+  "items": [
+   "cocoa"
+  ]
+ },
+ {
+  "id": "dagashiya",
+  "name": "駄菓子屋 ゆうなぎ",
+  "items": [
+   "dango",
+   "candy",
+   "ramune",
+   "dagashi",
+   "senkou",
+   "hanshi",
+   "sumi",
+   "salt",
+   "cloth"
+  ]
+ }
 ]

@@ -1,0 +1,300 @@
+{
+ "id": "back_yuunagi",
+ "name": "裏・夕凪住宅街",
+ "layer": "back",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": false,
+ "dangerLevel": 3,
+ "fixedPhase": "evening",
+ "palette": "back",
+ "ambience": "back_town",
+ "weather": [
+  "clear",
+  "fog",
+  "redmoon"
+ ],
+ "ground": [
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "......:........:......................:.....",
+  "......:........:......:::::::::,......:.....",
+  "......:........:......:,::::::::......:.....",
+  "......:........:......:::::::,::......:.....",
+  "......:........:......::,:::::::......:.....",
+  "............................................",
+  "............................................",
+  "____________________________________________",
+  "============================================",
+  "--------------------------------------------",
+  "============================================",
+  "____________________________________________",
+  ".................__.........................",
+  ".................__.........................",
+  "...aaaa..........__.........................",
+  "...aaaa..........__.........................",
+  "...aaaa..........__.........................",
+  ".....,...........__.________................",
+  ".................__.::::::::::::::::::::....",
+  "............,....__...................,.....",
+  ".................__.........,...............",
+  "...........,.....__...,.....................",
+  ".................__.........................",
+  "........,........__......,..................",
+  ".................__.........................",
+  "............................................"
+ ],
+ "objects": [
+  "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+  "                      RRRRRRRRRR            ",
+  "   RRRRRRR  QQQQQQQ   RRRRRRRRRR   RRRRRRR  ",
+  "   RRRRRRR  QQQQQQQ   RRRRRRRRRR   RRRRRRR  ",
+  "   HOHHHOH  HOHHHOH  yHHOHHHHOHHy  HOHHHOH  ",
+  "   HHHHHHH  HHHHHHH  yHHHHHHHHHHy  HHHHHHH  ",
+  "                     yHHHHHHHHHHy           ",
+  "                     y          y           ",
+  "                     y        T y           ",
+  "                     y          y           ",
+  "                     y          y           ",
+  " FFFFF FFFFFFFF FFFFFyyyy]y]yyyyyFFFFF FFFF ",
+  "   U E    |     E             |      E     f",
+  "                                           f",
+  "                                           f",
+  "                                           f",
+  "                                           f",
+  "      L             L             L        f",
+  " FFFFFF  FFFFFFFF                           ",
+  " F        i     F   QQQQQQQQ  RRRRRRR       ",
+  " F       Y  JJ  F   QQQQQQQQ  RRRRRRR       ",
+  " F       Y    T F   HOOHHOOH  HOHHHOH       ",
+  " F              F   HHHHHHHH  HHHHHHH    T  ",
+  " F              F   i      g       E        ",
+  " F b    L     b F                           ",
+  " F              F  g          QQQQQQQ       ",
+  " F   NN         F             QQQQQQQ       ",
+  " F              F             HOHHHOH    T  ",
+  " F T          T F             HHHHHHH       ",
+  " F              F                           ",
+  " F              F                           ",
+  "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+ ],
+ "above": [
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                              A             ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "              A                             ",
+  "                                         K  ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                         K  ",
+  "   A          A                             ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            "
+ ],
+ "overrides": [
+  {
+   "x": 26,
+   "y": 11,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "gate_open"
+   }
+  },
+  {
+   "x": 25,
+   "y": 11,
+   "layer": "objects",
+   "char": "[",
+   "when": {
+    "flag": "gate_open"
+   }
+  },
+  {
+   "x": 27,
+   "y": 11,
+   "layer": "objects",
+   "char": "[",
+   "when": {
+    "flag": "gate_open"
+   }
+  },
+  {
+   "x": 26,
+   "y": 6,
+   "layer": "objects",
+   "char": "D",
+   "when": {
+    "flag": "gate_open"
+   }
+  }
+ ],
+ "encounters": {
+  "table": "back_yuunagi",
+  "maxSymbols": 4
+ },
+ "npcs": [
+  {
+   "id": "shadow_kid",
+   "name": "影の子",
+   "sprite": "shadow_girl",
+   "x": 8,
+   "y": 25,
+   "facing": "down",
+   "script": "back_yuunagi_kid",
+   "when": {
+    "notFlag": "gate_open"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "busstop",
+   "x": 3,
+   "y": 12,
+   "script": "back_yuunagi_busstop"
+  },
+  {
+   "id": "np_slide",
+   "x": 9,
+   "y": 20,
+   "script": "back_np_slide",
+   "when": {
+    "notFlag": "np_slide"
+   }
+  },
+  {
+   "id": "np_slide2",
+   "x": 9,
+   "y": 21,
+   "script": "back_np_slide",
+   "when": {
+    "notFlag": "np_slide"
+   }
+  },
+  {
+   "id": "np_kaminari",
+   "x": 15,
+   "y": 8,
+   "script": "back_np_kaminari",
+   "when": {
+    "notFlag": "np_kaminari"
+   }
+  },
+  {
+   "id": "np_garbage",
+   "x": 19,
+   "y": 25,
+   "script": "back_np_garbage",
+   "hidden": true,
+   "when": {
+    "notFlag": "np_garbage"
+   }
+  },
+  {
+   "id": "np_board",
+   "x": 10,
+   "y": 12,
+   "script": "back_np_board",
+   "when": {
+    "notFlag": "np_board"
+   }
+  },
+  {
+   "id": "gate_l",
+   "x": 25,
+   "y": 11,
+   "script": "back_old_gate"
+  },
+  {
+   "id": "gate_r",
+   "x": 27,
+   "y": 11,
+   "script": "back_old_gate"
+  },
+  {
+   "id": "gate_c",
+   "x": 26,
+   "y": 11,
+   "script": "back_old_gate",
+   "when": {
+    "notFlag": "gate_open"
+   }
+  },
+  {
+   "id": "sunset",
+   "x": 2,
+   "y": 16,
+   "script": "back_sunset_memory",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_mem_sunset"
+   }
+  },
+  {
+   "id": "shop_sign",
+   "x": 20,
+   "y": 23,
+   "script": "back_shop_sign"
+  },
+  {
+   "id": "park_sign",
+   "x": 10,
+   "y": 19,
+   "script": "back_park_sign"
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_back_old_house",
+   "x": 26,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "to": "back_old_house",
+   "tx": 8,
+   "ty": 10,
+   "facing": "up",
+   "when": {
+    "flag": "gate_open"
+   },
+   "transition": "distort"
+  }
+ ],
+ "distortions": [
+  {
+   "x": 19,
+   "y": 25
+  },
+  {
+   "x": 2,
+   "y": 16
+  }
+ ],
+ "onEnter": "back_yuunagi_enter"
+}

@@ -1,11 +1,74 @@
 [
-  { "id": "ch1", "no": "Chapter 1", "title": "学校", "region": "桜ヶ丘高校", "status": "implemented", "summary": "十三階段の噂。踊り場の鏡の向こうで、名前のない影と出会う。" },
-  { "id": "ch2", "no": "Chapter 2", "title": "住宅街", "region": "夕凪住宅街", "status": "planned", "summary": "" },
-  { "id": "ch3", "no": "Chapter 3", "title": "商店街", "region": "白灯商店街", "status": "planned", "summary": "" },
-  { "id": "ch4", "no": "Chapter 4", "title": "病院", "region": "静寂病院", "status": "planned", "summary": "" },
-  { "id": "ch5", "no": "Chapter 5", "title": "地下鉄", "region": "月影地下鉄", "status": "planned", "summary": "" },
-  { "id": "ch6", "no": "Chapter 6", "title": "遊園地", "region": "忘却遊園地", "status": "planned", "summary": "" },
-  { "id": "ch7", "no": "Chapter 7", "title": "研究所", "region": "黒雨研究所", "status": "planned", "summary": "" },
-  { "id": "ch8", "no": "Chapter 8", "title": "妹の記憶", "region": "封印神社", "status": "planned", "summary": "" },
-  { "id": "final", "no": "Final", "title": "裏層最深部", "region": "裏層最深部", "status": "planned", "summary": "" }
+ {
+  "id": "ch1",
+  "no": "Chapter 1",
+  "title": "学校",
+  "region": "桜ヶ丘高校",
+  "status": "implemented",
+  "summary": "十三階段の噂。踊り場の鏡の向こうで、名前のない影と出会う。"
+ },
+ {
+  "id": "ch2",
+  "no": "Chapter 2",
+  "title": "住宅街",
+  "region": "夕凪住宅街",
+  "status": "implemented",
+  "summary": "夕方5時のチャイムの後、帰ってこない子がいる。かつて暮らした夕凪の家の、板で塞がれた子ども部屋へ。"
+ },
+ {
+  "id": "ch3",
+  "no": "Chapter 3",
+  "title": "商店街",
+  "region": "白灯商店街",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "ch4",
+  "no": "Chapter 4",
+  "title": "病院",
+  "region": "静寂病院",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "ch5",
+  "no": "Chapter 5",
+  "title": "地下鉄",
+  "region": "月影地下鉄",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "ch6",
+  "no": "Chapter 6",
+  "title": "遊園地",
+  "region": "忘却遊園地",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "ch7",
+  "no": "Chapter 7",
+  "title": "研究所",
+  "region": "黒雨研究所",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "ch8",
+  "no": "Chapter 8",
+  "title": "妹の記憶",
+  "region": "封印神社",
+  "status": "planned",
+  "summary": ""
+ },
+ {
+  "id": "final",
+  "no": "Final",
+  "title": "裏層最深部",
+  "region": "裏層最深部",
+  "status": "planned",
+  "summary": ""
+ }
 ]

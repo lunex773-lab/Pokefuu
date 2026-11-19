@@ -1,43 +1,597 @@
 [
-  { "id": "touch", "name": "ふれる", "type": "none", "category": "phys", "power": 35, "accuracy": 100, "cost": 0, "target": "enemy", "description": "そっと触れる。気力を使わない。" },
-  { "id": "stare", "name": "みつめる", "type": "none", "category": "support", "power": 0, "accuracy": 100, "cost": 0, "target": "enemy", "description": "じっと見つめ、相手の守りを崩す。", "buff": { "stat": "def", "stages": -1, "to": "target" } },
-
-  { "id": "behind_you", "name": "うしろにいる", "type": "fear", "category": "mind", "power": 40, "accuracy": 100, "cost": 1, "target": "enemy", "description": "背後に立つ気配。主人公の正気度も削る。", "sanityDamage": 2 },
-  { "id": "startle", "name": "おどかす", "type": "fear", "category": "mind", "power": 45, "accuracy": 95, "cost": 1, "target": "enemy", "description": "不意に驚かせる。ときどき恐慌にする。", "status": { "id": "panic", "chance": 0.2 } },
-  { "id": "shadow_stitch", "name": "影縫い", "type": "fear", "category": "phys", "power": 55, "accuracy": 90, "cost": 2, "target": "enemy", "description": "影を床に縫いとめる。ときどき呪縛する。", "status": { "id": "bind", "chance": 0.2 } },
-  { "id": "dark_hand", "name": "暗闇の手", "type": "fear", "category": "mind", "power": 72, "accuracy": 90, "cost": 3, "target": "enemy", "description": "闇の中から無数の手が伸びる。" },
-  { "id": "nightmare", "name": "悪夢", "type": "fear", "category": "mind", "power": 60, "accuracy": 85, "cost": 5, "target": "allEnemies", "description": "全員に悪夢を見せる。ときどき恐慌にする。", "status": { "id": "panic", "chance": 0.15 } },
-
-  { "id": "murmur", "name": "ひとりごと", "type": "loneliness", "category": "mind", "power": 40, "accuracy": 100, "cost": 0, "target": "enemy", "description": "誰にも届かない呟き。気力を使わない。" },
-  { "id": "hide", "name": "かくれる", "type": "loneliness", "category": "support", "power": 0, "accuracy": 100, "cost": 1, "target": "self", "description": "物陰に隠れ、守りを大きく固める。", "buff": { "stat": "def", "stages": 2, "to": "self" } },
-  { "id": "cold_finger", "name": "つめたい指", "type": "loneliness", "category": "phys", "power": 55, "accuracy": 95, "cost": 2, "target": "enemy", "description": "温もりを知らない指先で触れる。" },
-  { "id": "far_call", "name": "遠い呼び声", "type": "loneliness", "category": "mind", "power": 62, "accuracy": 90, "cost": 3, "target": "enemy", "description": "遠くから名前を呼ぶ声。ときどき失声にする。", "status": { "id": "silence", "chance": 0.25 } },
-  { "id": "call_name", "name": "なまえをよぶ", "type": "loneliness", "category": "mind", "power": 50, "accuracy": 100, "cost": 2, "target": "enemy", "priority": 1, "description": "名もなき声で呼びかける。必ず先に動ける。" },
-  { "id": "nestle", "name": "よりそう", "type": "loneliness", "category": "support", "power": 0, "accuracy": 100, "cost": 3, "target": "ally", "description": "仲間に寄り添い、HPを回復する。", "heal": { "ratio": 0.35 } },
-  { "id": "empty_room", "name": "からっぽの部屋", "type": "loneliness", "category": "mind", "power": 58, "accuracy": 90, "cost": 4, "target": "allEnemies", "description": "誰もいない部屋の静けさで全員を包む。" },
-
-  { "id": "shout", "name": "どなる", "type": "anger", "category": "mind", "power": 42, "accuracy": 95, "cost": 2, "target": "allEnemies", "description": "怒鳴り声で全員を攻撃する。" },
-  { "id": "slam", "name": "たたきつける", "type": "anger", "category": "phys", "power": 66, "accuracy": 90, "cost": 2, "target": "enemy", "description": "机ごと叩きつける。" },
-  { "id": "command", "name": "号令", "type": "anger", "category": "support", "power": 0, "accuracy": 100, "cost": 3, "target": "allAllies", "description": "起立！ 味方全員の攻撃を上げる。", "buff": { "stat": "atk", "stages": 1, "to": "allAllies" } },
-  { "id": "rage", "name": "逆上", "type": "anger", "category": "phys", "power": 100, "accuracy": 85, "cost": 4, "target": "enemy", "description": "我を忘れて暴れる。自分も傷つく。", "recoil": 0.25 },
-
-  { "id": "cling", "name": "しがみつく", "type": "obsession", "category": "phys", "power": 42, "accuracy": 95, "cost": 1, "target": "enemy", "description": "離さない。ときどき呪縛する。", "status": { "id": "bind", "chance": 0.25 } },
-  { "id": "peek", "name": "のぞきこむ", "type": "obsession", "category": "mind", "power": 55, "accuracy": 95, "cost": 2, "target": "enemy", "description": "隙間からのぞきこむ。ときどき蝕む。", "status": { "id": "erosion", "chance": 0.25 }, "sanityDamage": 2 },
-  { "id": "never_let_go", "name": "はなさない", "type": "obsession", "category": "phys", "power": 62, "accuracy": 90, "cost": 3, "target": "enemy", "description": "相手の力を吸い取り、自分のものにする。", "drain": 0.5 },
-
-  { "id": "discord", "name": "不協和音", "type": "guilt", "category": "mind", "power": 46, "accuracy": 90, "cost": 3, "target": "allEnemies", "description": "狂った和音で全員を攻撃する。" },
-  { "id": "confess", "name": "ざんげ", "type": "guilt", "category": "support", "power": 0, "accuracy": 100, "cost": 3, "target": "ally", "description": "罪を打ち明け、仲間のHPを回復する。", "heal": { "ratio": 0.35 } },
-  { "id": "blame", "name": "せめる声", "type": "guilt", "category": "mind", "power": 70, "accuracy": 90, "cost": 3, "target": "enemy", "description": "お前のせいだ、と責め立てる。ときどき萎縮させる。", "status": { "id": "weaken", "chance": 0.2 } },
-
-  { "id": "compare", "name": "みくらべる", "type": "envy", "category": "support", "power": 0, "accuracy": 100, "cost": 1, "target": "enemy", "description": "誰かと見比べ、相手の攻撃を下げる。", "buff": { "stat": "atk", "stages": -1, "to": "target" } },
-  { "id": "jealous_eye", "name": "ねたみ目", "type": "envy", "category": "mind", "power": 55, "accuracy": 95, "cost": 2, "target": "enemy", "description": "妬ましげに睨む。ときどき萎縮させる。", "status": { "id": "weaken", "chance": 0.3 } },
-  { "id": "snatch", "name": "よこどり", "type": "envy", "category": "phys", "power": 60, "accuracy": 95, "cost": 2, "target": "enemy", "description": "相手のものを奪い、少し回復する。", "drain": 0.3 },
-
-  { "id": "hollow_eye", "name": "うつろな目", "type": "despair", "category": "mind", "power": 45, "accuracy": 95, "cost": 1, "target": "enemy", "description": "何も映さない目で見る。ときどき恐慌にする。", "status": { "id": "panic", "chance": 0.15 } },
-  { "id": "collapse", "name": "くずれおちる", "type": "despair", "category": "phys", "power": 75, "accuracy": 90, "cost": 3, "target": "enemy", "description": "全身で崩れ落ちるようにぶつかる。" },
-  { "id": "hollow", "name": "空洞", "type": "despair", "category": "mind", "power": 80, "accuracy": 85, "cost": 4, "target": "enemy", "description": "心に穴を開ける。ときどき蝕む。", "status": { "id": "erosion", "chance": 0.3 } },
-
-  { "id": "thirteenth_step", "name": "十三段目", "type": "fear", "category": "mind", "power": 70, "accuracy": 90, "cost": 4, "target": "allEnemies", "description": "存在しないはずの段。全員を恐慌に陥れ、主人公の正気度を削る。", "status": { "id": "panic", "chance": 0.2 }, "sanityDamage": 8 },
-  { "id": "endless_stairs", "name": "終わらない階段", "type": "despair", "category": "phys", "power": 70, "accuracy": 95, "cost": 2, "target": "enemy", "description": "どこまでも続く段差に引きずり込む。ときどき呪縛する。", "status": { "id": "bind", "chance": 0.25 } },
-  { "id": "look_down", "name": "見下ろす", "type": "despair", "category": "support", "power": 0, "accuracy": 100, "cost": 2, "target": "allEnemies", "description": "遥か上から見下ろす。全員の守りを下げ、正気度を削る。", "buff": { "stat": "def", "stages": -1, "to": "target" }, "sanityDamage": 3 }
+ {
+  "id": "touch",
+  "name": "ふれる",
+  "type": "none",
+  "category": "phys",
+  "power": 35,
+  "accuracy": 100,
+  "cost": 0,
+  "target": "enemy",
+  "description": "そっと触れる。気力を使わない。"
+ },
+ {
+  "id": "stare",
+  "name": "みつめる",
+  "type": "none",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 0,
+  "target": "enemy",
+  "description": "じっと見つめ、相手の守りを崩す。",
+  "buff": {
+   "stat": "def",
+   "stages": -1,
+   "to": "target"
+  }
+ },
+ {
+  "id": "behind_you",
+  "name": "うしろにいる",
+  "type": "fear",
+  "category": "mind",
+  "power": 40,
+  "accuracy": 100,
+  "cost": 1,
+  "target": "enemy",
+  "description": "背後に立つ気配。主人公の正気度も削る。",
+  "sanityDamage": 2
+ },
+ {
+  "id": "startle",
+  "name": "おどかす",
+  "type": "fear",
+  "category": "mind",
+  "power": 45,
+  "accuracy": 95,
+  "cost": 1,
+  "target": "enemy",
+  "description": "不意に驚かせる。ときどき恐慌にする。",
+  "status": {
+   "id": "panic",
+   "chance": 0.2
+  }
+ },
+ {
+  "id": "shadow_stitch",
+  "name": "影縫い",
+  "type": "fear",
+  "category": "phys",
+  "power": 55,
+  "accuracy": 90,
+  "cost": 2,
+  "target": "enemy",
+  "description": "影を床に縫いとめる。ときどき呪縛する。",
+  "status": {
+   "id": "bind",
+   "chance": 0.2
+  }
+ },
+ {
+  "id": "dark_hand",
+  "name": "暗闇の手",
+  "type": "fear",
+  "category": "mind",
+  "power": 72,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "闇の中から無数の手が伸びる。"
+ },
+ {
+  "id": "nightmare",
+  "name": "悪夢",
+  "type": "fear",
+  "category": "mind",
+  "power": 60,
+  "accuracy": 85,
+  "cost": 5,
+  "target": "allEnemies",
+  "description": "全員に悪夢を見せる。ときどき恐慌にする。",
+  "status": {
+   "id": "panic",
+   "chance": 0.15
+  }
+ },
+ {
+  "id": "murmur",
+  "name": "ひとりごと",
+  "type": "loneliness",
+  "category": "mind",
+  "power": 40,
+  "accuracy": 100,
+  "cost": 0,
+  "target": "enemy",
+  "description": "誰にも届かない呟き。気力を使わない。"
+ },
+ {
+  "id": "hide",
+  "name": "かくれる",
+  "type": "loneliness",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 1,
+  "target": "self",
+  "description": "物陰に隠れ、守りを大きく固める。",
+  "buff": {
+   "stat": "def",
+   "stages": 2,
+   "to": "self"
+  }
+ },
+ {
+  "id": "cold_finger",
+  "name": "つめたい指",
+  "type": "loneliness",
+  "category": "phys",
+  "power": 55,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "enemy",
+  "description": "温もりを知らない指先で触れる。"
+ },
+ {
+  "id": "far_call",
+  "name": "遠い呼び声",
+  "type": "loneliness",
+  "category": "mind",
+  "power": 62,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "遠くから名前を呼ぶ声。ときどき失声にする。",
+  "status": {
+   "id": "silence",
+   "chance": 0.25
+  }
+ },
+ {
+  "id": "call_name",
+  "name": "なまえをよぶ",
+  "type": "loneliness",
+  "category": "mind",
+  "power": 50,
+  "accuracy": 100,
+  "cost": 2,
+  "target": "enemy",
+  "priority": 1,
+  "description": "名もなき声で呼びかける。必ず先に動ける。"
+ },
+ {
+  "id": "nestle",
+  "name": "よりそう",
+  "type": "loneliness",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 3,
+  "target": "ally",
+  "description": "仲間に寄り添い、HPを回復する。",
+  "heal": {
+   "ratio": 0.35
+  }
+ },
+ {
+  "id": "empty_room",
+  "name": "からっぽの部屋",
+  "type": "loneliness",
+  "category": "mind",
+  "power": 58,
+  "accuracy": 90,
+  "cost": 4,
+  "target": "allEnemies",
+  "description": "誰もいない部屋の静けさで全員を包む。"
+ },
+ {
+  "id": "shout",
+  "name": "どなる",
+  "type": "anger",
+  "category": "mind",
+  "power": 42,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "allEnemies",
+  "description": "怒鳴り声で全員を攻撃する。"
+ },
+ {
+  "id": "slam",
+  "name": "たたきつける",
+  "type": "anger",
+  "category": "phys",
+  "power": 66,
+  "accuracy": 90,
+  "cost": 2,
+  "target": "enemy",
+  "description": "机ごと叩きつける。"
+ },
+ {
+  "id": "command",
+  "name": "号令",
+  "type": "anger",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 3,
+  "target": "allAllies",
+  "description": "起立！ 味方全員の攻撃を上げる。",
+  "buff": {
+   "stat": "atk",
+   "stages": 1,
+   "to": "allAllies"
+  }
+ },
+ {
+  "id": "rage",
+  "name": "逆上",
+  "type": "anger",
+  "category": "phys",
+  "power": 100,
+  "accuracy": 85,
+  "cost": 4,
+  "target": "enemy",
+  "description": "我を忘れて暴れる。自分も傷つく。",
+  "recoil": 0.25
+ },
+ {
+  "id": "cling",
+  "name": "しがみつく",
+  "type": "obsession",
+  "category": "phys",
+  "power": 42,
+  "accuracy": 95,
+  "cost": 1,
+  "target": "enemy",
+  "description": "離さない。ときどき呪縛する。",
+  "status": {
+   "id": "bind",
+   "chance": 0.25
+  }
+ },
+ {
+  "id": "peek",
+  "name": "のぞきこむ",
+  "type": "obsession",
+  "category": "mind",
+  "power": 55,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "enemy",
+  "description": "隙間からのぞきこむ。ときどき蝕む。",
+  "status": {
+   "id": "erosion",
+   "chance": 0.25
+  },
+  "sanityDamage": 2
+ },
+ {
+  "id": "never_let_go",
+  "name": "はなさない",
+  "type": "obsession",
+  "category": "phys",
+  "power": 62,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "相手の力を吸い取り、自分のものにする。",
+  "drain": 0.5
+ },
+ {
+  "id": "discord",
+  "name": "不協和音",
+  "type": "guilt",
+  "category": "mind",
+  "power": 46,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "allEnemies",
+  "description": "狂った和音で全員を攻撃する。"
+ },
+ {
+  "id": "confess",
+  "name": "ざんげ",
+  "type": "guilt",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 3,
+  "target": "ally",
+  "description": "罪を打ち明け、仲間のHPを回復する。",
+  "heal": {
+   "ratio": 0.35
+  }
+ },
+ {
+  "id": "blame",
+  "name": "せめる声",
+  "type": "guilt",
+  "category": "mind",
+  "power": 70,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "お前のせいだ、と責め立てる。ときどき萎縮させる。",
+  "status": {
+   "id": "weaken",
+   "chance": 0.2
+  }
+ },
+ {
+  "id": "compare",
+  "name": "みくらべる",
+  "type": "envy",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 1,
+  "target": "enemy",
+  "description": "誰かと見比べ、相手の攻撃を下げる。",
+  "buff": {
+   "stat": "atk",
+   "stages": -1,
+   "to": "target"
+  }
+ },
+ {
+  "id": "jealous_eye",
+  "name": "ねたみ目",
+  "type": "envy",
+  "category": "mind",
+  "power": 55,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "enemy",
+  "description": "妬ましげに睨む。ときどき萎縮させる。",
+  "status": {
+   "id": "weaken",
+   "chance": 0.3
+  }
+ },
+ {
+  "id": "snatch",
+  "name": "よこどり",
+  "type": "envy",
+  "category": "phys",
+  "power": 60,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "enemy",
+  "description": "相手のものを奪い、少し回復する。",
+  "drain": 0.3
+ },
+ {
+  "id": "hollow_eye",
+  "name": "うつろな目",
+  "type": "despair",
+  "category": "mind",
+  "power": 45,
+  "accuracy": 95,
+  "cost": 1,
+  "target": "enemy",
+  "description": "何も映さない目で見る。ときどき恐慌にする。",
+  "status": {
+   "id": "panic",
+   "chance": 0.15
+  }
+ },
+ {
+  "id": "collapse",
+  "name": "くずれおちる",
+  "type": "despair",
+  "category": "phys",
+  "power": 75,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "全身で崩れ落ちるようにぶつかる。"
+ },
+ {
+  "id": "hollow",
+  "name": "空洞",
+  "type": "despair",
+  "category": "mind",
+  "power": 80,
+  "accuracy": 85,
+  "cost": 4,
+  "target": "enemy",
+  "description": "心に穴を開ける。ときどき蝕む。",
+  "status": {
+   "id": "erosion",
+   "chance": 0.3
+  }
+ },
+ {
+  "id": "thirteenth_step",
+  "name": "十三段目",
+  "type": "fear",
+  "category": "mind",
+  "power": 70,
+  "accuracy": 90,
+  "cost": 4,
+  "target": "allEnemies",
+  "description": "存在しないはずの段。全員を恐慌に陥れ、主人公の正気度を削る。",
+  "status": {
+   "id": "panic",
+   "chance": 0.2
+  },
+  "sanityDamage": 8
+ },
+ {
+  "id": "endless_stairs",
+  "name": "終わらない階段",
+  "type": "despair",
+  "category": "phys",
+  "power": 70,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "enemy",
+  "description": "どこまでも続く段差に引きずり込む。ときどき呪縛する。",
+  "status": {
+   "id": "bind",
+   "chance": 0.25
+  }
+ },
+ {
+  "id": "look_down",
+  "name": "見下ろす",
+  "type": "despair",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 2,
+  "target": "allEnemies",
+  "description": "遥か上から見下ろす。全員の守りを下げ、正気度を削る。",
+  "buff": {
+   "stat": "def",
+   "stages": -1,
+   "to": "target"
+  },
+  "sanityDamage": 3
+ },
+ {
+  "id": "sunset_chime",
+  "name": "夕焼けのチャイム",
+  "type": "loneliness",
+  "category": "mind",
+  "power": 52,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "allEnemies",
+  "description": "帰りを告げるチャイムで全員を包む。ときどき失声にする。",
+  "status": {
+   "id": "silence",
+   "chance": 0.2
+  }
+ },
+ {
+  "id": "gossip",
+  "name": "うわさばなし",
+  "type": "obsession",
+  "category": "mind",
+  "power": 50,
+  "accuracy": 95,
+  "cost": 2,
+  "target": "allEnemies",
+  "description": "近所中に広がる噂。全員の守りを下げる。",
+  "buff": {
+   "stat": "def",
+   "stages": -1,
+   "to": "target"
+  }
+ },
+ {
+  "id": "peeping",
+  "name": "のぞき見",
+  "type": "envy",
+  "category": "mind",
+  "power": 68,
+  "accuracy": 95,
+  "cost": 3,
+  "target": "enemy",
+  "description": "窓の外からじっと覗く。ときどき萎縮させ、正気度を削る。",
+  "status": {
+   "id": "weaken",
+   "chance": 0.25
+  },
+  "sanityDamage": 3
+ },
+ {
+  "id": "mimicry",
+  "name": "なりかわり",
+  "type": "fear",
+  "category": "phys",
+  "power": 76,
+  "accuracy": 90,
+  "cost": 3,
+  "target": "enemy",
+  "description": "相手そっくりの姿で襲いかかる。"
+ },
+ {
+  "id": "choose_me",
+  "name": "あの子がほしい",
+  "type": "envy",
+  "category": "phys",
+  "power": 64,
+  "accuracy": 95,
+  "cost": 3,
+  "target": "enemy",
+  "description": "相手の力を奪い取り、自分のものにする。",
+  "drain": 0.4
+ },
+ {
+  "id": "thunder",
+  "name": "かみなり",
+  "type": "anger",
+  "category": "mind",
+  "power": 78,
+  "accuracy": 90,
+  "cost": 4,
+  "target": "enemy",
+  "description": "雷のような怒鳴り声。ときどき恐慌にする。",
+  "status": {
+   "id": "panic",
+   "chance": 0.2
+  }
+ },
+ {
+  "id": "searching",
+  "name": "さがしています",
+  "type": "guilt",
+  "category": "support",
+  "power": 0,
+  "accuracy": 100,
+  "cost": 4,
+  "target": "allAllies",
+  "description": "見つけてほしい想いで、味方全員のHPを少し回復する。",
+  "heal": {
+   "ratio": 0.2
+  }
+ },
+ {
+  "id": "empty_house",
+  "name": "がらんどうの家",
+  "type": "despair",
+  "category": "mind",
+  "power": 86,
+  "accuracy": 85,
+  "cost": 4,
+  "target": "enemy",
+  "description": "誰も帰らない家の静けさ。ときどき蝕む。",
+  "status": {
+   "id": "erosion",
+   "chance": 0.3
+  }
+ },
+ {
+  "id": "red_scribble",
+  "name": "あかいらくがき",
+  "type": "obsession",
+  "category": "mind",
+  "power": 72,
+  "accuracy": 90,
+  "cost": 4,
+  "target": "allEnemies",
+  "description": "壁一面の赤い文字。全員を蝕み、主人公の正気度を削る。",
+  "status": {
+   "id": "erosion",
+   "chance": 0.2
+  },
+  "sanityDamage": 6
+ },
+ {
+  "id": "let_me_out",
+  "name": "ここからだして",
+  "type": "guilt",
+  "category": "mind",
+  "power": 92,
+  "accuracy": 90,
+  "cost": 4,
+  "target": "enemy",
+  "description": "閉じ込められた叫び。ときどき呪縛する。",
+  "status": {
+   "id": "bind",
+   "chance": 0.25
+  }
+ }
 ]

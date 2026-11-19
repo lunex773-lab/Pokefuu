@@ -157,10 +157,17 @@ describe('イベントスクリプト', () => {
       });
     }
   });
-  it('第1章の記憶片はすべて入手できる', () => {
+  it('実装済みの章の記憶片はすべて入手できる（True End に必要）', () => {
     const given = new Set<string>();
     for (const s of reg.allScripts()) walk(s.commands, (c) => c.cmd === 'memory' && given.add(String(c.id)));
-    for (const m of reg.data.memories.filter((x) => x.chapter === 'ch1')) expect(given.has(m.id), m.id).toBe(true);
+    const implemented = new Set(reg.data.chapters.filter((c) => c.status === 'implemented').map((c) => c.id));
+    for (const m of reg.data.memories.filter((x) => implemented.has(x.chapter))) expect(given.has(m.id), m.id).toBe(true);
+  });
+  it('ボスは図鑑完成のために再戦できる（共鳴に失敗しても取り返せる）', async () => {
+    const maps = await Promise.all(mapIds().map((id) => loadMap(id)));
+    const bosses = reg.data.kaii.filter((k) => k.boss).map((k) => k.id);
+    const json = JSON.stringify(maps);
+    for (const b of bosses) expect(json.includes(`"notRecruited":"${b}"`), b).toBe(true);
   });
 });
 
@@ -174,7 +181,8 @@ describe('世界観ルール', () => {
   it('章構成が企画書どおり（8章＋Final）', () => {
     expect(reg.data.chapters.map((c) => c.title)).toEqual(['学校', '住宅街', '商店街', '病院', '地下鉄', '遊園地', '研究所', '妹の記憶', '裏層最深部']);
   });
-  it('エンディングは4種類', () => {
+  it('エンディングは4種類で、True は「妹を受け入れる」', () => {
     expect(reg.data.endings.map((e) => e.id).sort()).toEqual(['bad', 'normal', 'secret', 'true']);
+    expect(reg.data.endings.find((e) => e.id === 'true')!.rule.finalChoice).toBe('accept');
   });
 });

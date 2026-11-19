@@ -1,6 +1,14 @@
 [
-  { "id": "normal", "name": "Normal End", "condition": "（未定・要相談）", "status": "planned" },
-  { "id": "bad", "name": "Bad End", "condition": "（未定・要相談）", "status": "planned" },
-  { "id": "true", "name": "True End", "condition": "妹を受け入れる。", "status": "planned" },
-  { "id": "secret", "name": "Secret End", "condition": "（未定・要相談）", "status": "planned" }
+  { "id": "secret", "name": "Secret End", "priority": 4, "status": "planned",
+    "condition": "記憶片をすべて集め、全怪異と共鳴（怪異図鑑を完成）したうえで、妹を受け入れる。",
+    "rule": { "finalChoice": "accept", "allMemories": true, "compendiumComplete": true } },
+  { "id": "true", "name": "True End", "priority": 3, "status": "planned",
+    "condition": "記憶片をすべて集め、妹を受け入れる。",
+    "rule": { "finalChoice": "accept", "allMemories": true } },
+  { "id": "normal", "name": "Normal End", "priority": 2, "status": "planned",
+    "condition": "妹を受け入れるが、記憶片がそろっていない。",
+    "rule": { "finalChoice": "accept", "allMemories": false } },
+  { "id": "bad", "name": "Bad End", "priority": 1, "status": "planned",
+    "condition": "最後の選択で、妹を拒絶する（忘れることを選ぶ）。",
+    "rule": { "finalChoice": "reject" } }
 ]

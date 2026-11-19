@@ -24,6 +24,8 @@ export function evaluate(cond: Condition | undefined, ctx: ConditionContext): bo
   if (cond.notItem !== undefined && (state.inventory[cond.notItem] ?? 0) > 0) return false;
   if (cond.chapter && !cond.chapter.includes(state.chapter)) return false;
   if (cond.partySizeGte !== undefined && state.party.length < cond.partySizeGte) return false;
+  if (cond.recruited !== undefined && !state.compendium[cond.recruited]?.recruited) return false;
+  if (cond.notRecruited !== undefined && state.compendium[cond.notRecruited]?.recruited) return false;
   if (cond.all && !cond.all.every((c) => evaluate(c, ctx))) return false;
   if (cond.any && !cond.any.some((c) => evaluate(c, ctx))) return false;
   return true;

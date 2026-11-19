@@ -12,6 +12,8 @@ import { checksum, MemoryStorageAdapter, SaveError, SaveManager } from '@/domain
 import { ScriptRunner } from '@/domain/script/ScriptRunner';
 import { createInitialState, type KaiiData } from '@/domain/state/GameState';
 import { evaluate } from '@/domain/world/Conditions';
+import { resolveEnding } from '@/domain/progress/Endings';
+import { formatText } from '@/domain/script/format';
 import { phaseAt } from '@/domain/world/Clock';
 
 const reg = createRegistry();
@@ -196,6 +198,55 @@ describe('バランス（シミュレーション）', () => {
   });
 });
 
+describe('バランス（第2章）', () => {
+  const run = (party: () => KaiiData[], enemies: () => KaiiData[], runs: number, seed: number) => {
+    let wins = 0;
+    for (let i = 0; i < runs; i++) {
+      const h = { ...host(130), sanityDrainMul: 0.5 };
+      const e = new BattleEngine(reg, new SeededRng(seed + i), h, { party: party(), enemies: enemies(), canFlee: false, boss: true });
+      let guard = 0;
+      while (!e.result && guard++ < 80) e.runTurn({ player: { kind: 'encourage' }, allies: {} });
+      if (e.result === 'win') wins++;
+    }
+    return wins / runs;
+  };
+  const fixed = (id: string) => () => reg.fixedEncounters.get(id)!.enemies.map((x) => mk(x.kaii, x.level));
+  it('中ボス（カミナリオヤジ）は Lv15 前後で安定して勝てる', () => {
+    expect(run(() => [mk('nanashi', 15), mk('kiritsu', 14), mk('gojinochaimu', 14)], fixed('kaminari'), 60, 400)).toBeGreaterThan(0.7);
+  });
+  it('ボス（アカイクレヨン）は推奨 Lv18 で勝ち越せ、Lv14 では厳しい', () => {
+    expect(run(() => [mk('nanashi', 18), mk('kiritsu', 17), mk('utsushimi', 17)], fixed('boss_crayon'), 60, 500)).toBeGreaterThan(0.45);
+    expect(run(() => [mk('nanashi', 14), mk('kiritsu', 13), mk('utsushimi', 13)], fixed('boss_crayon'), 60, 600)).toBeLessThan(0.2);
+  });
+});
+
+describe('エンディング判定（記憶片＋最後の選択）', () => {
+  const memoryIds = reg.data.memories.map((m) => m.id);
+  const speciesIds = reg.data.kaii.map((k) => k.id);
+  const mkState = (opts: { allMem: boolean; complete: boolean }) => {
+    const st = createInitialState('ユウ', 'female');
+    st.memories = opts.allMem ? [...memoryIds] : memoryIds.slice(1);
+    for (const id of speciesIds) st.compendium[id] = { seen: true, recruited: opts.complete };
+    return st;
+  };
+  const judge = (allMem: boolean, complete: boolean, finalChoice: 'accept' | 'reject') =>
+    resolveEnding(reg.data.endings, { state: mkState({ allMem, complete }), memoryIds, speciesIds, finalChoice }).id;
+
+  it('拒絶すると Bad（記憶片や図鑑に関係なく）', () => {
+    expect(judge(true, true, 'reject')).toBe('bad');
+    expect(judge(false, false, 'reject')).toBe('bad');
+  });
+  it('受け入れても記憶片が足りなければ Normal', () => {
+    expect(judge(false, true, 'accept')).toBe('normal');
+  });
+  it('記憶片をすべて集めて受け入れると True', () => {
+    expect(judge(true, false, 'accept')).toBe('true');
+  });
+  it('さらに図鑑を完成させると Secret', () => {
+    expect(judge(true, true, 'accept')).toBe('secret');
+  });
+});
+
 describe('条件式・時計', () => {
   const st = createInitialState('テスト', 'female');
   it('フラグ・時間帯・アイテム条件', () => {
@@ -204,6 +255,17 @@ describe('条件式・時計', () => {
     expect(evaluate({ flag: 'a', phase: ['night'] }, { state: st, phase: 'day' })).toBe(false);
     expect(evaluate({ hasItem: 'smartphone' }, { state: st, phase: 'day' })).toBe(true);
     expect(evaluate({ any: [{ flag: 'zzz' }, { notFlag: 'zzz' }] }, { state: st, phase: 'day' })).toBe(true);
+  });
+  it('共鳴済み・未共鳴の条件', () => {
+    const s2 = createInitialState('テスト', 'male');
+    s2.compendium.juusandan = { seen: true, recruited: true };
+    expect(evaluate({ recruited: 'juusandan' }, { state: s2, phase: 'day' })).toBe(true);
+    expect(evaluate({ notRecruited: 'juusandan' }, { state: s2, phase: 'day' })).toBe(false);
+    expect(evaluate({ notRecruited: 'akaikureyon' }, { state: s2, phase: 'day' })).toBe(true);
+  });
+  it('セリフの差し込み：名前と、妹からの呼び方（性別で変わる）', () => {
+    expect(formatText('{name}、{sib}', createInitialState('ユウ', 'male'))).toBe('ユウ、おにいちゃん');
+    expect(formatText('{sib}（{Sib}）', createInitialState('ユウ', 'female'))).toBe('おねえちゃん（姉）');
   });
   it('時刻から時間帯（6区分）を求める', () => {
     const p = reg.data.timePhases;

@@ -1,0 +1,192 @@
+{
+ "id": "back_old_house",
+ "name": "裏・夕凪の家",
+ "layer": "back",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": true,
+ "dangerLevel": 4,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_house",
+ "weather": [
+  "clear",
+  "redmoon"
+ ],
+ "ground": [
+  "wwwwwwwwwwwwwwww",
+  "wmmmmmw^^wwwwwww",
+  "wmmmmmw^^ww%wwww",
+  "wmmmmmwwwwwwwwww",
+  "wmmmmmw%wwwwwwww",
+  "wmmmmmwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "www%wwwwwwww%www",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww"
+ ],
+ "objects": [
+  "&&&&!&&&&&&!&&&&",
+  "&     &ZZ&jjjj &",
+  "&     &  &     &",
+  "&     &  &  nn &",
+  "!              &",
+  "&     &  &     &",
+  "&&& &&!& &&& !&&",
+  "&             s&",
+  "&  nn     I    !",
+  "&              &",
+  "&X            o&",
+  "&&&&&&&&D&&&&&&&"
+ ],
+ "above": [
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                "
+ ],
+ "overrides": [
+  {
+   "x": 7,
+   "y": 1,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "stairs_open"
+   }
+  },
+  {
+   "x": 8,
+   "y": 1,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "stairs_open"
+   }
+  }
+ ],
+ "encounters": {
+  "table": "back_old_house",
+  "maxSymbols": 3
+ },
+ "interactables": [
+  {
+   "id": "toy_rattle",
+   "x": 2,
+   "y": 2,
+   "script": "back_toy_rattle",
+   "hidden": true,
+   "when": {
+    "notFlag": "toy_rattle"
+   }
+  },
+  {
+   "id": "toy_bear",
+   "x": 13,
+   "y": 8,
+   "script": "back_toy_bear",
+   "hidden": true,
+   "when": {
+    "notFlag": "toy_bear"
+   }
+  },
+  {
+   "id": "toy_blocks",
+   "x": 12,
+   "y": 2,
+   "script": "back_toy_blocks",
+   "hidden": true,
+   "when": {
+    "notFlag": "toy_blocks"
+   }
+  },
+  {
+   "id": "techo",
+   "x": 10,
+   "y": 1,
+   "script": "back_techo",
+   "when": {
+    "notFlag": "got_mem_techo"
+   }
+  },
+  {
+   "id": "shoes",
+   "x": 1,
+   "y": 10,
+   "script": "back_shoes",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_mem_shoes"
+   }
+  },
+  {
+   "id": "pillar",
+   "x": 10,
+   "y": 8,
+   "script": "back_pillar"
+  },
+  {
+   "id": "stairs_l",
+   "x": 7,
+   "y": 1,
+   "script": "back_stairs_blocked",
+   "when": {
+    "notFlag": "stairs_open"
+   }
+  },
+  {
+   "id": "stairs_r",
+   "x": 8,
+   "y": 1,
+   "script": "back_stairs_blocked",
+   "when": {
+    "notFlag": "stairs_open"
+   }
+  },
+  {
+   "id": "candle",
+   "x": 14,
+   "y": 10,
+   "script": "back_candle"
+  }
+ ],
+ "warps": [
+  {
+   "id": "out",
+   "x": 8,
+   "y": 11,
+   "w": 1,
+   "h": 1,
+   "to": "back_yuunagi",
+   "tx": 26,
+   "ty": 8,
+   "facing": "down"
+  },
+  {
+   "id": "up",
+   "x": 7,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "to": "nursery",
+   "tx": 5,
+   "ty": 7,
+   "facing": "up",
+   "when": {
+    "flag": "stairs_open"
+   },
+   "transition": "distort"
+  }
+ ],
+ "onEnter": "back_old_house_enter"
+}

@@ -160,6 +160,25 @@
     "notFlag": "boss_cleared"
    },
    "once": false
+  },
+  {
+   "id": "boss_re",
+   "x": 5,
+   "y": 4,
+   "w": 5,
+   "h": 1,
+   "script": "stairs_boss_rematch",
+   "when": {
+    "all": [
+     {
+      "flag": "ch1_clear"
+     },
+     {
+      "notRecruited": "juusandan"
+     }
+    ]
+   },
+   "once": false
   }
  ],
  "warps": [

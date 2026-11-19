@@ -5,6 +5,7 @@ import type { GameSession } from '@/core/GameSession';
 import { expToNext, kaiiStats, MAX_EN, playerExpToNext, swapSkill } from '@/domain/creature/Kaii';
 import type { KaiiData } from '@/domain/state/GameState';
 import { itemIconKey } from '@/render/TextureFactory';
+import { formatText } from '@/domain/script/format';
 import { wrapText } from '@/ui/Dialogue';
 import { Theme } from '@/ui/Theme';
 import { drawPanel, label, ListView, type ListItem } from '@/ui/Widgets';
@@ -402,7 +403,7 @@ export class MenuScene extends Phaser.Scene {
             '記憶片',
             mems.map((m) => ({ text: s.state.memories.includes(m.id) ? m.title : '？？？', sub: reg.data.chapters.find((c) => c.id === m.chapter)?.no })),
             undefined,
-            (k) => this.setDetail(s.state.memories.includes(mems[k].id) ? `${mems[k].title}\n\n${mems[k].text.split('{name}').join(s.state.player.name)}` : 'まだ見つけていない記憶。'),
+            (k) => this.setDetail(s.state.memories.includes(mems[k].id) ? `${mems[k].title}\n\n${formatText(mems[k].text, s.state)}` : 'まだ見つけていない記憶。'),
           );
           this.main.onCancel = () => this.pageBookBack();
         } else if (i === 2) {

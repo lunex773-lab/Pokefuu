@@ -205,6 +205,163 @@ const kaiiDraw: Record<string, Draw> = {
     pc.outline('#4a1020');
     pc.rimShade();
   },
+  // ---------------------------------------------------------------- Chapter 2
+  kaii_gojinochaimu: (pc) => {
+    // 防災無線のスピーカーを頭にした子ども
+    pc.rect(30, 22, 4, 26, '#7a7a82');
+    pc.poly([[18, 6], [46, 6], [40, 22], [24, 22]], '#c8c8d0');
+    pc.poly([[21, 8], [43, 8], [38, 19], [26, 19]], '#2a2a34');
+    for (let r = 2; r < 9; r += 3) pc.ellipse(32, 13, r + 2, r * 0.6 + 1, '#4a4a58');
+    pc.rect(28, 23, 8, 2, '#ff8a3a');
+    pc.poly([[24, 30], [40, 30], [42, 48], [22, 48]], '#e07a3a');
+    pc.rect(24, 48, 6, 12, '#3a3a48');
+    pc.rect(34, 48, 6, 12, '#3a3a48');
+    pc.rect(16, 32, 8, 4, '#e07a3a');
+    pc.rect(40, 32, 8, 4, '#e07a3a');
+    // 音の輪
+    for (const r of [24, 28]) for (let a = -0.6; a < 0.6; a += 0.05) pc.set(32 + Math.cos(a - Math.PI / 2) * r, 14 + Math.sin(a - Math.PI / 2) * r * 0.5, '#ffb070', 140);
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_kairanban: (pc) => {
+    // 目だらけの回覧板と、垂れ下がる紐
+    pc.rect(14, 8, 36, 46, '#8a6a3a');
+    pc.rect(16, 12, 32, 40, '#f0ead8');
+    pc.rect(26, 4, 12, 8, '#5a5a62');
+    for (let y = 16; y < 50; y += 6) pc.hline(19, 44, y, '#c8c0b0');
+    for (const [x, y] of [[22, 20], [36, 24], [26, 34], [40, 40], [20, 44], [33, 46]] as [number, number][]) {
+      pc.ellipse(x, y, 3, 2, '#ffffff');
+      pc.rect(x, y - 1, 2, 2, '#2a1010');
+    }
+    for (const x of [18, 30, 44]) pc.line(x, 54, x - 3, 63, '#c02030');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_nozokimado: (pc) => {
+    // 窓に押しつけられた白い顔
+    pc.rect(8, 6, 48, 52, '#d8ccb4');
+    pc.rect(12, 10, 40, 44, '#2a3448');
+    pc.vline(32, 10, 53, '#d8ccb4');
+    pc.hline(12, 51, 30, '#d8ccb4');
+    pc.ellipse(32, 32, 13, 15, '#e8e4ea');
+    pc.ellipse(26, 30, 3, 2, '#0a0a10');
+    pc.ellipse(38, 30, 3, 2, '#0a0a10');
+    pc.set(27, 30, '#50ff70');
+    pc.set(39, 30, '#50ff70');
+    pc.ellipse(32, 40, 4, 2, '#5a3a4a');
+    for (const x of [18, 46]) pc.rect(x - 3, 40, 6, 10, '#e8e4ea');
+    pc.line(14, 48, 22, 34, '#ffffff', 90);
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_utsushimi: (pc) => {
+    // 鏡のようにつるりとした人型。顔だけが空白
+    pc.ellipse(32, 14, 9, 10, '#a8b8d0');
+    pc.poly([[22, 24], [42, 24], [46, 50], [18, 50]], '#8898b8');
+    pc.rect(20, 50, 8, 12, '#7888a8');
+    pc.rect(36, 50, 8, 12, '#7888a8');
+    pc.rect(12, 26, 10, 4, '#8898b8');
+    pc.rect(42, 26, 10, 4, '#8898b8');
+    pc.line(24, 10, 30, 30, '#e8f4ff');
+    pc.line(36, 28, 40, 46, '#e8f4ff', 160);
+    pc.ellipse(32, 15, 6, 6, '#f8fcff');
+    pc.hline(28, 36, 15, '#6a7a98');
+    pc.outline('#2a3050');
+    pc.rimShade();
+  },
+  kaii_hanaichimonme: (pc) => {
+    // 手をつないで輪になった紙人形。一人だけ輪の外
+    const cols = ['#f0e8d8', '#f0d8d8', '#e8e8f0', '#e0f0e0'];
+    for (let i = 0; i < 6; i++) {
+      const a = (i / 6) * Math.PI * 2;
+      const x = 28 + Math.cos(a) * 16;
+      const y = 30 + Math.sin(a) * 10;
+      pc.circle(x, y - 8, 3.5, cols[i % 4]);
+      pc.poly([[x - 4, y - 4], [x + 4, y - 4], [x + 5, y + 6], [x - 5, y + 6]], cols[i % 4]);
+      pc.set(x - 1, y - 9, '#2a1a1a');
+      pc.set(x + 1, y - 9, '#2a1a1a');
+    }
+    pc.ellipse(28, 30, 16, 10, '#c02030', 0);
+    for (let a = 0; a < Math.PI * 2; a += 0.12) pc.set(28 + Math.cos(a) * 16, 30 + Math.sin(a) * 10 - 2, '#c02030');
+    pc.circle(54, 46, 3.5, '#d8d0c8');
+    pc.poly([[50, 50], [58, 50], [59, 60], [49, 60]], '#d8d0c8');
+    pc.hline(52, 56, 45, '#2a1a1a');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_kaminarioyaji: (pc) => {
+    // 雷雲の顔をした怒鳴る老人
+    pc.ellipse(32, 22, 24, 15, '#4a4a5a');
+    pc.ellipse(20, 18, 12, 9, '#5a5a6a');
+    pc.ellipse(44, 18, 12, 9, '#5a5a6a');
+    pc.ellipse(32, 12, 12, 8, '#6a6a7a');
+    pc.rect(22, 18, 7, 3, '#ffe040');
+    pc.rect(36, 18, 7, 3, '#ffe040');
+    pc.line(20, 15, 29, 18, '#1a1a22');
+    pc.line(45, 15, 36, 18, '#1a1a22');
+    pc.ellipse(32, 28, 7, 4, '#1a0a0a');
+    pc.rect(28, 26, 8, 2, '#f0f0e8');
+    pc.poly([[18, 34], [26, 34], [20, 48], [28, 46], [16, 62], [20, 50], [12, 52]], '#ffe040');
+    pc.poly([[42, 34], [50, 36], [46, 46], [52, 46], [40, 60], [44, 50], [38, 50]], '#ffd020');
+    pc.outline('#2a2a38');
+    pc.rimShade();
+  },
+  kaii_harigamineko: (pc) => {
+    // 「さがしています」の張り紙。描かれた猫が痩せている
+    pc.rect(12, 4, 40, 56, '#f4f0e4');
+    pc.rect(12, 4, 40, 8, '#d84a3a');
+    pc.hline(18, 46, 8, '#ffffff');
+    pc.ellipse(32, 30, 11, 9, '#3a3a3a');
+    pc.poly([[23, 23], [26, 16], [29, 23]], '#3a3a3a');
+    pc.poly([[35, 23], [38, 16], [41, 23]], '#3a3a3a');
+    pc.rect(27, 28, 3, 2, '#e8c040');
+    pc.rect(35, 28, 3, 2, '#e8c040');
+    pc.line(22, 38, 18, 50, '#3a3a3a');
+    pc.line(42, 38, 46, 50, '#3a3a3a');
+    for (let y = 46; y < 56; y += 3) pc.hline(18, 46, y, '#a8a090');
+    pc.circle(14, 6, 2, '#c02030');
+    pc.circle(50, 6, 2, '#c02030');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_akiyanonushi: (pc) => {
+    // 空き家そのもの。窓が目、玄関が口
+    pc.poly([[6, 28], [32, 6], [58, 28]], '#4a3a4a');
+    pc.rect(10, 28, 44, 32, '#6a6070');
+    pc.rect(14, 34, 12, 10, '#0a0810');
+    pc.rect(38, 34, 12, 10, '#0a0810');
+    pc.rect(18, 37, 3, 3, '#ffd060');
+    pc.rect(42, 37, 3, 3, '#ffd060');
+    pc.rect(27, 46, 10, 14, '#0a0810');
+    for (let x = 28; x < 37; x += 2) pc.vline(x, 46, 49, '#d8d0c0');
+    pc.line(12, 30, 20, 58, '#3a3040');
+    pc.line(50, 32, 44, 52, '#3a3040');
+    pc.outline(OUT);
+    pc.rimShade();
+  },
+  kaii_akaikureyon: (pc, rnd) => {
+    // 塞がれた扉と、そこから伸びる小さな手。赤いクレヨンの落書き
+    pc.rect(12, 4, 40, 58, '#8a6a4a');
+    pc.rect(15, 7, 34, 55, '#6a4a2a');
+    for (const [y, t] of [[14, 3], [30, -3], [46, 2]] as [number, number][]) pc.poly([[8, y], [56, y + t], [56, y + t + 6], [8, y + 6]], '#a07a4a');
+    for (let k = 0; k < 14; k++) {
+      let x = 14 + Math.floor(rnd() * 36);
+      let y = 6 + Math.floor(rnd() * 52);
+      for (let i = 0; i < 12; i++) {
+        pc.set(x, y, '#e01818');
+        x += Math.floor(rnd() * 3) - 1;
+        y += Math.floor(rnd() * 3) - 1;
+      }
+    }
+    for (const [x, y] of [[20, 22], [40, 38], [28, 54]] as [number, number][]) {
+      pc.rect(x, y, 6, 4, '#f0e0d8');
+      for (let f = 0; f < 3; f++) pc.rect(x + f * 2, y - 3, 1, 3, '#f0e0d8');
+    }
+    pc.ellipse(32, 36, 5, 7, '#0a0408');
+    pc.circle(32, 35, 2, '#ff2030');
+    pc.outline('#4a0a10');
+    pc.rimShade();
+  },
 };
 
 export function buildKaiiSprite(key: string): PixelCanvas {

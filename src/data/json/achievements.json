@@ -1,15 +1,169 @@
 [
-  { "id": "first_back", "name": "鏡の向こう", "description": "はじめて裏層に足を踏み入れた。", "on": { "event": "map:enter", "match": { "layer": "back" } } },
-  { "id": "first_resonance", "name": "はじめての共鳴", "description": "はじめて怪異と共鳴した。", "counter": { "key": "kaii_recruited", "gte": 1 } },
-  { "id": "trio", "name": "三体編成", "description": "怪異を3体仲間にした。", "counter": { "key": "kaii_recruited", "gte": 3 } },
-  { "id": "seen5", "name": "怪異図鑑・初級", "description": "怪異を5種類見つけた。", "counter": { "key": "kaii_seen", "gte": 5 } },
-  { "id": "calm10", "name": "鎮める者", "description": "怪異を10体鎮めた。", "counter": { "key": "kaii_calmed", "gte": 10 } },
-  { "id": "first_craft", "name": "手作りの祈り", "description": "はじめてクラフトをした。", "counter": { "key": "crafted", "gte": 1 } },
-  { "id": "parttime", "name": "ふつうの毎日", "description": "コンビニでアルバイトをした。", "counter": { "key": "parttime", "gte": 1 } },
-  { "id": "sight10", "name": "歪みを視る目", "description": "『視る』を10回使った。", "counter": { "key": "sight_used", "gte": 10 } },
-  { "id": "redmoon", "name": "赤い月", "description": "赤い月を見た。", "hidden": true, "on": { "event": "weather:changed", "match": { "weather": "redmoon" } } },
-  { "id": "midnight_walk", "name": "深夜の散歩", "description": "深夜の朝霧町を歩いた。", "hidden": true, "flag": "walked_midnight" },
-  { "id": "low_sanity", "name": "ぎりぎりの心", "description": "正気度が10以下になった。", "hidden": true, "on": { "event": "player:sanity", "match": { "sanity": { "lte": 10 } } } },
-  { "id": "memories_ch1", "name": "欠けた記憶", "description": "第1章の記憶片をすべて集めた。", "counter": { "key": "memories", "gte": 4 } },
-  { "id": "ch1_clear", "name": "十三段目の先", "description": "Chapter 1 をクリアした。", "flag": "ch1_clear" }
+ {
+  "id": "first_back",
+  "name": "鏡の向こう",
+  "description": "はじめて裏層に足を踏み入れた。",
+  "on": {
+   "event": "map:enter",
+   "match": {
+    "layer": "back"
+   }
+  }
+ },
+ {
+  "id": "first_resonance",
+  "name": "はじめての共鳴",
+  "description": "はじめて怪異と共鳴した。",
+  "counter": {
+   "key": "kaii_recruited",
+   "gte": 1
+  }
+ },
+ {
+  "id": "trio",
+  "name": "三体編成",
+  "description": "怪異を3体仲間にした。",
+  "counter": {
+   "key": "kaii_recruited",
+   "gte": 3
+  }
+ },
+ {
+  "id": "seen5",
+  "name": "怪異図鑑・初級",
+  "description": "怪異を5種類見つけた。",
+  "counter": {
+   "key": "kaii_seen",
+   "gte": 5
+  }
+ },
+ {
+  "id": "calm10",
+  "name": "鎮める者",
+  "description": "怪異を10体鎮めた。",
+  "counter": {
+   "key": "kaii_calmed",
+   "gte": 10
+  }
+ },
+ {
+  "id": "first_craft",
+  "name": "手作りの祈り",
+  "description": "はじめてクラフトをした。",
+  "counter": {
+   "key": "crafted",
+   "gte": 1
+  }
+ },
+ {
+  "id": "parttime",
+  "name": "ふつうの毎日",
+  "description": "コンビニでアルバイトをした。",
+  "counter": {
+   "key": "parttime",
+   "gte": 1
+  }
+ },
+ {
+  "id": "sight10",
+  "name": "歪みを視る目",
+  "description": "『視る』を10回使った。",
+  "counter": {
+   "key": "sight_used",
+   "gte": 10
+  }
+ },
+ {
+  "id": "redmoon",
+  "name": "赤い月",
+  "description": "赤い月を見た。",
+  "hidden": true,
+  "on": {
+   "event": "weather:changed",
+   "match": {
+    "weather": "redmoon"
+   }
+  }
+ },
+ {
+  "id": "midnight_walk",
+  "name": "深夜の散歩",
+  "description": "深夜の朝霧町を歩いた。",
+  "hidden": true,
+  "flag": "walked_midnight"
+ },
+ {
+  "id": "low_sanity",
+  "name": "ぎりぎりの心",
+  "description": "正気度が10以下になった。",
+  "hidden": true,
+  "on": {
+   "event": "player:sanity",
+   "match": {
+    "sanity": {
+     "lte": 10
+    }
+   }
+  }
+ },
+ {
+  "id": "memories_ch1",
+  "name": "欠けた記憶",
+  "description": "第1章の記憶片をすべて集めた。",
+  "counter": {
+   "key": "memories",
+   "gte": 4
+  }
+ },
+ {
+  "id": "ch1_clear",
+  "name": "十三段目の先",
+  "description": "Chapter 1 をクリアした。",
+  "flag": "ch1_clear"
+ },
+ {
+  "id": "ch2_clear",
+  "name": "開かずの部屋",
+  "description": "Chapter 2 をクリアした。",
+  "flag": "ch2_clear"
+ },
+ {
+  "id": "kairan_done",
+  "name": "町内会の一員",
+  "description": "回覧板を3軒に回した。",
+  "flag": "kairan_done"
+ },
+ {
+  "id": "cat_found",
+  "name": "ミケ、見つけた",
+  "description": "迷い猫のミケを見つけた。",
+  "flag": "cat_found"
+ },
+ {
+  "id": "memories_9",
+  "name": "欠けた記憶・弐",
+  "description": "記憶片を9個集めた。",
+  "counter": {
+   "key": "memories",
+   "gte": 9
+  }
+ },
+ {
+  "id": "seen15",
+  "name": "怪異図鑑・中級",
+  "description": "怪異を15種類見つけた。",
+  "counter": {
+   "key": "kaii_seen",
+   "gte": 15
+  }
+ },
+ {
+  "id": "recruit10",
+  "name": "十の共鳴",
+  "description": "怪異と10回共鳴した。",
+  "counter": {
+   "key": "kaii_recruited",
+   "gte": 10
+  }
+ }
 ]

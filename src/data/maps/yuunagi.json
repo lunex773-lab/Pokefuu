@@ -1,0 +1,461 @@
+{
+ "id": "yuunagi",
+ "name": "夕凪住宅街",
+ "layer": "reality",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": false,
+ "dangerLevel": 0,
+ "ambience": "town",
+ "weather": [
+  "clear",
+  "rain",
+  "fog",
+  "blackout"
+ ],
+ "ground": [
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "............................................",
+  "......:........:......................:.....",
+  "......:........:......:::::::::,......:.....",
+  "......:........:......:,::::::::......:.....",
+  "......:........:......:::::::,::......:.....",
+  "......:........:......::,:::::::......:.....",
+  "............................................",
+  "............................................",
+  "____________________________________________",
+  "============================================",
+  "--------------------------------------------",
+  "============================================",
+  "____________________________________________",
+  ".................__.........................",
+  ".................__.........................",
+  "...aaaa..........__.........................",
+  "...aaaa..........__.........................",
+  "...aaaa..........__.........................",
+  ".....,...........__.________................",
+  ".................__.::::::::::::::::::::....",
+  "............,....__...................,.....",
+  ".................__.........,...............",
+  "...........,.....__...,.....................",
+  ".................__.........................",
+  "........,........__......,..................",
+  ".................__.........................",
+  "............................................"
+ ],
+ "objects": [
+  "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+  "                      RRRRRRRRRR            ",
+  "   RRRRRRR  QQQQQQQ   RRRRRRRRRR   RRRRRRR  ",
+  "   RRRRRRR  QQQQQQQ   RRRRRRRRRR   RRRRRRR  ",
+  "   HOHHHOH  HOHHHOH  yHHOHHHHOHHy  HOHHHOH  ",
+  "   HHHDHHH  HHHDHHH  yHHHHHHHHHHy  HHHDHHH  ",
+  "                     yHHHHDHHHHHy           ",
+  "                     y          y           ",
+  "                     y        T y           ",
+  "                     y          y           ",
+  "                     y          y           ",
+  " FFFFF FFFFFFFF FFFFFyyyy[ [yyyyyFFFFF FFFF ",
+  "   U E    |     E             |      E     f",
+  "                                           f",
+  "                                           f",
+  "                                           f",
+  "                                           f",
+  "      L             L             L        f",
+  " FFFFFF  FFFFFFFF                           ",
+  " F        i     F   QQQQQQQQ  RRRRRRR       ",
+  " F       Y  JJ  F   QQQQQQQQ  RRRRRRR       ",
+  " F       Y    T F   HOOHHOOH  HOHHHOH       ",
+  " F              F   HHHDHHHH  HHHDHHH    T  ",
+  " F              F   i      V       E        ",
+  " F b    L     b F                           ",
+  " F              F  g          QQQQQQQ       ",
+  " F   NN         F             QQQQQQQ       ",
+  " F              F             HOHHHOH    T  ",
+  " F T          T F             HHHDHHH       ",
+  " F              F                           ",
+  " F              F                           ",
+  "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+ ],
+ "above": [
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                              A             ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "              A                             ",
+  "                                         K  ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                         K  ",
+  "   A          A                             ",
+  "                                            ",
+  "                                            ",
+  "                                            ",
+  "                                            "
+ ],
+ "npcs": [
+  {
+   "id": "minato_yuunagi",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 4,
+   "y": 13,
+   "facing": "left",
+   "script": "yuunagi_arrive",
+   "when": {
+    "flag": "ch2_started",
+    "notFlag": "ch2_met_minato"
+   }
+  },
+  {
+   "id": "minato_park",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 11,
+   "y": 23,
+   "facing": "down",
+   "script": "yuunagi_minato_park",
+   "when": {
+    "flag": "ch2_met_minato",
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "saeki",
+   "name": "佐伯さん",
+   "sprite": "saeki",
+   "x": 24,
+   "y": 12,
+   "facing": "down",
+   "script": "yuunagi_saeki",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "housewife",
+   "name": "主婦",
+   "sprite": "housewife",
+   "x": 6,
+   "y": 9,
+   "facing": "down",
+   "script": "yuunagi_housewife",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "kid_a",
+   "name": "男の子",
+   "sprite": "kid_a",
+   "x": 12,
+   "y": 22,
+   "facing": "left",
+   "script": "yuunagi_kid_a",
+   "when": {
+    "phase": [
+     "day",
+     "evening"
+    ],
+    "notFlag": "ch2_kids_gone"
+   },
+   "wander": 2
+  },
+  {
+   "id": "kid_b",
+   "name": "女の子",
+   "sprite": "kid_b",
+   "x": 5,
+   "y": 21,
+   "facing": "right",
+   "script": "yuunagi_kid_b",
+   "when": {
+    "phase": [
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "mayu",
+   "name": "まゆ",
+   "sprite": "mayu",
+   "x": 8,
+   "y": 27,
+   "facing": "up",
+   "script": "yuunagi_mayu",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "raincoat_night",
+   "name": "？？？",
+   "sprite": "raincoat",
+   "x": 41,
+   "y": 15,
+   "facing": "left",
+   "script": "yuunagi_raincoat",
+   "when": {
+    "flag": "ch2_started",
+    "notFlag": "ch2_clear",
+    "phase": [
+     "night",
+     "midnight"
+    ]
+   }
+  },
+  {
+   "id": "raincoat_end",
+   "name": "黒い雨合羽の人物",
+   "sprite": "raincoat",
+   "x": 26,
+   "y": 13,
+   "facing": "up",
+   "script": "yuunagi_raincoat",
+   "when": {
+    "flag": "ch2_boss_cleared",
+    "notFlag": "ch2_clear"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "busstop",
+   "x": 3,
+   "y": 12,
+   "script": "yuunagi_busstop"
+  },
+  {
+   "id": "mail_a",
+   "x": 5,
+   "y": 12,
+   "script": "yuunagi_mail_a"
+  },
+  {
+   "id": "mail_b",
+   "x": 16,
+   "y": 12,
+   "script": "yuunagi_mail_b"
+  },
+  {
+   "id": "mail_c",
+   "x": 37,
+   "y": 12,
+   "script": "yuunagi_mail_c"
+  },
+  {
+   "id": "mail_d",
+   "x": 35,
+   "y": 23,
+   "script": "yuunagi_mail_d"
+  },
+  {
+   "id": "nameplate",
+   "x": 25,
+   "y": 11,
+   "script": "yuunagi_nameplate"
+  },
+  {
+   "id": "nameplate2",
+   "x": 27,
+   "y": 11,
+   "script": "yuunagi_nameplate"
+  },
+  {
+   "id": "park_sign",
+   "x": 10,
+   "y": 19,
+   "script": "yuunagi_park_sign"
+  },
+  {
+   "id": "slide",
+   "x": 9,
+   "y": 20,
+   "script": "yuunagi_slide"
+  },
+  {
+   "id": "slide2",
+   "x": 9,
+   "y": 21,
+   "script": "yuunagi_slide"
+  },
+  {
+   "id": "bench",
+   "x": 5,
+   "y": 26,
+   "script": "yuunagi_bench"
+  },
+  {
+   "id": "bench2",
+   "x": 6,
+   "y": 26,
+   "script": "yuunagi_bench"
+  },
+  {
+   "id": "shop_sign",
+   "x": 20,
+   "y": 23,
+   "script": "yuunagi_shop_sign"
+  },
+  {
+   "id": "garbage",
+   "x": 19,
+   "y": 25,
+   "script": "yuunagi_garbage"
+  },
+  {
+   "id": "vending",
+   "x": 27,
+   "y": 23,
+   "script": "vending"
+  },
+  {
+   "id": "door_b",
+   "x": 15,
+   "y": 5,
+   "script": "locked_door"
+  },
+  {
+   "id": "door_c",
+   "x": 38,
+   "y": 5,
+   "script": "locked_door"
+  },
+  {
+   "id": "door_d",
+   "x": 33,
+   "y": 22,
+   "script": "locked_door"
+  },
+  {
+   "id": "door_e",
+   "x": 33,
+   "y": 28,
+   "script": "locked_door"
+  },
+  {
+   "id": "door_a",
+   "x": 6,
+   "y": 5,
+   "script": "locked_door"
+  },
+  {
+   "id": "cat",
+   "x": 14,
+   "y": 24,
+   "script": "yuunagi_cat",
+   "hidden": true,
+   "when": {
+    "all": [
+     {
+      "flag": "cat_quest"
+     },
+     {
+      "notFlag": "got_collar"
+     },
+     {
+      "phase": [
+       "night",
+       "midnight"
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_town",
+   "x": 0,
+   "y": 14,
+   "w": 1,
+   "h": 3,
+   "to": "asagiri_town",
+   "tx": 38,
+   "ty": 24,
+   "facing": "left"
+  },
+  {
+   "id": "to_old_house",
+   "x": 26,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "to": "old_house",
+   "tx": 8,
+   "ty": 10,
+   "facing": "up",
+   "when": {
+    "hasItem": "old_key"
+   },
+   "blockedScript": "yuunagi_locked_old_house"
+  },
+  {
+   "id": "to_dagashiya",
+   "x": 23,
+   "y": 22,
+   "w": 1,
+   "h": 1,
+   "to": "dagashiya",
+   "tx": 4,
+   "ty": 6,
+   "facing": "up"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "midnight",
+   "x": 0,
+   "y": 12,
+   "w": 44,
+   "h": 6,
+   "script": "town_midnight",
+   "when": {
+    "phase": [
+     "midnight"
+    ],
+    "notFlag": "walked_midnight"
+   }
+  }
+ ],
+ "onEnter": "yuunagi_enter"
+}

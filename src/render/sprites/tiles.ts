@@ -360,6 +360,85 @@ const gens: Record<string, Gen> = {
     pc.ellipse(ox + 16, oy + 12, 12, 7, c[1]);
     for (let k = 0; k < 6; k++) pc.set(ox + 6 + Math.floor(rnd() * 20), oy + 8 + Math.floor(rnd() * 8), c[2]);
   },
+  slide: (pc, ox, oy, c) => {
+    // すべり台（上から見た図）
+    pc.rect(ox + 10, oy + 2, 12, 28, c[0]);
+    pc.rect(ox + 12, oy + 2, 8, 28, shadeHex(c[0], 1.25));
+    pc.rect(ox + 8, oy + 2, 2, 10, c[1]);
+    pc.rect(ox + 22, oy + 2, 2, 10, c[1]);
+    for (let y = 4; y < 12; y += 3) pc.hline(ox + 8, ox + 23, oy + y, c[2]);
+  },
+  swing: (pc, ox, oy, c) => {
+    pc.rect(ox + 2, oy + 4, 28, 3, c[0]);
+    pc.rect(ox + 2, oy + 4, 3, 26, c[0]);
+    pc.rect(ox + 27, oy + 4, 3, 26, c[0]);
+    pc.vline(ox + 11, oy + 7, oy + 20, c[2]);
+    pc.vline(ox + 20, oy + 7, oy + 20, c[2]);
+    pc.rect(ox + 9, oy + 20, 14, 4, c[1]);
+  },
+  sand: (pc, ox, oy, c, rnd) => {
+    fill(pc, ox, oy, c[0]);
+    pc.speckle(ox, oy, T, T, [c[1], c[2]], 0.3, rnd);
+  },
+  boarded: (pc, ox, oy, c) => {
+    pc.rect(ox, oy, T, T, shadeHex(c[0], 0.7));
+    pc.rect(ox + 4, oy + 1, 24, 31, c[0]);
+    for (const [y, tilt] of [[6, 3], [15, -2], [24, 2]] as [number, number][]) {
+      pc.poly([[ox + 1, oy + y], [ox + 31, oy + y + tilt], [ox + 31, oy + y + tilt + 5], [ox + 1, oy + y + 5]], c[1]);
+      pc.set(ox + 4, oy + y + 2, c[2]);
+      pc.set(ox + 27, oy + y + tilt + 2, c[2]);
+    }
+  },
+  gatepost: (pc, ox, oy, c) => {
+    pc.rect(ox + 6, oy + 2, 20, 30, c[1]);
+    pc.rect(ox + 7, oy + 2, 18, 29, c[0]);
+    pc.hline(ox + 7, ox + 24, oy + 2, shadeHex(c[0], 1.2));
+    pc.rect(ox + 9, oy + 9, 14, 8, shadeHex(c[2], 0.7));
+    pc.rect(ox + 10, oy + 10, 12, 6, c[2]);
+    pc.hline(ox + 12, ox + 19, oy + 13, shadeHex(c[2], 0.4));
+  },
+  mailbox: (pc, ox, oy, c) => {
+    pc.rect(ox + 14, oy + 18, 4, 14, c[2]);
+    pc.rect(ox + 8, oy + 6, 16, 13, c[0]);
+    pc.hline(ox + 8, ox + 23, oy + 6, shadeHex(c[0], 1.3));
+    pc.rect(ox + 10, oy + 10, 12, 2, c[1]);
+  },
+  busstop: (pc, ox, oy, c) => {
+    pc.rect(ox + 15, oy + 10, 3, 22, c[2]);
+    pc.circle(ox + 16, oy + 8, 7, c[0]);
+    pc.circle(ox + 16, oy + 8, 5, c[1]);
+    pc.rect(ox + 13, oy + 7, 7, 2, c[0]);
+    pc.rect(ox + 11, oy + 28, 11, 4, shadeHex(c[2], 0.7));
+  },
+  garbage: (pc, ox, oy, c, rnd) => {
+    pc.rect(ox + 1, oy + 8, 30, 22, shadeHex(c[2], 0.8));
+    for (let k = 0; k < 5; k++) pc.circle(ox + 6 + k * 5 + Math.floor(rnd() * 3), oy + 18 + Math.floor(rnd() * 6), 5, c[1]);
+    for (let x = 1; x < 31; x += 3) pc.vline(ox + x, oy + 8, oy + 29, c[0]);
+    for (let y = 8; y < 30; y += 3) pc.hline(ox + 1, ox + 30, oy + y, c[0]);
+  },
+  pillar: (pc, ox, oy, c) => {
+    pc.rect(ox + 10, oy, 12, 32, c[0]);
+    pc.vline(ox + 10, oy, oy + 31, shadeHex(c[0], 1.2));
+    pc.vline(ox + 21, oy, oy + 31, c[1]);
+    for (const y of [8, 13, 18, 23]) pc.hline(ox + 12, ox + 17, oy + y, c[2]);
+  },
+  crayonwall: (pc, ox, oy, c, rnd) => {
+    gens.intwall(pc, ox, oy, c, rnd, 0);
+    for (let k = 0; k < 4; k++) {
+      let x = ox + 3 + Math.floor(rnd() * 22);
+      let y = oy + 3 + Math.floor(rnd() * 16);
+      for (let i = 0; i < 9; i++) {
+        pc.set(x, y, c[3] ?? '#c02020');
+        x += Math.floor(rnd() * 3) - 1 + (i % 2);
+        y += Math.floor(rnd() * 3) - 1;
+      }
+    }
+  },
+  hedge: (pc, ox, oy, c, rnd) => {
+    pc.rect(ox, oy + 6, T, 24, c[2]);
+    pc.rect(ox, oy + 4, T, 22, c[0]);
+    pc.speckle(ox, oy + 4, T, 22, [c[1], shadeHex(c[0], 1.2)], 0.35, rnd);
+  },
   bench: (pc, ox, oy, c) => {
     pc.rect(ox + 1, oy + 10, 30, 4, c[0]);
     pc.rect(ox + 1, oy + 16, 30, 4, c[0]);

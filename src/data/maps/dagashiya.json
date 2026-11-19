@@ -1,0 +1,93 @@
+{
+ "id": "dagashiya",
+ "name": "駄菓子 ゆうなぎ",
+ "layer": "reality",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "shop",
+ "ground": [
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww",
+  "wwwwwwwwww"
+ ],
+ "objects": [
+  "##########",
+  "#hhh hhhV#",
+  "#        #",
+  "#hh  CC  #",
+  "#    C   #",
+  "#        #",
+  "#        #",
+  "####D#####"
+ ],
+ "above": [
+  "          ",
+  "          ",
+  "          ",
+  "          ",
+  "          ",
+  "          ",
+  "          ",
+  "          "
+ ],
+ "lights": [
+  {
+   "x": 4,
+   "y": 3,
+   "radius": 100,
+   "color": "#ffe0b0",
+   "power": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "owner",
+   "name": "店主",
+   "sprite": "dagashi_owner",
+   "x": 6,
+   "y": 2,
+   "facing": "down",
+   "script": "dagashiya_owner"
+  }
+ ],
+ "interactables": [
+  {
+   "id": "counter",
+   "x": 5,
+   "y": 3,
+   "script": "dagashiya_owner"
+  },
+  {
+   "id": "vending",
+   "x": 8,
+   "y": 1,
+   "script": "vending"
+  },
+  {
+   "id": "shelf",
+   "x": 1,
+   "y": 1,
+   "script": "dagashiya_shelf"
+  }
+ ],
+ "warps": [
+  {
+   "id": "out",
+   "x": 4,
+   "y": 7,
+   "w": 1,
+   "h": 1,
+   "to": "yuunagi",
+   "tx": 23,
+   "ty": 23,
+   "facing": "down"
+  }
+ ]
+}

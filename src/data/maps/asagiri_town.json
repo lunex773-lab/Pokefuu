@@ -318,6 +318,21 @@
     ]
    },
    "blockedScript": "school_closed"
+  },
+  {
+   "id": "to_yuunagi",
+   "x": 39,
+   "y": 23,
+   "w": 1,
+   "h": 3,
+   "to": "yuunagi",
+   "tx": 1,
+   "ty": 15,
+   "facing": "right",
+   "when": {
+    "flag": "ch2_started"
+   },
+   "blockedScript": "town_east_blocked"
   }
  ],
  "onEnter": "town_enter"

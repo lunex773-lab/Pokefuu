@@ -56,5 +56,43 @@
   "canFlee": false,
   "boss": true,
   "forceResonance": true
+ },
+ {
+  "id": "kaminari",
+  "enemies": [
+   {
+    "kaii": "harigamineko",
+    "level": 11
+   },
+   {
+    "kaii": "kaminarioyaji",
+    "level": 15
+   },
+   {
+    "kaii": "harigamineko",
+    "level": 11
+   }
+  ],
+  "canFlee": false
+ },
+ {
+  "id": "boss_crayon",
+  "enemies": [
+   {
+    "kaii": "utsushimi",
+    "level": 13
+   },
+   {
+    "kaii": "akaikureyon",
+    "level": 17
+   },
+   {
+    "kaii": "utsushimi",
+    "level": 13
+   }
+  ],
+  "canFlee": false,
+  "boss": true,
+  "forceResonance": true
  }
 ]

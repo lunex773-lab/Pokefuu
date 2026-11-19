@@ -1,0 +1,105 @@
+{
+ "id": "old_house",
+ "name": "夕凪の空き家",
+ "layer": "reality",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "home",
+ "ambientDarkness": 0.25,
+ "ground": [
+  "wwwwwwwwwwwwwwww",
+  "wmmmmmw^^wwwwwww",
+  "wmmmmmw^^wwwwwww",
+  "wmmmmmwwwwwwwwww",
+  "wmmmmmwwwwwwwwww",
+  "wmmmmmwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww",
+  "wwwwwwwwwwwwwwww"
+ ],
+ "objects": [
+  "################",
+  "#     #ZZ#jjjj #",
+  "#     #  #     #",
+  "#     #  #  nn #",
+  "#              #",
+  "#     #  #     #",
+  "### #### ### ###",
+  "#             s#",
+  "#  nn     I    #",
+  "#              #",
+  "#X             #",
+  "########D#######"
+ ],
+ "above": [
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                ",
+  "                "
+ ],
+ "interactables": [
+  {
+   "id": "tatami",
+   "x": 3,
+   "y": 3,
+   "script": "old_house_tatami"
+  },
+  {
+   "id": "boarded",
+   "x": 7,
+   "y": 1,
+   "script": "old_house_boarded"
+  },
+  {
+   "id": "boarded2",
+   "x": 8,
+   "y": 1,
+   "script": "old_house_boarded"
+  },
+  {
+   "id": "pillar",
+   "x": 10,
+   "y": 8,
+   "script": "old_house_pillar"
+  },
+  {
+   "id": "kitchen",
+   "x": 11,
+   "y": 1,
+   "script": "old_house_kitchen"
+  },
+  {
+   "id": "shoebox",
+   "x": 1,
+   "y": 10,
+   "script": "old_house_shoebox"
+  }
+ ],
+ "warps": [
+  {
+   "id": "out",
+   "x": 8,
+   "y": 11,
+   "w": 1,
+   "h": 1,
+   "to": "yuunagi",
+   "tx": 26,
+   "ty": 8,
+   "facing": "down"
+  }
+ ],
+ "onEnter": "old_house_enter"
+}

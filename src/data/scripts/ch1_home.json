@@ -225,6 +225,25 @@
       "then": [
        {
         "cmd": "sleep"
+       },
+       {
+        "cmd": "if",
+        "when": {
+         "all": [
+          {
+           "flag": "ch1_clear"
+          },
+          {
+           "notFlag": "ch2_started"
+          }
+         ]
+        },
+        "then": [
+         {
+          "cmd": "call",
+          "script": "ch2_prologue"
+         }
+        ]
        }
       ]
      },

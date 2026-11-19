@@ -34,6 +34,9 @@ export interface Condition {
   notItem?: string;
   chapter?: string[];
   partySizeGte?: number;
+  /** その怪異と共鳴済み（図鑑で「共鳴済」） */
+  recruited?: string;
+  notRecruited?: string;
   all?: Condition[];
   any?: Condition[];
 }
@@ -405,10 +408,23 @@ export interface GlossaryDef {
   text: string;
 }
 
+export interface EndingRule {
+  /** 最後の選択 */
+  finalChoice?: 'accept' | 'reject';
+  /** 記憶片をすべて集めたか（true＝全部、false＝足りない） */
+  allMemories?: boolean;
+  /** 怪異図鑑の完成（全怪異と共鳴） */
+  compendiumComplete?: boolean;
+}
+
 export interface EndingDef {
   id: string;
   name: string;
+  /** 条件の説明文 */
   condition: string;
+  /** 判定ルール（priority の高い順に評価し、最初に一致したもの） */
+  rule: EndingRule;
+  priority: number;
   status: 'planned' | 'implemented';
 }
 

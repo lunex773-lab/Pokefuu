@@ -1,0 +1,128 @@
+{
+ "id": "nursery",
+ "name": "封じられた子ども部屋",
+ "layer": "back",
+ "chapter": "ch2",
+ "region": "yuunagi",
+ "indoor": true,
+ "dangerLevel": 5,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_room",
+ "weather": [
+  "clear",
+  "redmoon"
+ ],
+ "ground": [
+  "wwwwwwwwwwww",
+  "wwwwwwwwwwww",
+  "wwwwwwwwwwww",
+  "wwwwww%wwwww",
+  "wwwwwwwwwwww",
+  "ww%wwwwwwwww",
+  "wwwwwwwww%ww",
+  "wwww%wwwwwww",
+  "wwwwwwwwwwww",
+  "wwwww^^wwwww"
+ ],
+ "objects": [
+  "!!!!!!!!!!!!",
+  "!s        s!",
+  "!  e    e  !",
+  "!          !",
+  "!          !",
+  "!          !",
+  "!          !",
+  "!o         !",
+  "!          !",
+  "!!!!!  !!!!!"
+ ],
+ "above": [
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            ",
+  "            "
+ ],
+ "lights": [
+  {
+   "x": 5,
+   "y": 2,
+   "radius": 70,
+   "color": "#ff4040",
+   "flicker": true
+  }
+ ],
+ "interactables": [
+  {
+   "id": "crib_l",
+   "x": 3,
+   "y": 2,
+   "script": "nursery_crib"
+  },
+  {
+   "id": "crib_r",
+   "x": 8,
+   "y": 2,
+   "script": "nursery_crib"
+  },
+  {
+   "id": "candle",
+   "x": 1,
+   "y": 7,
+   "script": "back_candle"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "boss",
+   "x": 2,
+   "y": 4,
+   "w": 8,
+   "h": 1,
+   "script": "nursery_boss",
+   "when": {
+    "notFlag": "ch2_boss_cleared"
+   },
+   "once": false
+  },
+  {
+   "id": "boss_re",
+   "x": 2,
+   "y": 4,
+   "w": 8,
+   "h": 1,
+   "script": "nursery_boss_rematch",
+   "when": {
+    "all": [
+     {
+      "flag": "ch2_clear"
+     },
+     {
+      "notRecruited": "akaikureyon"
+     }
+    ]
+   },
+   "once": false
+  }
+ ],
+ "warps": [
+  {
+   "id": "down",
+   "x": 5,
+   "y": 9,
+   "w": 2,
+   "h": 1,
+   "to": "back_old_house",
+   "tx": 8,
+   "ty": 2,
+   "facing": "down"
+  }
+ ],
+ "onEnter": "nursery_enter"
+}
