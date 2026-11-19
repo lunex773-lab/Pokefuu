@@ -337,5 +337,35 @@
    "blockedScript": "town_east_blocked"
   }
  ],
- "onEnter": "town_enter"
+ "onEnter": "town_enter",
+ "rooms": [
+  {
+   "x": 2,
+   "y": 13,
+   "w": 7,
+   "h": 4,
+   "name": "自宅"
+  },
+  {
+   "x": 28,
+   "y": 13,
+   "w": 9,
+   "h": 4,
+   "name": "ヨツバマート"
+  },
+  {
+   "x": 12,
+   "y": 14,
+   "w": 10,
+   "h": 6,
+   "name": "公園"
+  },
+  {
+   "x": 0,
+   "y": 8,
+   "w": 40,
+   "h": 4,
+   "name": "通学路"
+  }
+ ]
 }

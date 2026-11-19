@@ -138,10 +138,50 @@
    "w": 2,
    "h": 1,
    "to": "back_school_1f",
-   "tx": 20,
-   "ty": 10,
+   "tx": 15,
+   "ty": 12,
    "facing": "up"
   }
  ],
- "onEnter": "back_gym_enter"
+ "onEnter": "back_gym_enter",
+ "rooms": [
+  {
+   "x": 1,
+   "y": 1,
+   "w": 14,
+   "h": 3,
+   "name": "ステージ"
+  },
+  {
+   "x": 16,
+   "y": 1,
+   "w": 7,
+   "h": 4,
+   "name": "放送室"
+  },
+  {
+   "x": 1,
+   "y": 6,
+   "w": 22,
+   "h": 9,
+   "name": "フロア"
+  }
+ ],
+ "landmarks": [
+  {
+   "x": 8,
+   "y": 2,
+   "label": "跳ねるボール（中ボス）",
+   "kind": "midboss",
+   "when": {
+    "notFlag": "dribble_done"
+   }
+  },
+  {
+   "x": 22,
+   "y": 13,
+   "label": "灯り（休憩）",
+   "kind": "save"
+  }
+ ]
 }

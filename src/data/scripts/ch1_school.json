@@ -837,8 +837,8 @@
    {
     "cmd": "warp",
     "map": "back_school_2f",
-    "x": 3,
-    "y": 2,
+    "x": 26,
+    "y": 3,
     "facing": "down",
     "transition": "distort"
    }
@@ -867,8 +867,8 @@
          {
           "cmd": "warp",
           "map": "back_school_2f",
-          "x": 3,
-          "y": 2,
+          "x": 26,
+          "y": 3,
           "facing": "down",
           "transition": "distort"
          }

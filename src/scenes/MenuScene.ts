@@ -11,6 +11,7 @@ import { wrapText } from '@/ui/Dialogue';
 import { Theme } from '@/ui/Theme';
 import { drawPanel, label, ListView, type ListItem } from '@/ui/Widgets';
 import { showKaiiInfo } from '@/ui/KaiiInfo';
+import { showAreaMap } from '@/ui/AreaMap';
 import type { WorldScene } from './WorldScene';
 
 interface MenuData {
@@ -86,6 +87,7 @@ export class MenuScene extends Phaser.Scene {
         ? [{ text: 'セーブ', open: () => this.pageSave() }]
         : [
             { text: '怪異', open: () => this.pageParty() },
+            { text: '地図', open: () => void this.openMap() },
             { text: 'アイテム', open: () => this.pageItems() },
             { text: 'クラフト', open: () => this.pageCraft() },
             { text: '装備', open: () => this.pageEquip() },
@@ -108,10 +110,12 @@ export class MenuScene extends Phaser.Scene {
       return true;
     };
     this.tabs.onSelect = (_it, i) => {
-      if (i < tabs.length - 1 && !['タイトルへ'].includes(tabs[i].text)) tabs[i].open();
+      // カーソルを合わせただけで画面が切り替わらないもの（地図・タイトルへ）は、決定したときだけ開く
+      if (i < tabs.length - 1 && !['タイトルへ', '地図'].includes(tabs[i].text)) tabs[i].open();
     };
     this.tabs.onConfirm = (_it, i) => {
       tabs[i].open();
+      if (tabs[i].text === '地図') return;
       if (i < tabs.length - 1 && this.main.visible && this.mainHasItems()) this.focusMain();
     };
     this.tabs.onCancel = () => this.close();
@@ -561,6 +565,21 @@ export class MenuScene extends Phaser.Scene {
       () => this.setDetail('音量は 0〜100% を順に切り替えます。\n画質「自動」は、動作が重いときに画面エフェクトを自動で切ります。\n\n操作\n移動：左スティック／矢印・WASD\n調べる：Z・Enter\n視る：C\nダッシュ：Shift\nメニュー：Esc・M'),
       keep,
     );
+  }
+
+  // ------------------------------------------------------------ 地図
+
+  private mapOpen = false;
+
+  private async openMap(): Promise<void> {
+    if (this.mapOpen) return;
+    const info = (this.scene.get('World') as WorldScene).areaMapInfo();
+    if (!info) return;
+    this.mapOpen = true;
+    this.tabs.active = false;
+    await showAreaMap(this, this.ctx.reg, info, this.ctx.input, (id) => this.ctx.audio.sfx(id));
+    this.tabs.active = true;
+    this.mapOpen = false;
   }
 
   private async toTitle(): Promise<void> {

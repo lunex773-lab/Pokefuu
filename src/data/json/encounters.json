@@ -23,16 +23,32 @@
   "extra": [
    {
     "when": {
-     "weather": [
-      "redmoon"
-     ]
+     "flag": "loop_broken"
     },
     "entries": [
      {
-      "kaii": "sanbanme",
-      "min": 5,
-      "max": 6,
-      "weight": 2
+      "kaii": "gakubuchi",
+      "min": 7,
+      "max": 9,
+      "weight": 4
+     },
+     {
+      "kaii": "honemi",
+      "min": 7,
+      "max": 9,
+      "weight": 4
+     },
+     {
+      "kaii": "kiritsu",
+      "min": 7,
+      "max": 9,
+      "weight": 3
+     },
+     {
+      "kaii": "yonakipiano",
+      "min": 8,
+      "max": 9,
+      "weight": 1
      }
     ]
    }

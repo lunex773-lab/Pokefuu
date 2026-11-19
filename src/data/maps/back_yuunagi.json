@@ -297,5 +297,32 @@
    "y": 16
   }
  ],
- "onEnter": "back_yuunagi_enter"
+ "onEnter": "back_yuunagi_enter",
+ "rooms": [
+  {
+   "x": 2,
+   "y": 19,
+   "w": 14,
+   "h": 11,
+   "name": "公園"
+  },
+  {
+   "x": 22,
+   "y": 1,
+   "w": 10,
+   "h": 6,
+   "name": "空き家"
+  }
+ ],
+ "landmarks": [
+  {
+   "x": 15,
+   "y": 8,
+   "label": "カミナリオヤジの庭（中ボス）",
+   "kind": "midboss",
+   "when": {
+    "notFlag": "np_kaminari"
+   }
+  }
+ ]
 }

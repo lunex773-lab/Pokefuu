@@ -391,6 +391,10 @@ export interface MapDef {
   onEnter?: string;
   /** 「視る」で見える歪みの演出点 */
   distortions?: { x: number; y: number }[];
+  /** 地図画面に出す部屋・区画の名前 */
+  rooms?: { x: number; y: number; w: number; h: number; name: string }[];
+  /** 地図画面に出す重要な場所（行ったことのある場所だけ表示） */
+  landmarks?: { x: number; y: number; label: string; kind: 'boss' | 'midboss' | 'event' | 'save' | 'exit'; when?: Condition }[];
   /** BGM（music.json の曲ID）。省略時は層・屋内外から自動で決まる */
   music?: string;
   /** 夜（night / midnight）の BGM。省略時は music と同じ */

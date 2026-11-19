@@ -56,11 +56,13 @@ export interface GameState {
   chapter: string;
   playTimeMs: number;
   nextUid: number;
+  /** 地図：歩いて見たことのあるマス（マップIDごとのビット列を base64 で保存） */
+  explored: Record<string, string>;
 }
 
 export function createInitialState(name: string, gender: Gender): GameState {
   return {
-    version: 1,
+    version: 2,
     player: {
       name,
       gender,
@@ -85,5 +87,6 @@ export function createInitialState(name: string, gender: Gender): GameState {
     chapter: 'ch1',
     playTimeMs: 0,
     nextUid: 1,
+    explored: {},
   };
 }

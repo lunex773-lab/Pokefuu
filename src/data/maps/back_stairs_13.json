@@ -190,10 +190,36 @@
    "w": 3,
    "h": 1,
    "to": "back_school_2f",
-   "tx": 34,
-   "ty": 7,
-   "facing": "up"
+   "tx": 23,
+   "ty": 2,
+   "facing": "down"
   }
  ],
- "onEnter": "stairs_enter"
+ "onEnter": "stairs_enter",
+ "rooms": [
+  {
+   "x": 5,
+   "y": 1,
+   "w": 5,
+   "h": 4,
+   "name": "最上段"
+  }
+ ],
+ "landmarks": [
+  {
+   "x": 7,
+   "y": 4,
+   "label": "ジュウサンダン",
+   "kind": "boss",
+   "when": {
+    "notFlag": "boss_cleared"
+   }
+  },
+  {
+   "x": 7,
+   "y": 27,
+   "label": "2階へ戻る",
+   "kind": "exit"
+  }
+ ]
 }

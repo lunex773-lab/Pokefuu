@@ -17,6 +17,7 @@ import { MapView } from './world/MapView';
 import { registerScriptCommands } from './world/ScriptCommands';
 import type { UIScene } from './UIScene';
 import type { BattleRequest } from './BattleScene';
+import type { AreaMapInfo } from '@/ui/AreaMap';
 
 const T = GameConfig.tileSize;
 
@@ -186,7 +187,9 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       this.waterMask = this.waterMaskGfx.createGeometryMask();
     }
     const spriteKey = s.state.player.gender === 'female' ? 'player_female' : 'player_male';
-    this.player = new Player(this, spriteKey, tx, ty, this.waterMask);
+    // 作り直したマップに古いセーブの位置が壁として残っていても、近くの歩けるマスに立たせる
+    const safe = this.map.nearestWalkable(tx, ty);
+    this.player = new Player(this, spriteKey, safe.x, safe.y, this.waterMask);
     this.player.face(toFacing4(facing));
     this.player.onStep = (x, y) => this.ctx.audio.sfx(`step_${this.map!.stepKind(x, y)}`, 0.8);
     this.spawnNpcs();
@@ -351,7 +354,8 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     const weather = s.weather.def();
     const back = def.layer === 'back';
     let darkness = phase.darkness + weather.darknessAdd + (def.ambientDarkness ?? 0);
-    darkness = Math.max(0, Math.min(back ? 0.8 : 0.9, darkness));
+    // 裏層は暗くても、部屋の形や出口がうっすら分かる程度に抑える
+    darkness = Math.max(0, Math.min(back ? 0.62 : 0.9, darkness));
     const tint = weather.tint ?? phase.tint;
     const tintAlpha = (weather.tint ? weather.tintAlpha ?? 0 : phase.tintAlpha) * (def.indoor && !back ? 0.5 : 1);
     this.lighting.setParams({ darkness, tint, tintAlpha, powerOut: !!weather.powerOut }, immediate);
@@ -388,6 +392,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     }
     this.map.update(dt);
 
+    this.revealAround();
     const v = dirVector(this.player.facing);
     this.lighting!.playerLight.dirX = v.x;
     this.lighting!.playerLight.dirY = v.y;
@@ -719,6 +724,37 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
         this.updateMusic();
       }
     }
+  }
+
+  // ------------------------------------------------------------ 地図
+
+  private lastReveal = '';
+
+  /** 主人公のまわりを「見たことのある場所」として地図に記録する */
+  private revealAround(): void {
+    if (!this.map || !this.mapDef) return;
+    const key = `${this.mapDef.id}:${this.player.tx},${this.player.ty}`;
+    if (key === this.lastReveal) return;
+    this.lastReveal = key;
+    this.session.explore.reveal(this.mapDef.id, this.map.cols, this.map.rows, this.player.tx, this.player.ty, 4);
+  }
+
+  /** 地図画面に渡す情報 */
+  areaMapInfo(): AreaMapInfo | undefined {
+    if (!this.map || !this.mapDef) return undefined;
+    const map = this.map;
+    const def = this.mapDef;
+    const s = this.session;
+    return {
+      def,
+      cols: map.cols,
+      rows: map.rows,
+      cell: (x, y) => map.cellKind(x, y),
+      explored: (x, y) => s.explore.isExplored(def.id, map.cols, map.rows, x, y),
+      check: (c) => s.check(c),
+      revealed: (w) => !w.hidden || this.isRevealed(w),
+      player: { x: this.player.tx, y: this.player.ty, facing: this.player.facing },
+    };
   }
 
   // ------------------------------------------------------------ BGM

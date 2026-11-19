@@ -145,6 +145,36 @@ export class MapView {
     return !!this.tileAt('ground', tx, ty)?.water;
   }
 
+  /** 地図画面用：そのマスの種類 */
+  cellKind(tx: number, ty: number): 'floor' | 'wall' | 'water' | 'stairs' {
+    if (this.isWater(tx, ty)) return 'water';
+    if (this.isSolidTile(tx, ty)) return 'wall';
+    return this.tileAt('ground', tx, ty)?.id === 'stairs' ? 'stairs' : 'floor';
+  }
+
+  /** (tx, ty) が歩けなければ、いちばん近い歩けるマスを返す（古いセーブの位置が壁になった場合など） */
+  nearestWalkable(tx: number, ty: number): { x: number; y: number } {
+    const sx = Math.max(0, Math.min(this.cols - 1, tx));
+    const sy = Math.max(0, Math.min(this.rows - 1, ty));
+    if (!this.isSolidTile(sx, sy)) return { x: sx, y: sy };
+    const seen = new Set<number>([sy * this.cols + sx]);
+    const q: [number, number][] = [[sx, sy]];
+    while (q.length) {
+      const [x, y] = q.shift()!;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const nx = x + dx;
+        const ny = y + dy;
+        if (nx < 0 || ny < 0 || nx >= this.cols || ny >= this.rows) continue;
+        const k = ny * this.cols + nx;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        if (!this.isSolidTile(nx, ny)) return { x: nx, y: ny };
+        q.push([nx, ny]);
+      }
+    }
+    return { x: sx, y: sy };
+  }
+
   get water(): { x: number; y: number }[] {
     return this.waterCells;
   }

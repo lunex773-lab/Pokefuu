@@ -1,4 +1,5 @@
 import { GameConfig } from '@/config/GameConfig';
+import { ExploreService } from '@/domain/world/Explore';
 import type { DataRegistry } from '@/data/DataRegistry';
 import { CraftingService, InventoryService } from '@/domain/inventory/Inventory';
 import { AchievementSystem, StatsTracker } from '@/domain/progress/Achievements';
@@ -25,6 +26,7 @@ export class GameSession {
   readonly clock: Clock;
   readonly weather: WeatherSystem;
   readonly achievements: AchievementSystem;
+  readonly explore: ExploreService;
   private readonly tracker: StatsTracker;
 
   constructor(
@@ -39,6 +41,7 @@ export class GameSession {
     this.player = new PlayerService(state, reg, bus, this.inventory);
     this.party = new PartyService(state, reg, bus);
     this.story = new StoryService(state, bus);
+    this.explore = new ExploreService(state);
     this.clock = new Clock(state, reg.data.timePhases, bus, GameConfig.clock.realMsPerGameMinute);
     this.weather = new WeatherSystem(state, reg.data.weathers, bus, rng);
     this.achievements = new AchievementSystem(state, reg.data.achievements, bus);

@@ -364,6 +364,92 @@ describe('イベントスクリプト', () => {
   });
 });
 
+describe('第1章の裏層（現実の校舎と同じ間取り）', async () => {
+  const maps = new Map((await Promise.all(mapIds().map(loadMap))).map((m) => [m.id, m]));
+  /** overrides を適用（open=true なら条件に関係なく開いた状態） */
+  const grid = (id: string, open: boolean) => {
+    const m = maps.get(id)!;
+    const ground = m.ground.map((r) => [...r]);
+    const objects = m.objects.map((r) => [...r]);
+    if (open) for (const o of m.overrides ?? []) (o.layer === 'ground' ? ground : objects)[o.y][o.x] = o.char;
+    const solid = (x: number, y: number) => {
+      const g = ground[y]?.[x];
+      const o = objects[y]?.[x];
+      if (g === undefined || o === undefined) return true;
+      return !!(reg.tilesByChar.get(g)?.solid || reg.tilesByChar.get(o)?.solid);
+    };
+    return { m, solid };
+  };
+  const reach = (id: string, sx: number, sy: number, open = false) => {
+    const { solid } = grid(id, open);
+    const seen = new Set<string>([`${sx},${sy}`]);
+    const q = [[sx, sy]];
+    while (q.length) {
+      const [x, y] = q.shift()!;
+      for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+        const k = `${x + dx},${y + dy}`;
+        if (seen.has(k) || solid(x + dx, y + dy)) continue;
+        seen.add(k);
+        q.push([x + dx, y + dy]);
+      }
+    }
+    return seen;
+  };
+  const canFace = (seen: Set<string>, x: number, y: number) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => seen.has(`${x + dx},${y + dy}`));
+  const warp = (id: string, wid: string) => maps.get(id)!.warps!.find((w) => w.id === wid)!;
+  const obj = (id: string, oid: string) => maps.get(id)!.interactables!.find((o) => o.id === oid)!;
+  const inWarp = (seen: Set<string>, w: { x: number; y: number; w: number; h: number }) => {
+    for (let y = w.y; y < w.y + w.h; y++) for (let x = w.x; x < w.x + w.w; x++) if (seen.has(`${x},${y}`)) return true;
+    return false;
+  };
+
+  it('踊り場に落ちてくる → 理科室の床の歪み → 1階', () => {
+    const arrive = reach('back_school_2f', 26, 3);
+    expect(inWarp(arrive, warp('back_school_2f', 'hidden_down'))).toBe(true);
+    expect(inWarp(arrive, warp('back_school_2f', 'stairs_down'))).toBe(true);
+  });
+
+  it('1階：楽譜を拾い、東の階段で2階へ戻れる。昇降口から体育館へ行ける', () => {
+    const w = warp('back_school_2f', 'hidden_down');
+    const f1 = reach('back_school_1f', w.tx, w.ty);
+    const score = obj('back_school_1f', 'score');
+    expect(canFace(f1, score.x, score.y)).toBe(true);
+    expect(inWarp(f1, warp('back_school_1f', 'stairs_up'))).toBe(true);
+    expect(inWarp(f1, warp('back_school_1f', 'to_gym'))).toBe(true);
+  });
+
+  it('2階：ピアノを弾いたあと、踊り場の十三階段へ行ける', () => {
+    const up = warp('back_school_1f', 'stairs_up');
+    const f2 = reach('back_school_2f', up.tx, up.ty, true);
+    const piano = obj('back_school_2f', 'piano_back');
+    expect(canFace(f2, piano.x, piano.y)).toBe(true);
+    expect(inWarp(f2, warp('back_school_2f', 'to_stairs13'))).toBe(true);
+  });
+
+  it('地図の部屋名・目印はマップの範囲内', () => {
+    for (const m of maps.values()) {
+      const w = m.ground[0].length;
+      const h = m.ground.length;
+      for (const r of m.rooms ?? []) expect(r.x >= 0 && r.y >= 0 && r.x + r.w <= w && r.y + r.h <= h, `${m.id} ${r.name}`).toBe(true);
+      for (const l of m.landmarks ?? []) expect(l.x >= 0 && l.y >= 0 && l.x < w && l.y < h, `${m.id} ${l.label}`).toBe(true);
+    }
+    // 第1章・第2章のボスと中ボスは地図に出る
+    const kinds = [...maps.values()].flatMap((m) => (m.landmarks ?? []).map((l) => l.kind));
+    expect(kinds.filter((k) => k === 'boss').length).toBeGreaterThanOrEqual(2);
+    expect(kinds.filter((k) => k === 'midboss').length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('間取りが現実の校舎と同じ（部屋の位置で迷わない）', () => {
+    for (const [back, real] of [['back_school_2f', 'school_2f'], ['back_school_1f', 'school_1f']]) {
+      const b = maps.get(back)!;
+      const r = maps.get(real)!;
+      expect(b.ground.length, back).toBe(r.ground.length);
+      expect(b.ground[0].length, back).toBe(r.ground[0].length);
+      for (const room of b.rooms ?? []) expect(room.x + room.w <= b.ground[0].length && room.y + room.h <= b.ground.length, room.name).toBe(true);
+    }
+  });
+});
+
 describe('裏層で負けても詰まない', () => {
   it('現実から裏層へ入る場所は、一度入ったあとは何度でも入り直せて、目印が出る', async () => {
     const backMaps = new Set<string>();

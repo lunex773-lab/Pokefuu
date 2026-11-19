@@ -17,56 +17,62 @@
   "blackout"
  ],
  "ground": [
-  "tttttttttttttttttttttttttttttttttttttttttt",
-  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
-  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
-  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
-  "tttttttttttttttttttttttttttttttttttttttttt",
-  "tttttttttttttttttttttttt%ttttttttttttt^^^t",
-  "tttttt%ttttttttttttttttttttttttttttttt^^^t",
-  "ttttttttttttt%ttttttttttttttttt%tttttt^^^t",
-  "tttttttttttttttttttttttttttttttttttttttttt",
-  "ttttttttttttttcccccccccccccttttttttttttttt",
-  "ttttttttttttttcccccccccccccttttttttttttttt",
-  "ttttttttttttttttttttcttttttttttttttttttttt"
+  "tttttttttttttttttttttttttttttt",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcc%ccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "tttttttttttttttttttttttttttttt",
+  "tttt%tttttttttttttttt%tttttttt",
+  "ttttttttttt%tttttttttttttt%ttt",
+  "ttttttttttcccccccccccttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "ttttttttttcc%ccccccccttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "tttttttttttttttttttttttttttttt"
  ],
  "objects": [
-  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
-  "&  &BBBBBBBBBBBBB&&uuuuuuu&& s s     &&&&&",
-  "&  & k  k  k  k  &&       &&     k k &&&&&",
-  "&  &             &&       &&         &&&&&",
-  "&& &&&&&&& &&&&&&&&&&& &&&&&&&&& &&&&&&&&&",
-  "&                                        &",
-  "&                                        &",
-  "& o                                 o    &",
-  "&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&",
-  "&xxxxxxxxxxxxx XX  o  XX   xxxxxxxxxxxxxx&",
-  "&xxxxxxxxxxxxxX           Xxxxxxxxxxxxxxx&",
-  "&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&"
+  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+  "&&BBBBBBBBB&&&uuuuu&&&&&     &",
+  "&           &&     &&&&&     &",
+  "& k k k k k &&     &&&&&     &",
+  "& k k k k k &&     &&&&&     &",
+  "&           &&     &&&&&     &",
+  "&&&&&&&&&& &&&&& &&&&Z&&    &&",
+  "& o                          &",
+  "&l                         l &",
+  "&&&&&&&&&&           &&&&&&&&&",
+  "&&&&&&&&&& XXX   XXX &&&&&&&&&",
+  "&&&&&&&&&&           &&&&&&&&&",
+  "&&&&&&&&&&           &&&&&&&&&",
+  "&&&&&&&&&&&&&&&dd&&&&&&&&&&&&&"
  ],
  "above": [
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          ",
-  "                                          "
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              "
  ],
  "encounters": {
   "table": "back_1f",
-  "maxSymbols": 4
+  "maxSymbols": 3
  },
  "interactables": [
   {
    "id": "randoseru",
-   "x": 8,
-   "y": 2,
+   "x": 2,
+   "y": 3,
    "script": "back_randoseru",
    "when": {
     "notFlag": "got_mem_randoseru"
@@ -74,8 +80,8 @@
   },
   {
    "id": "score",
-   "x": 14,
-   "y": 2,
+   "x": 10,
+   "y": 3,
    "script": "back_score",
    "when": {
     "notItem": "score_piece",
@@ -83,14 +89,20 @@
    }
   },
   {
+   "id": "blackboard_back",
+   "x": 5,
+   "y": 1,
+   "script": "back_blackboard"
+  },
+  {
    "id": "stall3_back",
-   "x": 21,
+   "x": 16,
    "y": 1,
    "script": "back_stall3"
   },
   {
    "id": "mirror_shard",
-   "x": 24,
+   "x": 14,
    "y": 1,
    "script": "back_mirror_shard",
    "hidden": true,
@@ -100,8 +112,8 @@
   },
   {
    "id": "notebook",
-   "x": 35,
-   "y": 2,
+   "x": 27,
+   "y": 8,
    "script": "back_notebook",
    "when": {
     "notFlag": "got_notebook"
@@ -109,49 +121,44 @@
   },
   {
    "id": "candle_save",
-   "x": 19,
-   "y": 9,
+   "x": 2,
+   "y": 7,
    "script": "back_candle"
   },
   {
    "id": "shelf_dust",
-   "x": 31,
-   "y": 1,
+   "x": 12,
+   "y": 10,
    "script": "back_shelf",
    "hidden": true,
    "when": {
     "notFlag": "got_back_shelf"
    }
+  },
+  {
+   "id": "library_back",
+   "x": 21,
+   "y": 6,
+   "script": "back_library_door"
   }
  ],
  "warps": [
   {
-   "id": "west_up",
-   "x": 1,
+   "id": "stairs_up",
+   "x": 24,
    "y": 1,
-   "w": 2,
+   "w": 5,
    "h": 1,
    "to": "back_school_2f",
-   "tx": 13,
-   "ty": 4,
+   "tx": 25,
+   "ty": 2,
    "facing": "down"
   },
   {
-   "id": "east_up",
-   "x": 40,
-   "y": 5,
-   "w": 1,
-   "h": 3,
-   "to": "back_school_2f",
-   "tx": 39,
-   "ty": 5,
-   "facing": "left"
-  },
-  {
    "id": "to_gym",
-   "x": 20,
-   "y": 11,
-   "w": 1,
+   "x": 15,
+   "y": 13,
+   "w": 2,
    "h": 1,
    "to": "back_gym",
    "tx": 11,
@@ -159,5 +166,59 @@
    "facing": "up"
   }
  ],
- "onEnter": "back_1f_enter"
+ "onEnter": "back_1f_enter",
+ "rooms": [
+  {
+   "x": 1,
+   "y": 1,
+   "w": 11,
+   "h": 5,
+   "name": "教室"
+  },
+  {
+   "x": 14,
+   "y": 1,
+   "w": 5,
+   "h": 5,
+   "name": "トイレ"
+  },
+  {
+   "x": 24,
+   "y": 1,
+   "w": 5,
+   "h": 5,
+   "name": "階段"
+  },
+  {
+   "x": 1,
+   "y": 7,
+   "w": 28,
+   "h": 2,
+   "name": "廊下"
+  },
+  {
+   "x": 10,
+   "y": 9,
+   "w": 11,
+   "h": 4,
+   "name": "昇降口"
+  }
+ ],
+ "landmarks": [
+  {
+   "x": 2,
+   "y": 7,
+   "label": "灯り（休憩）",
+   "kind": "save"
+  },
+  {
+   "x": 15,
+   "y": 13,
+   "label": "体育館（中ボス）",
+   "kind": "midboss",
+   "when": {
+    "notFlag": "dribble_done"
+   }
+  }
+ ]
 }

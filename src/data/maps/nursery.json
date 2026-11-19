@@ -125,5 +125,22 @@
    "facing": "down"
   }
  ],
- "onEnter": "nursery_enter"
+ "onEnter": "nursery_enter",
+ "landmarks": [
+  {
+   "x": 5,
+   "y": 4,
+   "label": "アカイクレヨン",
+   "kind": "boss",
+   "when": {
+    "notFlag": "ch2_boss_cleared"
+   }
+  },
+  {
+   "x": 1,
+   "y": 7,
+   "label": "灯り（休憩）",
+   "kind": "save"
+  }
+ ]
 }

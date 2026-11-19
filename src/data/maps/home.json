@@ -151,5 +151,29 @@
    "facing": "down"
   }
  ],
- "onEnter": "home_enter"
+ "onEnter": "home_enter",
+ "rooms": [
+  {
+   "x": 1,
+   "y": 1,
+   "w": 5,
+   "h": 5,
+   "name": "自分の部屋"
+  },
+  {
+   "x": 7,
+   "y": 1,
+   "w": 6,
+   "h": 5,
+   "name": "居間・台所"
+  }
+ ],
+ "landmarks": [
+  {
+   "x": 1,
+   "y": 1,
+   "label": "ベッド（眠る）",
+   "kind": "save"
+  }
+ ]
 }

@@ -51,6 +51,7 @@
 - 文字とタイルの対応は `json/tiles.json` の `char`（マップごとに `legend` で上書き可）
 - `objects` の空白はタイルなし。`above` は人物より手前に描く（木の葉など）
 - `layer: "back"` で裏層。`palette: "back"` で裏層用の色に自動変換、`dangerLevel` で危険度、`fixedPhase` で時刻固定
+- `rooms`（部屋の名前と範囲）と `landmarks`（ボス・中ボス・灯りなどの目印。`kind`：boss / midboss / event / save / exit、`when` で表示条件）は地図画面に表示される。歩いたことのある場所だけ描かれる
 - `music` で BGM（`json/music.json` の曲ID）、`musicNight` で夜（夜・深夜）の BGM。省略すると「裏層（危険度5以上は back_deep）／屋外（昼 town・夜 town_night）／屋内（unease）」で自動的に決まる
 
 ```jsonc

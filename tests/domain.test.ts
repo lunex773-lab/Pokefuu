@@ -18,6 +18,8 @@ import { phaseAt } from '@/domain/world/Clock';
 import { noteToMidi, parseSequence, resolveAreaMusic, sequenceUnits } from '@/domain/audio/music';
 import { describeSkill, typeMatchups } from '@/domain/creature/describe';
 import { ShelvingGame } from '@/domain/minigame/Shelving';
+import { ExploreService } from '@/domain/world/Explore';
+import { migrations } from '@/domain/save/migrations';
 
 const reg = createRegistry();
 let uid = 0;
@@ -336,7 +338,7 @@ describe('ゲームセッション（サービス群）', () => {
 
 describe('セーブデータ', () => {
   it('保存して読み込める', async () => {
-    const sm = new SaveManager(new MemoryStorageAdapter(), 'p.', 1);
+    const sm = new SaveManager(new MemoryStorageAdapter(), 'p.', GameConfig.save.version, migrations);
     const st = createInitialState('ユウ', 'male');
     st.flags.x = 3;
     await sm.save('1', st, '朝霧町');
@@ -347,7 +349,7 @@ describe('セーブデータ', () => {
 
   it('破損を検出する', async () => {
     const storage = new MemoryStorageAdapter();
-    const sm = new SaveManager(storage, 'p.', 1);
+    const sm = new SaveManager(storage, 'p.', GameConfig.save.version, migrations);
     await sm.save('1', createInitialState('ユウ', 'male'), '');
     const raw = JSON.parse(storage.store.get('p.1')!);
     raw.state.player.money = 999999;
@@ -560,5 +562,30 @@ describe('条件：今日やったかどうか', () => {
     expect(evaluate({ today: 'parttime_day' }, ctx)).toBe(true);
     st.clock.day += 1;
     expect(evaluate({ today: 'parttime_day' }, ctx)).toBe(false);
+  });
+});
+
+describe('地図（歩いた場所の記録）', () => {
+  it('歩いたまわりだけが記録され、保存用の文字列から復元できる', () => {
+    const st = createInitialState('テスト', 'female');
+    const ex = new ExploreService(st);
+    expect(ex.isExplored('m', 30, 14, 5, 5)).toBe(false);
+    expect(ex.reveal('m', 30, 14, 5, 5, 4)).toBe(true);
+    expect(ex.isExplored('m', 30, 14, 5, 5)).toBe(true);
+    expect(ex.isExplored('m', 30, 14, 8, 5)).toBe(true);
+    expect(ex.isExplored('m', 30, 14, 20, 5)).toBe(false);
+    expect(ex.reveal('m', 30, 14, 5, 5, 4)).toBe(false);
+    // セーブから読み直しても同じ
+    const again = new ExploreService(JSON.parse(JSON.stringify(st)));
+    expect(again.isExplored('m', 30, 14, 8, 5)).toBe(true);
+    expect(again.isExplored('m', 30, 14, 20, 5)).toBe(false);
+  });
+
+  it('古いセーブ（v1）は、地図の記録が空の状態で読み込める', () => {
+    const old = { ...createInitialState('テスト', 'male'), version: 1 } as Record<string, unknown>;
+    delete old.explored;
+    const migrated = migrations[1](old) as unknown as { version: number; explored: Record<string, string> };
+    expect(migrated.version).toBe(2);
+    expect(migrated.explored).toEqual({});
   });
 });

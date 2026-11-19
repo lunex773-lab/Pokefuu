@@ -10,4 +10,6 @@ import type { Migration } from './SaveManager';
  */
 export const migrations: Record<number, Migration> = {
   0: (s) => ({ ...s, version: 1 }),
+  // v2：地図（歩いた場所の記録）を追加
+  1: (s) => ({ ...s, explored: {}, version: 2 }),
 };

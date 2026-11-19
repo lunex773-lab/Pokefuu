@@ -189,5 +189,19 @@
    "transition": "distort"
   }
  ],
- "onEnter": "back_old_house_enter"
+ "onEnter": "back_old_house_enter",
+ "landmarks": [
+  {
+   "x": 14,
+   "y": 10,
+   "label": "灯り（休憩）",
+   "kind": "save"
+  },
+  {
+   "x": 7,
+   "y": 1,
+   "label": "二階への階段",
+   "kind": "event"
+  }
+ ]
 }

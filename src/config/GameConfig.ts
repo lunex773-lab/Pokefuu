@@ -31,7 +31,7 @@ export const GameConfig = {
     textSpeedCharsPerSec: 40,
   },
   save: {
-    version: 1,
+    version: 2,
     keyPrefix: 'pokefuu.save.',
     settingsKey: 'pokefuu.settings',
     slots: ['auto', '1', '2', '3'] as const,
