@@ -21,7 +21,7 @@ export function buildLightTexture(size = 128): HTMLCanvasElement {
   return c;
 }
 
-/** ライト（懐中電灯）の円錐形の光。右向きが基準 */
+/** ライト（懐中電灯）の円錐形の光。右向きが基準。遠くまで明るさが残るようにしている */
 export function buildConeTexture(size = 128): HTMLCanvasElement {
   const c = canvas(size, size);
   const g = c.getContext('2d')!;
@@ -29,15 +29,31 @@ export function buildConeTexture(size = 128): HTMLCanvasElement {
   const cy = size / 2;
   const grad = g.createRadialGradient(cx, cy, 0, cx, cy, size * 0.95);
   grad.addColorStop(0, 'rgba(255,255,255,1)');
-  grad.addColorStop(0.6, 'rgba(255,255,255,0.55)');
+  grad.addColorStop(0.55, 'rgba(255,255,255,0.9)');
+  grad.addColorStop(0.85, 'rgba(255,255,255,0.45)');
   grad.addColorStop(1, 'rgba(255,255,255,0)');
   g.fillStyle = grad;
   g.beginPath();
   g.moveTo(cx, cy);
-  g.arc(cx, cy, size * 0.95, -0.42, 0.42);
+  g.arc(cx, cy, size * 0.95, -0.48, 0.48);
   g.closePath();
   g.fill();
   return c;
+}
+
+/** 明かりの灯った窓ガラス（窓タイルのガラス面 18×16 と同じ形。十字の桟は暗く残す） */
+export function buildWindowGlowTexture(): HTMLCanvasElement {
+  const pc = new PixelCanvas(18, 16);
+  for (let y = 0; y < 16; y++) {
+    for (let x = 0; x < 18; x++) {
+      // 下ほど少し明るい（室内の灯りが下から照らす感じ）
+      const a = 170 + Math.round((y / 15) * 60);
+      pc.set(x, y, [255, 255, 255, a]);
+    }
+  }
+  for (let y = 0; y < 16; y++) pc.set(9, y, [255, 255, 255, 40]);
+  for (let x = 0; x < 18; x++) pc.set(x, 8, [255, 255, 255, 40]);
+  return pc.toCanvas();
 }
 
 /** タイル可能な霧のノイズ（2オクターブのバリューノイズ） */

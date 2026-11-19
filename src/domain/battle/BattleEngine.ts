@@ -3,7 +3,7 @@ import { chance, randInt, weightedPick, type Rng } from '@/core/Rng';
 import type { DataRegistry } from '@/data/DataRegistry';
 import { kaiiStats, MAX_EN } from '../creature/Kaii';
 import type { KaiiData } from '../state/GameState';
-import type { SkillDef, StatKey, Stats } from '../types';
+import type { SkillDef, StatKey, Stats, TimePhase, TraitEffect, TraitWhen, WeatherId, WorldLayer } from '../types';
 import { stageMultiplier, typeMultiplier } from './TypeChart';
 
 export type Side = 'ally' | 'enemy';
@@ -18,6 +18,8 @@ export interface Combatant {
   defending: boolean;
   out: boolean;
   participated: boolean;
+  /** 特性「届かない一投」：外したあと、次に当たる攻撃が強くなる */
+  charged?: boolean;
 }
 
 export type PlayerAction =
@@ -49,6 +51,8 @@ export type BattleEvent =
   | { t: 'flee'; success: boolean }
   | { t: 'sanity'; delta: number; value: number }
   | { t: 'en'; target: string; en: number }
+  /** 特性が働いた（続くイベントがその結果） */
+  | { t: 'trait'; target: string; trait: string; text?: string }
   | { t: 'end'; result: BattleResultKind };
 
 export type BattleResultKind = 'win' | 'lose' | 'flee';
@@ -63,11 +67,19 @@ export interface BattleHost {
   readonly sanityDrainMul: number;
 }
 
+/** 戦闘の場（特性の条件に使う） */
+export interface BattleEnv {
+  phase: TimePhase;
+  layer: WorldLayer;
+  weather?: WeatherId;
+}
+
 export interface BattleSetup {
   party: KaiiData[];
   enemies: KaiiData[];
   canFlee: boolean;
   boss: boolean;
+  env?: BattleEnv;
 }
 
 export interface BattleOutcome {
@@ -130,9 +142,105 @@ export class BattleEngine {
     const st = c.kaii.status ? this.reg.statuses.get(c.kaii.status.id) : undefined;
     const out = { ...base };
     for (const k of ['atk', 'def', 'spd', 'mnd'] as StageKey[]) {
-      out[k] = Math.max(1, Math.floor(base[k] * stageMultiplier(c.stages[k]) * (st?.statMul?.[k] ?? 1)));
+      out[k] = Math.max(1, Math.floor(base[k] * stageMultiplier(c.stages[k]) * (st?.statMul?.[k] ?? 1) * this.traitStatMul(c, k)));
     }
     return out;
+  }
+
+  // ------------------------------------------------------------ 特性
+
+  /** その怪異の特性の効果 */
+  traitEffects(c: Combatant): TraitEffect[] {
+    return this.reg.traitOf(c.kaii.speciesId)?.effects ?? [];
+  }
+
+  private trait<K extends TraitEffect['kind']>(c: Combatant, kind: K): Extract<TraitEffect, { kind: K }> | undefined {
+    return this.traitEffects(c).find((e): e is Extract<TraitEffect, { kind: K }> => e.kind === kind);
+  }
+
+  private traitName(c: Combatant): string {
+    return this.reg.traitOf(c.kaii.speciesId)?.id ?? '';
+  }
+
+  /** 特性の条件を満たしているか */
+  traitActive(c: Combatant, when: TraitWhen | undefined, target?: Combatant): boolean {
+    if (!when) return true;
+    const env = this.setup.env ?? { phase: 'day', layer: 'reality' };
+    switch (when) {
+      case 'dark':
+        return env.layer === 'back' || env.phase === 'night' || env.phase === 'midnight';
+      case 'dusk':
+        return env.layer === 'back' || env.phase === 'evening' || env.phase === 'night' || env.phase === 'midnight';
+      case 'alone':
+        return this.active(c.side).length === 1;
+      case 'hpHalf':
+        return c.kaii.hp <= this.maxHp(c) / 2;
+      case 'targetStronger': {
+        if (!target) return false;
+        const base = (x: Combatant) => kaiiStats(this.reg, x.kaii);
+        const a = base(c);
+        const b = base(target);
+        return b.atk > a.atk || b.mnd > a.mnd;
+      }
+    }
+  }
+
+  private traitStatMul(c: Combatant, k: StageKey): number {
+    let m = 1;
+    for (const e of this.traitEffects(c)) {
+      if (e.kind === 'statMul' && e.stats.includes(k) && this.traitActive(c, e.when)) m *= e.mul;
+      if (e.kind === 'bondStats' && c.side === 'ally') m *= 1 + (e.max * Math.max(0, Math.min(100, c.kaii.bond))) / 100;
+    }
+    return m;
+  }
+
+  /** 特性で能力が変わっている能力（表示用） */
+  traitBoosted(c: Combatant): StageKey[] {
+    return (['atk', 'def', 'spd', 'mnd'] as StageKey[]).filter((k) => Math.abs(this.traitStatMul(c, k) - 1) > 0.001);
+  }
+
+  private traitEvent(c: Combatant, ev: BattleEvent[], text?: string): void {
+    ev.push({ t: 'trait', target: c.id, trait: this.traitName(c), text });
+  }
+
+  /** 戦闘開始時（最初に場にいる怪異の「場に出たとき」の特性） */
+  start(): BattleEvent[] {
+    const ev: BattleEvent[] = [];
+    for (const c of this.all()) this.onEnter(c, ev);
+    return ev;
+  }
+
+  private onEnter(c: Combatant, ev: BattleEvent[]): void {
+    const e = this.trait(c, 'entryDebuff');
+    if (!e || c.out) return;
+    const foes = this.active(c.side === 'ally' ? 'enemy' : 'ally');
+    if (!foes.length) return;
+    this.traitEvent(c, ev);
+    for (const f of foes) this.addStage(f, e.stat, e.stages, ev);
+  }
+
+  private addStage(c: Combatant, stat: StageKey, stages: number, ev: BattleEvent[]): void {
+    const before = c.stages[stat];
+    c.stages[stat] = Math.max(-3, Math.min(3, before + stages));
+    ev.push({ t: 'buff', target: c.id, stat, stages: c.stages[stat] - before });
+  }
+
+  /** 状態異常をかける（特性「空っぽの体」「写し身」を考慮）。かかったら true */
+  private inflict(source: Combatant, target: Combatant, statusId: string, turns: number | undefined, ev: BattleEvent[]): boolean {
+    if (target.out || target.kaii.status) return false;
+    const def = this.reg.status(statusId);
+    if (this.trait(target, 'statusImmune')) {
+      this.traitEvent(target, ev, `${this.name(target)}には${def.name}が効かない。`);
+      return false;
+    }
+    target.kaii.status = { id: def.id, turns: turns ?? def.defaultTurns };
+    ev.push({ t: 'status', target: target.id, status: def.id });
+    if (this.trait(target, 'mirrorStatus') && source !== target && !source.out && !source.kaii.status && !this.trait(source, 'statusImmune')) {
+      this.traitEvent(target, ev);
+      source.kaii.status = { id: def.id, turns: turns ?? def.defaultTurns };
+      ev.push({ t: 'status', target: source.id, status: def.id });
+    }
+    return true;
   }
 
   maxHp(c: Combatant): number {
@@ -172,11 +280,11 @@ export class BattleEngine {
     const queue: Queued[] = [];
     for (const c of this.active('ally')) {
       const action = input.allies[c.id] ?? this.aiAction(c);
-      queue.push({ actor: c, action, priority: this.priorityOf(action), speed: this.stats(c).spd });
+      queue.push({ actor: c, action, priority: this.priorityOf(action, c), speed: this.stats(c).spd });
     }
     for (const c of this.active('enemy')) {
       const action = this.aiAction(c);
-      queue.push({ actor: c, action, priority: this.priorityOf(action), speed: this.stats(c).spd });
+      queue.push({ actor: c, action, priority: this.priorityOf(action, c), speed: this.stats(c).spd });
     }
     queue.sort((a, b) => b.priority - a.priority || b.speed - a.speed || this.rng.next() - 0.5);
 
@@ -191,10 +299,12 @@ export class BattleEngine {
     return ev;
   }
 
-  private priorityOf(a: KaiiAction): number {
+  private priorityOf(a: KaiiAction, c: Combatant): number {
     if (a.kind === 'swap') return 10;
-    if (a.kind === 'defend') return 5;
-    return this.reg.skill(a.skill).priority ?? 0;
+    // 特性「号令」：最初のターンは、交代以外のだれよりも先に動く
+    const first = this.turn === 1 && this.trait(c, 'firstStrike') ? 6 : 0;
+    if (a.kind === 'defend') return 5 + first;
+    return (this.reg.skill(a.skill).priority ?? 0) + first;
   }
 
   private doPlayerAction(a: PlayerAction, ev: BattleEvent[]): void {
@@ -314,6 +424,7 @@ export class BattleEngine {
     this.allies[actor.slot] = c;
     ev.push({ t: 'swap', slot: actor.slot, out: actor.id, in: c.id });
     ev.push({ t: 'message', text: `${this.reg.species(actor.kaii.speciesId).name}を下げ、${this.name(c)}を呼んだ！` });
+    this.onEnter(c, ev);
   }
 
   private resolveTargets(actor: Combatant, skill: SkillDef, targetId?: string): Combatant[] {
@@ -341,13 +452,32 @@ export class BattleEngine {
 
   private applySkill(actor: Combatant, target: Combatant, skill: SkillDef, ev: BattleEvent[]): void {
     const hostile = target.side !== actor.side;
-    if (hostile && skill.accuracy < 100 && !chance(this.rng, skill.accuracy / 100)) {
+    if (hostile && skill.accuracy < 100 && !this.trait(actor, 'sureHit') && !chance(this.rng, skill.accuracy / 100)) {
       ev.push({ t: 'miss', actor: actor.id, target: target.id });
+      if (skill.power > 0 && this.trait(actor, 'missCharge') && !actor.charged) {
+        actor.charged = true;
+        this.traitEvent(actor, ev, `${this.name(actor)}は次の一投に力をこめている……`);
+      }
       return;
     }
     if (skill.power > 0 && hostile) {
       const { amount, eff, crit } = this.damage(actor, target, skill);
+      actor.charged = false;
       this.hurt(target, amount, ev, eff, crit);
+      // 特性「かみなり」：物理攻撃を受けたら、相手を状態異常にすることがある
+      const counter = this.trait(target, 'counterStatus');
+      if (counter && skill.category === 'phys' && !target.out && !actor.out && !actor.kaii.status && chance(this.rng, counter.chance)) {
+        this.traitEvent(target, ev);
+        this.inflict(target, actor, counter.status, undefined, ev);
+      }
+      // 特性「ガラス越し」：上がっている能力を元に戻す
+      if (this.trait(actor, 'stripBuffs') && !target.out) {
+        const up = (Object.keys(target.stages) as StageKey[]).filter((k) => target.stages[k] > 0);
+        if (up.length) {
+          this.traitEvent(actor, ev, `${this.name(target)}の上がっていた能力が元に戻った。`);
+          for (const k of up) target.stages[k] = 0;
+        }
+      }
       if (skill.drain && amount > 0) this.healBy(actor, Math.floor(amount * skill.drain), ev);
       if (skill.recoil && amount > 0) this.hurt(actor, Math.max(1, Math.floor(amount * skill.recoil)), ev, 1, false);
       if (skill.sanityDamage && actor.side === 'enemy') this.changeSanity(-skill.sanityDamage * this.host.sanityDrainMul, ev);
@@ -357,19 +487,13 @@ export class BattleEngine {
     if (skill.heal && !target.out) this.healBy(target, Math.floor(this.maxHp(target) * skill.heal.ratio), ev);
     if (skill.status && !target.out && !target.kaii.status && hostile) {
       const resist = Math.min(0.5, this.stats(target).mnd / (this.stats(actor).mnd * 4));
-      if (chance(this.rng, skill.status.chance * (1 - resist))) {
-        const def = this.reg.status(skill.status.id);
-        target.kaii.status = { id: def.id, turns: skill.status.turns ?? def.defaultTurns };
-        ev.push({ t: 'status', target: target.id, status: def.id });
-      }
+      if (chance(this.rng, skill.status.chance * (1 - resist))) this.inflict(actor, target, skill.status.id, skill.status.turns, ev);
     }
     if (skill.buff) {
       const to = skill.buff.to === 'self' ? [actor] : skill.buff.to === 'allAllies' ? this.active(actor.side) : [target];
       for (const c of to) {
         if (c.out) continue;
-        const before = c.stages[skill.buff.stat];
-        c.stages[skill.buff.stat] = Math.max(-3, Math.min(3, before + skill.buff.stages));
-        ev.push({ t: 'buff', target: c.id, stat: skill.buff.stat, stages: c.stages[skill.buff.stat] - before });
+        this.addStage(c, skill.buff.stat, skill.buff.stages, ev);
       }
     }
   }
@@ -387,12 +511,30 @@ export class BattleEngine {
     const spread = skill.target === 'allEnemies' ? 0.75 : 1;
     const base = ((2 * actor.kaii.level) / 5 + 2) * skill.power * (atk / Math.max(1, def)) / 50 + 2;
     const roll = 0.85 + this.rng.next() * 0.15;
-    const mult = eff * stab * roll * (crit ? 1.5 : 1) * (target.defending ? 0.5 : 1) * spread;
+    // 特性による倍率
+    let trait = 1;
+    const dealt = this.trait(actor, 'dealtMul');
+    if (dealt && this.traitActive(actor, dealt.when, target)) trait *= dealt.mul;
+    const charge = this.trait(actor, 'missCharge');
+    if (charge && actor.charged) trait *= charge.mul;
+    const taken = this.trait(target, 'takenMul');
+    if (taken && (!taken.category || taken.category === skill.category)) trait *= taken.mul;
+    const guard = this.trait(target, 'defendMul');
+    const defend = target.defending ? 0.5 * (guard ? guard.mul : 1) : 1;
+    const mult = eff * stab * roll * (crit ? 1.5 : 1) * defend * spread * trait;
     return { amount: eff === 0 ? 0 : Math.max(1, Math.floor(base * mult)), eff, crit };
   }
 
   private hurt(target: Combatant, amount: number, ev: BattleEvent[], eff: number, crit: boolean): void {
+    // 特性「迷い猫の張り紙」：HP満タンなら HP1 で耐える
+    const endure = amount >= target.kaii.hp && target.kaii.hp === this.maxHp(target) && target.kaii.hp > 1 && this.trait(target, 'endure');
+    if (endure) amount = target.kaii.hp - 1;
     target.kaii.hp = Math.max(0, target.kaii.hp - amount);
+    if (endure) {
+      ev.push({ t: 'damage', target: target.id, amount, hp: target.kaii.hp, maxHp: this.maxHp(target), eff, crit });
+      this.traitEvent(target, ev, `${this.name(target)}は持ちこたえた！`);
+      return;
+    }
     ev.push({ t: 'damage', target: target.id, amount, hp: target.kaii.hp, maxHp: this.maxHp(target), eff, crit });
     if (target.kaii.hp <= 0) this.knockOut(target, ev);
   }
@@ -414,6 +556,13 @@ export class BattleEngine {
     } else {
       ev.push({ t: 'exhaust', target: c.id });
     }
+    // 特性「あの子がほしい」：仲間が倒れるたびに強くなる
+    for (const f of this.active(c.side)) {
+      const e = this.trait(f, 'allyDownBuff');
+      if (!e) continue;
+      this.traitEvent(f, ev);
+      this.addStage(f, e.stat, e.stages, ev);
+    }
   }
 
   private changeSanity(delta: number, ev: BattleEvent[]): void {
@@ -428,6 +577,16 @@ export class BattleEngine {
       if (c.out) continue;
       c.defending = false;
       c.kaii.en = Math.min(MAX_EN, c.kaii.en + 1);
+      const enRegen = this.trait(c, 'enRegen');
+      if (enRegen && c.kaii.en < MAX_EN) {
+        c.kaii.en = Math.min(MAX_EN, c.kaii.en + enRegen.amount);
+        ev.push({ t: 'en', target: c.id, en: c.kaii.en });
+      }
+      const regen = this.trait(c, 'regen');
+      if (regen && c.kaii.hp < this.maxHp(c)) {
+        this.traitEvent(c, ev);
+        this.healBy(c, Math.max(1, Math.floor(this.maxHp(c) * regen.ratio)), ev);
+      }
       const s = c.kaii.status;
       if (!s) continue;
       const def = this.reg.status(s.id);
@@ -455,6 +614,7 @@ export class BattleEngine {
       this.allies[i] = c;
       ev.push({ t: 'swap', slot: i, out: cur?.id, in: c.id });
       ev.push({ t: 'message', text: `${this.name(c)}が前に出た！` });
+      this.onEnter(c, ev);
     }
   }
 

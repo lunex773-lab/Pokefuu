@@ -54,21 +54,39 @@
    "y": 3,
    "radius": 90,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 16,
    "y": 3,
    "radius": 90,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 12,
    "y": 7,
    "radius": 100,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 25,
@@ -76,7 +94,13 @@
    "radius": 80,
    "color": "#ffe8c0",
    "power": true,
-   "flicker": true
+   "flicker": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   }
  ],
  "npcs": [

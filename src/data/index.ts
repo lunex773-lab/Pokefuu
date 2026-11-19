@@ -18,6 +18,7 @@ import skills from './json/skills.json';
 import statuses from './json/statuses.json';
 import tiles from './json/tiles.json';
 import timePhases from './json/timePhases.json';
+import traits from './json/traits.json';
 import typeChart from './json/typeChart.json';
 import types from './json/types.json';
 import weathers from './json/weathers.json';
@@ -41,6 +42,7 @@ export const gameData = {
   statuses,
   tiles,
   timePhases,
+  traits,
   typeChart,
   types,
   weathers,

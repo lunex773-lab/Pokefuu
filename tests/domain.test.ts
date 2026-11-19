@@ -16,6 +16,7 @@ import { resolveEnding } from '@/domain/progress/Endings';
 import { formatText } from '@/domain/script/format';
 import { phaseAt } from '@/domain/world/Clock';
 import { noteToMidi, parseSequence, resolveAreaMusic, sequenceUnits } from '@/domain/audio/music';
+import { describeSkill, typeMatchups } from '@/domain/creature/describe';
 
 const reg = createRegistry();
 let uid = 0;
@@ -420,5 +421,93 @@ describe('BGM の音列', () => {
     expect(resolveAreaMusic({ ...base, indoor: true }, 'day')).toBe('unease');
     expect(resolveAreaMusic({ layer: 'back', indoor: true, dangerLevel: 3 }, 'midnight')).toBe('back');
     expect(resolveAreaMusic({ layer: 'back', indoor: true, dangerLevel: 5 }, 'midnight')).toBe('back_deep');
+  });
+});
+
+describe('特性', () => {
+  const engine = (party: KaiiData[], enemies: KaiiData[], env?: { phase: 'day' | 'midnight'; layer: 'reality' | 'back' }, seed = 1) =>
+    new BattleEngine(reg, new SeededRng(seed), host(), { party, enemies, canFlee: true, boss: false, env });
+
+  it('背中の影：裏層では素早さが上がる', () => {
+    const day = engine([mk('nanashi', 5)], [mk('kageboushi', 10)]);
+    const back = engine([mk('nanashi', 5)], [mk('kageboushi', 10)], { phase: 'midnight', layer: 'back' });
+    const d = day.stats(day.active('enemy')[0]).spd;
+    const b = back.stats(back.active('enemy')[0]).spd;
+    expect(b).toBeGreaterThan(d);
+    expect(back.traitBoosted(back.active('enemy')[0])).toContain('spd');
+  });
+
+  it('もういいかい：味方がひとりだけのとき攻撃が上がる', () => {
+    const solo = engine([mk('hitorioni', 10)], [mk('kageboushi', 5)]);
+    const duo = engine([mk('hitorioni', 10), mk('nanashi', 10)], [mk('kageboushi', 5)]);
+    expect(solo.stats(solo.active('ally')[0]).atk).toBeGreaterThan(duo.stats(duo.active('ally')[0]).atk);
+  });
+
+  it('ひとりだけの名前：絆が深いほど強くなる（敵には働かない）', () => {
+    const a = mk('nanashi', 10);
+    const b = mk('nanashi', 10);
+    b.bond = 100;
+    const e = engine([a, b], [mk('nanashi', 10)]);
+    const [ca, cb] = e.active('ally');
+    expect(e.stats(cb).atk).toBeGreaterThan(e.stats(ca).atk);
+    expect(e.traitBoosted(e.active('enemy')[0])).toEqual([]);
+  });
+
+  it('出席確認：場に出たとき相手全員の精神を下げる', () => {
+    const e = engine([mk('housoushitsu', 10)], [mk('kageboushi', 5), mk('kageboushi', 5)]);
+    const ev = e.start();
+    expect(ev.some((x) => x.t === 'trait')).toBe(true);
+    for (const c of e.active('enemy')) expect(c.stages.mnd).toBe(-1);
+  });
+
+  it('号令：最初のターンは遅くても先に動く', () => {
+    const e = engine([mk('kiritsu', 3)], [mk('kageboushi', 30)]);
+    const ev = e.runTurn({ player: { kind: 'encourage' }, allies: {} });
+    const first = ev.find((x) => x.t === 'use');
+    expect(first && first.t === 'use' && e.get(first.actor)?.side).toBe('ally');
+  });
+
+  it('空っぽの体：状態異常にかからない', () => {
+    for (let seed = 0; seed < 30; seed++) {
+      const e = engine([mk('honemi', 10)], [mk('kageboushi', 20)], undefined, seed);
+      for (let t = 0; t < 6 && !e.result; t++) e.runTurn({ player: { kind: 'encourage' }, allies: {} });
+      const c = e.allies[0]!;
+      expect(c.kaii.status).toBeUndefined();
+    }
+  });
+
+  it('迷い猫の張り紙：HP満タンなら倒れる攻撃でも HP1 で耐える', () => {
+    const e = engine([mk('harigamineko', 3)], [mk('akaikureyon', 40)], undefined, 5);
+    const ev = e.runTurn({ player: { kind: 'encourage' }, allies: {} });
+    const i = ev.findIndex((x) => x.t === 'damage' && e.get(x.target)?.side === 'ally');
+    const hit = ev[i];
+    expect(hit.t === 'damage' && hit.hp).toBe(1);
+    expect(ev[i + 1].t).toBe('trait');
+  });
+
+  it('見張りの目：技が外れない', () => {
+    for (let seed = 0; seed < 20; seed++) {
+      const e = engine([mk('kairanban', 15)], [mk('akaikureyon', 30)], undefined, seed);
+      for (let t = 0; t < 4 && !e.result; t++) {
+        const ev = e.runTurn({ player: { kind: 'encourage' }, allies: {} });
+        expect(ev.some((x) => x.t === 'miss' && e.get(x.actor)?.side === 'ally')).toBe(false);
+      }
+    }
+  });
+});
+
+describe('技・相性の説明', () => {
+  it('技の説明に威力・命中・気力と追加効果が入る', () => {
+    const text = describeSkill(reg, reg.skill('startle'));
+    expect(text).toContain('威力45');
+    expect(text).toContain('命中95');
+    expect(text).toContain('EN1');
+    expect(text).toContain('20%で恐慌');
+  });
+  it('相性：タイプ表どおりに「よく響く」「響きにくい」が出る', () => {
+    const m = typeMatchups(reg, ['fear']);
+    expect(m.weak.length + m.resist.length).toBeGreaterThan(0);
+    for (const t of m.weak) expect(typeMultiplier(reg.data.typeChart, t, ['fear'])).toBeGreaterThan(1);
+    for (const t of m.resist) expect(typeMultiplier(reg.data.typeChart, t, ['fear'])).toBeLessThan(1);
   });
 });

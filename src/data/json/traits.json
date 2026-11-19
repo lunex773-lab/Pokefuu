@@ -1,0 +1,239 @@
+[
+ {
+  "id": "only_name",
+  "name": "ひとりだけの名前",
+  "description": "主人公との絆が深いほど、すべての能力が上がる（絆が最大のとき1.2倍）。",
+  "effects": [
+   {
+    "kind": "bondStats",
+    "max": 0.2
+   }
+  ]
+ },
+ {
+  "id": "back_watcher",
+  "name": "背中の影",
+  "description": "夜・深夜や裏層では、素早さが1.3倍になる。",
+  "effects": [
+   {
+    "kind": "statMul",
+    "stats": [
+     "spd"
+    ],
+    "mul": 1.3,
+    "when": "dark"
+   }
+  ]
+ },
+ {
+  "id": "mou_ii_kai",
+  "name": "もういいかい",
+  "description": "味方が自分ひとりだけになると、攻撃と精神が1.5倍になる。",
+  "effects": [
+   {
+    "kind": "statMul",
+    "stats": [
+     "atk",
+     "mnd"
+    ],
+    "mul": 1.5,
+    "when": "alone"
+   }
+  ]
+ },
+ {
+  "id": "locked_stall",
+  "name": "閉ざされた個室",
+  "description": "防御しているとき、受けるダメージがさらに半分になる。",
+  "effects": [
+   {
+    "kind": "defendMul",
+    "mul": 0.5
+   }
+  ]
+ },
+ {
+  "id": "gourei",
+  "name": "気をつけ",
+  "description": "戦闘の最初のターンは、だれよりも先に動く。",
+  "effects": [
+   {
+    "kind": "firstStrike"
+   }
+  ]
+ },
+ {
+  "id": "comparing_eyes",
+  "name": "比べる目",
+  "description": "相手のほうが攻撃か精神が高いと、与えるダメージが1.3倍になる。",
+  "effects": [
+   {
+    "kind": "dealtMul",
+    "mul": 1.3,
+    "when": "targetStronger"
+   }
+  ]
+ },
+ {
+  "id": "all_night_recital",
+  "name": "夜通しの演奏",
+  "description": "ターンの終わりに、気力（EN）がさらに1回復する。",
+  "effects": [
+   {
+    "kind": "enRegen",
+    "amount": 1
+   }
+  ]
+ },
+ {
+  "id": "hollow_body",
+  "name": "空っぽの体",
+  "description": "状態異常にかからない。",
+  "effects": [
+   {
+    "kind": "statusImmune"
+   }
+  ]
+ },
+ {
+  "id": "endless_stairs",
+  "name": "また一段",
+  "description": "ターンの終わりに、HPが少し回復する（最大HPの1/40）。",
+  "effects": [
+   {
+    "kind": "regen",
+    "ratio": 0.025
+   }
+  ]
+ },
+ {
+  "id": "one_more_shot",
+  "name": "届かない一投",
+  "description": "攻撃が外れると、次に当たる攻撃のダメージが1.5倍になる。",
+  "effects": [
+   {
+    "kind": "missCharge",
+    "mul": 1.5
+   }
+  ]
+ },
+ {
+  "id": "attendance",
+  "name": "出席確認",
+  "description": "場に出たとき、相手全員の精神を1段階下げる。",
+  "effects": [
+   {
+    "kind": "entryDebuff",
+    "stat": "mnd",
+    "stages": -1
+   }
+  ]
+ },
+ {
+  "id": "five_oclock",
+  "name": "夕方五時",
+  "description": "夕方から深夜、または裏層では、精神が1.3倍になる。",
+  "effects": [
+   {
+    "kind": "statMul",
+    "stats": [
+     "mnd"
+    ],
+    "mul": 1.3,
+    "when": "dusk"
+   }
+  ]
+ },
+ {
+  "id": "watching_eyes",
+  "name": "見張りの目",
+  "description": "自分の技は必ず命中する。",
+  "effects": [
+   {
+    "kind": "sureHit"
+   }
+  ]
+ },
+ {
+  "id": "through_glass",
+  "name": "ガラス越し",
+  "description": "攻撃を当てた相手の、上がっている能力を元に戻す。",
+  "effects": [
+   {
+    "kind": "stripBuffs"
+   }
+  ]
+ },
+ {
+  "id": "mirror_body",
+  "name": "写し身",
+  "description": "状態異常にされると、相手にも同じ状態異常を写し返す。",
+  "effects": [
+   {
+    "kind": "mirrorStatus"
+   }
+  ]
+ },
+ {
+  "id": "that_child",
+  "name": "輪の外",
+  "description": "味方が倒れる（消耗する）たびに、攻撃が1段階上がる。",
+  "effects": [
+   {
+    "kind": "allyDownBuff",
+    "stat": "atk",
+    "stages": 1
+   }
+  ]
+ },
+ {
+  "id": "thunderclap",
+  "name": "庭に入るな",
+  "description": "物理攻撃を受けると、30%の確率で相手を恐慌状態にする。",
+  "effects": [
+   {
+    "kind": "counterStatus",
+    "status": "panic",
+    "chance": 0.3
+   }
+  ]
+ },
+ {
+  "id": "lost_cat_poster",
+  "name": "迷い猫の張り紙",
+  "description": "HPが満タンのとき、倒れるほどの攻撃を受けてもHP1で耐える。",
+  "effects": [
+   {
+    "kind": "endure"
+   }
+  ]
+ },
+ {
+  "id": "rotten_walls",
+  "name": "朽ちた壁",
+  "description": "物理攻撃で受けるダメージが0.75倍になる。",
+  "effects": [
+   {
+    "kind": "takenMul",
+    "mul": 0.75,
+    "category": "phys"
+   }
+  ]
+ },
+ {
+  "id": "let_me_out",
+  "name": "だして",
+  "description": "HPが半分以下になると、攻撃と精神が1.3倍になる。",
+  "effects": [
+   {
+    "kind": "statMul",
+    "stats": [
+     "atk",
+     "mnd"
+    ],
+    "mul": 1.3,
+    "when": "hpHalf"
+   }
+  ]
+ }
+]

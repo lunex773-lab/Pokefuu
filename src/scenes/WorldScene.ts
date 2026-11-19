@@ -192,12 +192,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     this.spawnNpcs();
     this.shadows = new SunShadows(this);
     this.lighting = new Lighting(this, viewW, viewH);
-    // 裏層には電気が通っていない：電源式の光（街灯・窓）は灯らない
-    const tileLights = def.layer === 'back' ? this.map.tileLights().filter((l) => !l.power) : this.map.tileLights();
-    this.lighting.setLights([
-      ...tileLights,
-      ...(def.lights ?? []).filter((l) => s.check(l.when)).map((l) => ({ ...l, x: (l.x + 0.5) * T, y: (l.y + 0.5) * T })),
-    ]);
+    this.applyLights();
     this.weatherFx = new WeatherFx(this, viewW, viewH);
     this.refreshMarkers();
     const cam = this.cameras.main;
@@ -262,6 +257,20 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     this.map.refresh(this.session.check);
     this.spawnNpcs();
     this.refreshMarkers();
+    this.applyLights();
+  }
+
+  /** 光源を置き直す（時間帯で消える照明・ストーリーで灯る明かりなどに対応） */
+  private applyLights(): void {
+    if (!this.map || !this.mapDef || !this.lighting) return;
+    const def = this.mapDef;
+    const s = this.session;
+    // 裏層には電気が通っていない：電源式の光（街灯・窓）は灯らない
+    const tileLights = def.layer === 'back' ? this.map.tileLights().filter((l) => !l.power) : this.map.tileLights();
+    this.lighting.setLights([
+      ...tileLights,
+      ...(def.lights ?? []).filter((l) => s.check(l.when)).map((l) => ({ ...l, x: (l.x + 0.5) * T, y: (l.y + 0.5) * T })),
+    ]);
   }
 
   private isRevealed(item: MapObject | MapWarp): boolean {

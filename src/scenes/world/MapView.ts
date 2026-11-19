@@ -15,7 +15,12 @@ export interface TileLight {
   color: string;
   power?: boolean;
   flicker?: boolean;
+  /** 窓：ガラス面が光る */
+  window?: boolean;
 }
+
+/** タイル位置から決まる 0〜99 の値（どの窓に明かりが灯るかを毎回同じにする） */
+const tileHash = (x: number, y: number): number => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 100;
 
 /**
  * マップの描画と当たり判定。
@@ -151,6 +156,18 @@ export class MapView {
       for (let x = 0; x < this.cols; x++) {
         const t = this.tileAt('objects', x, y);
         if (!t?.light) continue;
+        if (t.light.window) {
+          // 屋内の窓：夜は外から月明かりが差すだけ（電気とは無関係）
+          if (this.def.indoor) {
+            out.push({ x: (x + 0.5) * T, y: (y + 0.47) * T, radius: 18, color: '#a8bce8', window: true });
+            continue;
+          }
+          // 屋外の窓：すべての家に明かりがついているわけではない。夜の学校はほとんど真っ暗
+          const litShare = t.id === 'window_school' ? 12 : 65;
+          if (tileHash(x, y) >= litShare) continue;
+          out.push({ x: (x + 0.5) * T, y: (y + 0.47) * T, ...t.light });
+          continue;
+        }
         const yOff = t.gen === 'lamp' ? 0.2 : 0.5;
         out.push({ x: (x + 0.5) * T, y: (y + yOff) * T, ...t.light });
       }

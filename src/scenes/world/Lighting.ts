@@ -9,9 +9,13 @@ export interface LightSource {
   color: string;
   power?: boolean;
   flicker?: boolean;
+  /** 窓：ガラス面だけが光る */
+  window?: boolean;
   /** 0-1 */
   intensity?: number;
   glow?: Phaser.GameObjects.Image;
+  /** 窓ガラスの光（暗闇より手前に描く） */
+  pane?: Phaser.GameObjects.Image;
   phase?: number;
 }
 
@@ -34,6 +38,8 @@ export class Lighting {
   private tint: Phaser.GameObjects.Rectangle;
   private lights: LightSource[] = [];
   private playerGlow: Phaser.GameObjects.Image;
+  /** 懐中電灯の光の色味（加算） */
+  private coneGlow: Phaser.GameObjects.Image;
   private params: LightingParams = { darkness: 0, tint: '#ffffff', tintAlpha: 0, powerOut: false };
   private current = { darkness: 0, tintAlpha: 0 };
   private flickerT = 0;
@@ -57,10 +63,14 @@ export class Lighting {
     this.cone = scene.make.image({ key: TEX.cone, add: false }).setOrigin(0.08, 0.5);
     this.tint = scene.add.rectangle(0, 0, viewW + this.pad * 2, viewH + this.pad * 2, 0xffffff, 0).setOrigin(0).setDepth(9200);
     this.playerGlow = scene.add.image(0, 0, TEX.light).setBlendMode(Phaser.BlendModes.ADD).setDepth(9110).setAlpha(0);
+    this.coneGlow = scene.add.image(0, 0, TEX.cone).setOrigin(0.08, 0.5).setBlendMode(Phaser.BlendModes.ADD).setDepth(9110).setAlpha(0).setTint(0xfff2d8);
   }
 
   setLights(lights: LightSource[]): void {
-    this.lights.forEach((l) => l.glow?.destroy());
+    this.lights.forEach((l) => {
+      l.glow?.destroy();
+      l.pane?.destroy();
+    });
     this.lights = lights.map((l) => {
       const glow = this.scene.add
         .image(l.x, l.y, TEX.light)
@@ -69,7 +79,9 @@ export class Lighting {
         .setScale((l.radius * 1.4) / 64)
         .setDepth(9100)
         .setAlpha(0);
-      return { ...l, glow, phase: Math.random() * 10, intensity: 1 };
+      // 窓はガラス面そのものを、暗闇の上に光らせる（周りの壁まで昼間のように明るくしない）
+      const pane = l.window ? this.scene.add.image(l.x, l.y, TEX.windowGlow).setTint(Theme.hex(l.color)).setDepth(9310).setAlpha(0) : undefined;
+      return { ...l, glow, pane, phase: Math.random() * 10, intensity: 1 };
     });
   }
 
@@ -106,12 +118,15 @@ export class Lighting {
       let inten = on ? 1 : 0;
       if (on && l.flicker) inten = 0.75 + Math.sin(this.flickerT * 13 + (l.phase ?? 0)) * 0.12 + Math.sin(this.flickerT * 31 + (l.phase ?? 0)) * 0.1;
       l.intensity = inten;
-      l.glow?.setAlpha(inten * Math.min(0.4, dark * 0.55)).setVisible(visible(l));
+      const glowMax = l.window ? 0.22 : 0.3;
+      l.glow?.setAlpha(inten * Math.min(glowMax, dark * 0.55)).setVisible(visible(l));
+      l.pane?.setAlpha(inten * Math.min(0.92, dark * 1.4)).setVisible(visible(l));
     }
 
     if (dark < 0.02) {
       this.rt.setVisible(false);
       this.playerGlow.setAlpha(0);
+      this.coneGlow.setAlpha(0);
       return;
     }
     this.rt.setVisible(true);
@@ -119,21 +134,30 @@ export class Lighting {
     this.rt.fill(0x05040c, dark);
     for (const l of this.lights) {
       if (!l.intensity || !visible(l)) continue;
-      this.stamp.setScale((l.radius * 2) / 128).setAlpha(l.intensity);
-      this.rt.erase(this.stamp, l.x - ox, l.y - oy);
+      // 窓は足元へのこぼれ光だけ（少し下にずらして弱く）。ほかの光も真っ白に飛ばないよう少し抑える
+      const spill = l.window ? 0.5 : 0.9;
+      this.stamp.setScale((l.radius * 2) / 128).setAlpha(l.intensity * spill);
+      this.rt.erase(this.stamp, l.x - ox, l.y - oy + (l.window ? 10 : 0));
     }
     const amount = Lighting.playerLightAmount(dark);
     if (amount > 0) {
       const r = this.playerLight.radius;
       this.stamp.setScale((r * 1.1) / 128).setAlpha(0.85 * amount);
       this.rt.erase(this.stamp, player.x - ox, player.y - 8 - oy);
+      const rot = Math.atan2(this.playerLight.dirY, this.playerLight.dirX);
       if (this.playerLight.cone) {
-        this.cone.setScale((r * 2.2) / 128).setRotation(Math.atan2(this.playerLight.dirY, this.playerLight.dirX)).setAlpha(0.95 * amount);
+        // 懐中電灯：暗闇を2回抜いて、遠くまでしっかり明るくする
+        this.cone.setScale((r * 2.4) / 128).setRotation(rot).setAlpha(amount);
         this.rt.erase(this.cone, player.x - ox, player.y - 10 - oy);
-      }
+        this.rt.erase(this.cone, player.x - ox, player.y - 10 - oy);
+        this.coneGlow.setPosition(player.x, player.y - 10).setScale((r * 2.4) / 128).setRotation(rot).setAlpha(dark * 0.16 * amount);
+      } else this.coneGlow.setAlpha(0);
       const glow = this.playerLight.cone ? 0.22 : 0.12;
       this.playerGlow.setPosition(player.x, player.y - 8).setScale((r * 0.9) / 64).setTint(0xfff0d0).setAlpha(dark * glow * amount);
-    } else this.playerGlow.setAlpha(0);
+    } else {
+      this.playerGlow.setAlpha(0);
+      this.coneGlow.setAlpha(0);
+    }
   }
 
   /** 暗さ（0〜1）から主人公の明かりの強さ（0〜1）を求める */
@@ -143,7 +167,11 @@ export class Lighting {
   }
 
   destroy(): void {
-    this.lights.forEach((l) => l.glow?.destroy());
+    this.lights.forEach((l) => {
+      l.glow?.destroy();
+      l.pane?.destroy();
+    });
+    this.coneGlow.destroy();
     this.rt.destroy();
     this.tint.destroy();
     this.stamp.destroy();

@@ -51,14 +51,26 @@
    "y": 3,
    "radius": 100,
    "color": "#fff0d8",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 9,
    "y": 5,
    "radius": 100,
    "color": "#fff0d8",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   }
  ],
  "npcs": [

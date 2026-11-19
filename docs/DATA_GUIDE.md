@@ -10,6 +10,7 @@
   "no": 10,                      // 図鑑番号
   "name": "シンキカイイ",
   "types": ["fear"],             // fear / loneliness / anger / obsession / guilt / envy / despair（最大2つ）
+  "trait": "back_watcher",       // 特性（json/traits.json の ID）。誕生理由に結びついた固有の力
   "origin": "誕生理由（必須）",   // World Bible：すべての怪異には誕生理由を持たせる
   "legend": "モチーフの都市伝説",
   "description": "図鑑の説明",
@@ -32,6 +33,17 @@
 ```
 
 出現させるには `json/encounters.json` の表に追加します。
+
+### 特性（`json/traits.json`）
+
+```jsonc
+{ "id": "back_watcher", "name": "背中の影", "description": "夜・深夜や裏層では、素早さが1.3倍になる。",
+  "effects": [ { "kind": "statMul", "stats": ["spd"], "mul": 1.3, "when": "dark" } ] }
+```
+
+- 効果 `kind`：`statMul`（能力倍率）`bondStats`（絆で強くなる）`defendMul` `firstStrike` `dealtMul` `takenMul` `enRegen` `statusImmune` `regen` `missCharge` `entryDebuff` `sureHit` `stripBuffs` `mirrorStatus` `allyDownBuff` `counterStatus` `endure`（意味は `src/domain/types.ts` の `TraitEffect`）
+- 条件 `when`：`dark`（夜・深夜・裏層）`dusk`（夕方〜深夜・裏層）`alone`（味方が自分だけ）`hpHalf`（HP半分以下）`targetStronger`（相手のほうが強い）
+- 特性の名前は技の名前と重ねない（テストで検査）。敵の特性は、その怪異と共鳴するまで図鑑・「強さをみる」に表示されない
 
 ## マップを追加する（`maps/<id>.json`）
 

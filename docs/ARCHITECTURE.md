@@ -56,7 +56,7 @@ src/
 │   ├── BattleScene.ts          戦闘演出（ロジックは domain/battle）
 │   ├── UIScene.ts              HUD・仮想操作・会話・フェード
 │   ├── MenuScene.ts / ShopScene.ts / TitleScene.ts / NewGameScene.ts / BootScene.ts
-└── ui/                       ボタン・リスト・会話ウィンドウ・共鳴画面
+└── ui/                       ボタン・リスト・会話ウィンドウ・共鳴画面・怪異の詳細（KaiiInfo）
 tests/                        単体テスト＋データ整合性テスト
 ```
 

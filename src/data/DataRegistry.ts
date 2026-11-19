@@ -19,6 +19,7 @@ import type {
   StatusDef,
   TileDef,
   TimePhaseDef,
+  TraitDef,
   TypeChartDef,
   TypeDef,
   WeatherDef,
@@ -47,6 +48,7 @@ export interface GameData {
   endings: EndingDef[];
   npcSprites: NpcSpriteDef[];
   music: MusicTrackDef[];
+  traits: TraitDef[];
 }
 
 export type MapLoader = (id: string) => Promise<MapDef>;
@@ -82,6 +84,7 @@ export class DataRegistry {
   readonly memories: Map<string, MemoryDef>;
   readonly npcSprites: Map<string, NpcSpriteDef>;
   readonly music: Map<string, MusicTrackDef>;
+  readonly traits: Map<string, TraitDef>;
   private scripts = new Map<string, ScriptDef>();
   private mapCache = new Map<string, MapDef>();
 
@@ -104,6 +107,7 @@ export class DataRegistry {
     this.memories = indexBy(data.memories, 'memory');
     this.npcSprites = indexBy(data.npcSprites, 'npcSprite');
     this.music = indexBy(data.music, 'music');
+    this.traits = indexBy(data.traits, 'trait');
     this.tilesByChar = new Map();
     for (const t of data.tiles) {
       if (this.tilesByChar.has(t.char)) throw new Error(`[DataRegistry] duplicate tile char: ${t.char}`);
@@ -130,6 +134,12 @@ export class DataRegistry {
 
   allScripts(): ScriptDef[] {
     return [...this.scripts.values()];
+  }
+
+  /** その怪異の特性（未設定なら undefined） */
+  traitOf(speciesId: string): TraitDef | undefined {
+    const sp = this.kaii.get(speciesId);
+    return sp ? this.traits.get(sp.trait) : undefined;
   }
 
   skill(id: string): SkillDef {

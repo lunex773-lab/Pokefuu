@@ -63,28 +63,52 @@
    "y": 3,
    "radius": 110,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 8,
    "y": 7,
    "radius": 90,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 20,
    "y": 7,
    "radius": 90,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   },
   {
    "x": 15,
    "y": 10,
    "radius": 90,
    "color": "#f0f4ff",
-   "power": true
+   "power": true,
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   }
   }
  ],
  "npcs": [

@@ -44,6 +44,25 @@ describe('怪異データ', () => {
       if (k.ai?.special) expect(reg.skills.has(k.ai.special)).toBe(true);
     }
   });
+  it('すべての怪異に特性があり、説明と効果が正しい', () => {
+    for (const k of reg.data.kaii) {
+      const t = reg.traits.get(k.trait);
+      expect(t, `${k.id} trait ${k.trait}`).toBeDefined();
+      expect(t!.name.length, k.id).toBeGreaterThan(0);
+      expect(t!.description.length, k.id).toBeGreaterThan(5);
+      expect(t!.effects.length, k.id).toBeGreaterThan(0);
+      for (const e of t!.effects) if (e.kind === 'counterStatus') expect(reg.statuses.has(e.status), `${t!.id} ${e.status}`).toBe(true);
+    }
+  });
+  it('特性の名前は技・ほかの特性と重ならない（説明画面で混同しない）', () => {
+    const skillNames = new Set(reg.data.skills.map((s) => s.name));
+    const seen = new Set<string>();
+    for (const t of reg.data.traits) {
+      expect(skillNames.has(t.name), `${t.id} ${t.name}`).toBe(false);
+      expect(seen.has(t.name), t.name).toBe(false);
+      seen.add(t.name);
+    }
+  });
   it('図鑑番号が重複しない', () => {
     const nos = reg.data.kaii.map((k) => k.no);
     expect(new Set(nos).size).toBe(nos.length);

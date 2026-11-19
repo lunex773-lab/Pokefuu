@@ -15,6 +15,9 @@ import { DialogueBox, wrapText } from '@/ui/Dialogue';
 import { showResonance } from '@/ui/Resonance';
 import { textStyle, Theme } from '@/ui/Theme';
 import { drawPanel, Gauge, label, ListView, type ListItem } from '@/ui/Widgets';
+import { showKaiiInfo } from '@/ui/KaiiInfo';
+import { kaiiStats } from '@/domain/creature/Kaii';
+import type { WorldScene } from './WorldScene';
 
 export interface BattleRequest {
   enemies: KaiiData[];
@@ -84,6 +87,17 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
   private skipWait?: () => void;
   private targetPick?: (id: string | null) => void;
   private fx?: DistortPipeline;
+  /**
+   * 演出中の味方の表示値。エンジンは1ターン分を先に計算するので、
+   * そのままだと被弾より前に HP バーが減ってしまう。イベントに合わせて少しずつ反映する。
+   */
+  private disp?: {
+    slots: (Combatant | null)[];
+    vals: Map<string, { hp: number; en: number; status?: string; out: boolean }>;
+    reserve: Map<string, { hp: number; en: number; status?: string }>;
+  };
+  /** このターンに登場した怪異（交代で場を離れた後も名前・表示を引けるように） */
+  private known = new Map<string, Combatant>();
 
   constructor() {
     super('Battle');
@@ -113,7 +127,16 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
         return s.player.sanityDrainMul;
       },
     };
-    this.engine = new BattleEngine(this.ctx.reg, this.ctx.rng, host, { party: s.party.party, enemies: req.enemies, canFlee: req.canFlee, boss: req.boss });
+    const world = this.scene.get('World') as WorldScene | undefined;
+    const layer = world?.mapDef?.layer ?? (s.state.player.position.mapId.startsWith('back') ? 'back' : 'reality');
+    this.engine = new BattleEngine(this.ctx.reg, this.ctx.rng, host, {
+      party: s.party.party,
+      enemies: req.enemies,
+      canFlee: req.canFlee,
+      boss: req.boss,
+      // 特性の条件（夜・裏層など）に使う
+      env: { phase: s.clock.phase, layer, weather: s.weather.current },
+    });
     for (const e of req.enemies) s.party.markSeen(e.speciesId);
     this.ctx.bus.emit('battle:start', { encounterId: req.encounterId, boss: req.boss });
 
@@ -199,7 +222,8 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
 
   private refreshAllies(): void {
     const reg = this.ctx.reg;
-    this.engine.allies.forEach((c, i) => {
+    const slots = this.disp?.slots ?? this.engine.allies;
+    slots.forEach((c, i) => {
       const card = this.cards[i];
       card.bg.clear();
       if (!c) {
@@ -214,18 +238,23 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       }
       const sp = reg.species(c.kaii.speciesId);
       const max = this.engine.maxHp(c);
-      drawPanel(card.bg, 0, 0, 430, 250, { alpha: c.out ? 0.4 : 0.85, border: c.out ? 0x444050 : Theme.color.border });
-      card.icon.setTexture(sp.sprite).setScale(2).setVisible(true).setAlpha(c.out ? 0.35 : 1);
+      const v = this.disp?.vals.get(c.id);
+      const hp = v ? v.hp : c.kaii.hp;
+      const en = v ? v.en : c.kaii.en;
+      const status = v ? v.status : c.kaii.status?.id;
+      const out = v ? v.out : c.out;
+      drawPanel(card.bg, 0, 0, 430, 250, { alpha: out ? 0.4 : 0.85, border: out ? 0x444050 : Theme.color.border });
+      card.icon.setTexture(sp.sprite).setScale(2).setVisible(true).setAlpha(out ? 0.35 : 1);
       card.name.setText(`${c.kaii.nickname ?? sp.name} Lv${c.kaii.level}`);
       card.hp.setVisible(true);
-      card.hp.set(c.kaii.hp / max);
-      card.hpText.setText(`HP ${c.kaii.hp}/${max}`);
+      card.hp.set(hp / max);
+      card.hpText.setText(`HP ${hp}/${max}`);
       card.en.clear();
       for (let k = 0; k < MAX_EN; k++) {
-        card.en.fillStyle(k < c.kaii.en ? 0x80b0ff : 0x30304a, 1);
+        card.en.fillStyle(k < en ? 0x80b0ff : 0x30304a, 1);
         card.en.fillRect(170 + k * 24, 160, 18, 12);
       }
-      const st = c.kaii.status ? reg.status(c.kaii.status.id).name : c.out ? '消耗' : '';
+      const st = status ? reg.status(status).name : out ? '消耗' : '';
       card.status.setText(st);
     });
   }
@@ -306,13 +335,17 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
     const reg = this.ctx.reg;
     const names = this.engine.active('enemy').map((c) => reg.species(c.kaii.speciesId).name);
     await this.msg(this.req.boss ? `${names.join('と')}が立ちはだかった！` : `${names.join('と')}が現れた！`, 1200);
+    // 場に出たときに働く特性
+    await this.play(this.engine.start());
     while (!this.engine.result) {
       const input = await this.collectInput();
       this.list.setVisible(false);
       this.cmdTitle.setText('');
       this.cmdSub.setText('');
+      this.beginDisplay();
       const events = this.engine.runTurn(input);
       await this.play(events);
+      this.disp = undefined;
       this.refreshAllies();
     }
     await this.finish();
@@ -330,23 +363,29 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       const opts: ListItem[] = [{ text: '技' }, { text: '防御' }];
       const canSwap = this.engine.reserves.some((k) => k.hp > 0);
       opts.push({ text: '交代', disabled: !canSwap });
+      opts.push({ text: '強さをみる' });
       opts.push({ text: 'おまかせ（残り全員）', color: Theme.color.dim });
       if (i > 0) opts.push({ text: '戻る', color: Theme.color.dim });
       const sel = await this.pick(`${name} の行動`, `EN ${c.kaii.en}/${MAX_EN}`, opts, i > 0);
-      if (sel === -1 || opts[sel]?.text === '戻る') {
+      const choice = opts[sel]?.text;
+      if (sel === -1 || choice === '戻る') {
         i = Math.max(0, i - 1);
         continue;
       }
-      if (sel === 3) {
+      if (choice === '強さをみる') {
+        await this.inspect();
+        continue;
+      }
+      if (choice === 'おまかせ（残り全員）') {
         for (let k = i; k < actors.length; k++) allies[actors[k].id] = this.engine.aiAction(actors[k]);
         break;
       }
-      if (sel === 1) {
+      if (choice === '防御') {
         allies[c.id] = { kind: 'defend' };
         i++;
         continue;
       }
-      if (sel === 2) {
+      if (choice === '交代') {
         const res = this.engine.reserves.filter((k) => k.hp > 0);
         const items = res.map((k) => ({ text: `${k.nickname ?? reg.species(k.speciesId).name} Lv${k.level}`, right: `HP ${k.hp}` }));
         const r = await this.pick('交代する怪異', '', [...items, { text: '戻る', color: Theme.color.dim }]);
@@ -359,7 +398,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       const skills = c.kaii.skills.map((id) => reg.skill(id));
       const items: ListItem[] = skills.map((sk) => {
         const t = sk.type === 'none' ? '無' : reg.types.get(sk.type)?.name ?? '';
-        return { text: sk.name, sub: `${t}・威力${sk.power || '-'}・${sk.description}`, right: `EN${sk.cost}`, disabled: !this.engine.canUse(c, sk.id) };
+        return { text: sk.name, sub: `${t}・威力${sk.power || '-'}`, right: `EN${sk.cost}`, disabled: !this.engine.canUse(c, sk.id) };
       });
       items.push({ text: '戻る', color: Theme.color.dim });
       const si = await this.pick(`${name} の技`, '', items);
@@ -429,11 +468,80 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
 
   // ------------------------------------------------------------ 演出
 
+  private combatant(id: string): Combatant | undefined {
+    return this.engine.get(id) ?? this.known.get(id);
+  }
+
   private viewFor(id: string): { enemy?: EnemyView; card?: AllyCard; c?: Combatant } {
-    const c = this.engine.get(id);
+    const c = this.combatant(id);
     if (!c) return {};
     if (c.side === 'enemy') return { enemy: this.enemyViews.get(id), c };
-    return { card: this.cards[c.slot], c };
+    const slots = this.disp?.slots ?? this.engine.allies;
+    const idx = slots.findIndex((x) => x?.id === id);
+    return { card: idx >= 0 ? this.cards[idx] : undefined, c };
+  }
+
+  /** ターンの演出を始める前に、味方の表示値をターン開始時点で固定する */
+  private beginDisplay(): void {
+    const vals = new Map<string, { hp: number; en: number; status?: string; out: boolean }>();
+    for (const c of this.engine.all()) {
+      vals.set(c.id, { hp: c.kaii.hp, en: c.kaii.en, status: c.kaii.status?.id, out: c.out });
+      this.known.set(c.id, c);
+    }
+    const reserve = new Map(this.engine.reserves.map((k) => [k.uid, { hp: k.hp, en: k.en, status: k.status?.id }]));
+    this.disp = { slots: [...this.engine.allies], vals, reserve };
+  }
+
+  /** 表示値を更新（味方のみ。敵は HP バーを直接動かす） */
+  private setDisp(id: string, patch: Partial<{ hp: number; en: number; status: string | undefined; out: boolean }>): void {
+    const v = this.disp?.vals.get(id);
+    if (v) Object.assign(v, patch);
+  }
+
+  /** 戦闘中の「強さをみる」：味方はすべて、敵は共鳴したことがあれば技・能力・特性まで */
+  private async inspect(): Promise<void> {
+    const reg = this.ctx.reg;
+    const s = this.s;
+    type Entry = { text: string; open: () => Promise<void> };
+    const entries: Entry[] = [];
+    const sfx = (id: string) => this.ctx.audio.sfx(id);
+    const nameOf = (k: KaiiData) => k.nickname ?? reg.species(k.speciesId).name;
+    for (const c of this.engine.active('ally')) {
+      entries.push({
+        text: `味方  ${nameOf(c.kaii)} Lv${c.kaii.level}`,
+        open: () => showKaiiInfo(this, reg, { kaii: c.kaii, known: true, stats: this.engine.stats(c), stages: c.stages, traitBoosted: this.engine.traitBoosted(c), input: this.ctx.input, sfx }),
+      });
+    }
+    for (const k of this.engine.reserves) {
+      entries.push({
+        text: `控え  ${nameOf(k)} Lv${k.level}`,
+        open: () => showKaiiInfo(this, reg, { kaii: k, known: true, stats: kaiiStats(reg, k), input: this.ctx.input, sfx }),
+      });
+    }
+    for (const c of this.engine.active('enemy')) {
+      const known = !!s.state.compendium[c.kaii.speciesId]?.recruited;
+      entries.push({
+        text: `敵  ${nameOf(c.kaii)} Lv${c.kaii.level}`,
+        open: () =>
+          showKaiiInfo(this, reg, {
+            kaii: c.kaii,
+            known,
+            prefix: '敵の',
+            stats: this.engine.stats(c),
+            stages: c.stages,
+            traitBoosted: this.engine.traitBoosted(c),
+            input: this.ctx.input,
+            sfx,
+          }),
+      });
+    }
+    for (;;) {
+      const i = await this.pick('強さをみる', 'だれを見る？', [...entries.map((e) => ({ text: e.text })), { text: '戻る', color: Theme.color.dim }]);
+      if (i < 0 || i >= entries.length) return;
+      this.list.setVisible(false);
+      await entries[i].open();
+      this.list.setVisible(true);
+    }
   }
 
   private floatNumber(id: string, text: string, color: string): void {
@@ -459,7 +567,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
   private async play(events: BattleEvent[]): Promise<void> {
     const reg = this.ctx.reg;
     const nm = (id: string) => {
-      const c = this.engine.get(id);
+      const c = this.combatant(id);
       return c ? this.engine.name(c) : '';
     };
     for (const e of events) {
@@ -471,6 +579,9 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           const v = this.viewFor(e.actor);
           if (v.enemy) this.tweens.add({ targets: v.enemy.sprite, scale: v.enemy.sprite.scale * 1.08, yoyo: true, duration: 120 });
           if (v.card) this.tweens.add({ targets: v.card.box, y: v.card.box.y - 20, yoyo: true, duration: 120 });
+          const cur = this.disp?.vals.get(e.actor);
+          if (cur) this.setDisp(e.actor, { en: Math.max(0, cur.en - reg.skill(e.skill).cost) });
+          this.refreshAllies();
           await this.msg(`${nm(e.actor)}の${e.skillName}！`, 650);
           break;
         }
@@ -481,6 +592,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           this.floatNumber(e.target, `${e.amount}`, e.eff > 1 ? '#ffb040' : '#ffffff');
           const v = this.viewFor(e.target);
           v.enemy?.hp.set(e.hp / e.maxHp);
+          this.setDisp(e.target, { hp: e.hp });
           this.refreshAllies();
           const eff = effectivenessLabel(e.eff);
           if (e.crit) await this.msg('急所に響いた！', 600);
@@ -496,6 +608,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           this.ctx.audio.sfx('heal');
           this.floatNumber(e.target, `+${e.amount}`, '#80e0a0');
           this.viewFor(e.target).enemy?.hp.set(e.hp / e.maxHp);
+          this.setDisp(e.target, { hp: e.hp });
           this.refreshAllies();
           await this.msg(`${nm(e.target)}のHPが回復した。`, 600);
           break;
@@ -505,6 +618,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           const st = reg.status(e.status);
           const v = this.viewFor(e.target);
           v.enemy?.status.setText(st.name);
+          this.setDisp(e.target, { status: e.status });
           this.refreshAllies();
           await this.msg(`${nm(e.target)}は${st.name}状態になった！`);
           break;
@@ -512,6 +626,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
         case 'statusEnd': {
           const v = this.viewFor(e.target);
           v.enemy?.status.setText('');
+          this.setDisp(e.target, { status: undefined });
           this.refreshAllies();
           await this.msg(`${nm(e.target)}の${reg.status(e.status).name}が治まった。`, 700);
           break;
@@ -540,16 +655,34 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
         }
         case 'exhaust':
           this.ctx.audio.sfx('status');
+          this.setDisp(e.target, { out: true, hp: 0, status: undefined });
           this.refreshAllies();
           await this.msg(`${nm(e.target)}は消耗してしまった……`, 900);
           break;
         case 'seal':
           await this.playSeal(e.target, e.success, e.shakes);
           break;
-        case 'swap':
+        case 'swap': {
+          const c = this.engine.get(e.in);
+          if (c && this.disp) {
+            this.known.set(c.id, c);
+            this.disp.slots[e.slot] = c;
+            const before = this.disp.reserve.get(c.kaii.uid) ?? { hp: c.kaii.hp, en: c.kaii.en, status: c.kaii.status?.id };
+            this.disp.vals.set(c.id, { ...before, out: false });
+          }
           this.refreshAllies();
           await this.wait(200);
           break;
+        }
+        case 'trait': {
+          const t = reg.traits.get(e.trait);
+          if (!t) break;
+          this.ctx.audio.sfx('sight');
+          this.floatNumber(e.target, `「${t.name}」`, '#ffd870');
+          await this.msg(`${nm(e.target)}の特性「${t.name}」！`, 800);
+          if (e.text) await this.msg(e.text, 800);
+          break;
+        }
         case 'flee':
           await this.msg(e.success ? 'うまく逃げ切れた！' : '逃げられなかった！', 800);
           break;
@@ -563,6 +696,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           } else await this.msg(`主人公の正気度が ${e.delta} 回復した。`, 700);
           break;
         case 'en':
+          this.setDisp(e.target, { en: e.en });
           this.refreshAllies();
           break;
         case 'end':

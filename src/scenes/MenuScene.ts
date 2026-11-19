@@ -10,6 +10,7 @@ import { formatText } from '@/domain/script/format';
 import { wrapText } from '@/ui/Dialogue';
 import { Theme } from '@/ui/Theme';
 import { drawPanel, label, ListView, type ListItem } from '@/ui/Widgets';
+import { showKaiiInfo } from '@/ui/KaiiInfo';
 import type { WorldScene } from './WorldScene';
 
 interface MenuData {
@@ -247,10 +248,11 @@ export class MenuScene extends Phaser.Scene {
     const skills = k.skills.map((id) => `・${reg.skill(id).name}（EN${reg.skill(id).cost}）`).join('\n');
     const learned = k.learned.length ? `\n控え：${k.learned.map((id) => reg.skill(id).name).join('、')}` : '';
     const charm = k.charm ? reg.item(k.charm).name : 'なし';
+    const trait = reg.traitOf(k.speciesId);
     this.setDetail(
       `No.${String(sp.no).padStart(3, '0')} ${sp.name}［${types}］\nLv${k.level}  次まで ${expToNext(k.level) - k.exp}\n` +
         `HP ${k.hp}/${st.hp}  EN ${k.en}/${MAX_EN}\n攻撃${st.atk} 守り${st.def} 素早さ${st.spd} 精神${st.mnd}\n` +
-        `御守り：${charm}  絆：${k.bond}\n\n技\n${skills}${learned}`,
+        `御守り：${charm}  絆：${k.bond}\n特性：${trait?.name ?? 'なし'}\n\n技\n${skills}${learned}\n\n（決定→「くわしく見る」で技の効果）`,
       { key: sp.sprite, scale: 4 },
     );
   }
@@ -258,10 +260,13 @@ export class MenuScene extends Phaser.Scene {
   private async kaiiActions(k: KaiiData, stored: boolean): Promise<void> {
     const s = this.s;
     const reg = this.ctx.reg;
-    const opts = stored ? ['手持ちに加える', '戻る'] : ['先頭にする', '技を入れ替える', '御守りを持たせる', '保管に預ける', '戻る'];
+    const opts = stored ? ['くわしく見る', '手持ちに加える', '戻る'] : ['くわしく見る', '先頭にする', '技を入れ替える', '御守りを持たせる', '保管に預ける', '戻る'];
     const i = await this.popup(this.kaiiName(k), opts.map((t) => ({ text: t })));
     const op = opts[i];
-    if (op === '手持ちに加える') {
+    if (op === 'くわしく見る') {
+      // タイプ・相性・能力・特性・技の効果を1画面で
+      await showKaiiInfo(this, reg, { kaii: k, known: true, input: this.ctx.input, sfx: (id) => this.ctx.audio.sfx(id) });
+    } else if (op === '手持ちに加える') {
       if (!s.party.fromStorage(k.uid)) await this.popup('手持ちがいっぱいです', [{ text: 'OK' }]);
     } else if (op === '先頭にする') {
       s.party.move(s.party.party.indexOf(k), 0);
@@ -432,7 +437,10 @@ export class MenuScene extends Phaser.Scene {
               const e = s.state.compendium[sp.id];
               if (!e?.seen) return this.setDetail('まだ出会っていない。');
               const types = sp.types.map((t) => reg.types.get(t)?.name).join('・');
-              this.setDetail(`${sp.name}［${types}］\n\n${sp.description}\n\n【誕生】${sp.origin}\n\n【伝承】${sp.legend}`, { key: sp.sprite, scale: 4 });
+              // 特性は共鳴して初めてわかる
+              const trait = reg.traitOf(sp.id);
+              const traitText = e.recruited && trait ? `\n\n【特性】${trait.name}：${trait.description}` : '\n\n【特性】？？？（共鳴すると分かる）';
+              this.setDetail(`${sp.name}［${types}］\n\n${sp.description}\n\n【誕生】${sp.origin}\n\n【伝承】${sp.legend}${traitText}`, { key: sp.sprite, scale: 4 });
             },
           );
           this.main.onCancel = () => this.pageBookBack();

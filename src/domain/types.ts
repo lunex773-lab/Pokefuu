@@ -109,11 +109,73 @@ export interface ResonanceOption {
   reply: string;
 }
 
+// ---------------------------------------------------------------- 特性
+
+/** 特性が働く条件 */
+export type TraitWhen =
+  /** 夜・深夜、または裏層 */
+  | 'dark'
+  /** 夕方〜深夜、または裏層 */
+  | 'dusk'
+  /** 味方が自分ひとりだけ */
+  | 'alone'
+  /** HP が半分以下 */
+  | 'hpHalf'
+  /** 相手の攻撃か精神が自分より高い */
+  | 'targetStronger';
+
+type BattleStat = Exclude<StatKey, 'hp'>;
+
+/** 特性の効果（組み合わせて1つの特性を作る） */
+export type TraitEffect =
+  | { kind: 'statMul'; stats: BattleStat[]; mul: number; when?: TraitWhen }
+  /** 主人公との絆で全能力が上がる（絆100で 1+max 倍） */
+  | { kind: 'bondStats'; max: number }
+  /** 防御中に受けるダメージをさらに掛ける */
+  | { kind: 'defendMul'; mul: number }
+  /** 最初のターンは誰よりも先に動く */
+  | { kind: 'firstStrike' }
+  /** 与えるダメージ倍率 */
+  | { kind: 'dealtMul'; mul: number; when?: TraitWhen }
+  /** 受けるダメージ倍率（category 省略で全部） */
+  | { kind: 'takenMul'; mul: number; category?: 'phys' | 'mind' }
+  /** ターン終了時に EN がさらに回復 */
+  | { kind: 'enRegen'; amount: number }
+  /** 状態異常にかからない */
+  | { kind: 'statusImmune' }
+  /** ターン終了時に最大HPの割合だけ回復 */
+  | { kind: 'regen'; ratio: number }
+  /** 攻撃が外れると、次に当たる攻撃の威力が上がる */
+  | { kind: 'missCharge'; mul: number }
+  /** 場に出たとき、相手全員の能力を下げる */
+  | { kind: 'entryDebuff'; stat: BattleStat; stages: number }
+  /** 自分の技は必ず命中する */
+  | { kind: 'sureHit' }
+  /** 攻撃を当てた相手の、上がっている能力を元に戻す */
+  | { kind: 'stripBuffs' }
+  /** 状態異常にされると、相手にも同じ状態異常を写し返す */
+  | { kind: 'mirrorStatus' }
+  /** 味方が倒れる（消耗する）たびに能力が上がる */
+  | { kind: 'allyDownBuff'; stat: BattleStat; stages: number }
+  /** 物理攻撃を受けると、確率で相手を状態異常にする */
+  | { kind: 'counterStatus'; status: string; chance: number }
+  /** HP満タンのとき、倒れるほどの攻撃を受けても HP1 で耐える */
+  | { kind: 'endure' };
+
+export interface TraitDef {
+  id: string;
+  name: string;
+  description: string;
+  effects: TraitEffect[];
+}
+
 export interface KaiiSpeciesDef {
   id: string;
   no: number;
   name: string;
   types: EmotionType[];
+  /** 特性（traits.json の ID）。誕生理由に結びついた固有の力 */
+  trait: string;
   /** 誕生理由（World Bible: すべての怪異には誕生理由を持たせる） */
   origin: string;
   /** モチーフとなった都市伝説・怪談・伝承 */
@@ -222,7 +284,8 @@ export interface TileDef {
   water?: boolean;
   /** 影を落とす高さ（タイル単位、0なら影なし） */
   height?: number;
-  light?: { radius: number; color: string; power?: boolean; flicker?: boolean };
+  /** window=true は「窓」：光るのはガラス面と足元への小さなこぼれ光だけ（屋内では月明かりになる） */
+  light?: { radius: number; color: string; power?: boolean; flicker?: boolean; window?: boolean };
   /** 足音の種類 */
   step?: 'grass' | 'hard' | 'wood' | 'water';
 }

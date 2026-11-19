@@ -236,9 +236,10 @@
   "solid": true,
   "height": 2,
   "light": {
-   "radius": 40,
-   "color": "#ffd890",
-   "power": true
+   "radius": 24,
+   "color": "#ffc878",
+   "power": true,
+   "window": true
   }
  },
  {
@@ -275,9 +276,10 @@
   "solid": true,
   "height": 3,
   "light": {
-   "radius": 36,
-   "color": "#ffe8a0",
-   "power": true
+   "radius": 22,
+   "color": "#ffe0a0",
+   "power": true,
+   "window": true
   }
  },
  {
