@@ -1,5 +1,5 @@
 # main ブランチに push すると GitHub Pages に公開します（スマホのブラウザで遊べるURLになります）。
-# Pages が無効な場合は自動で有効化を試みます。失敗したら Settings → Pages → Source を「GitHub Actions」にしてください。
+# 初回のみ: リポジトリの Settings → Pages → Build and deployment → Source を「GitHub Actions」にしてください。
 name: Deploy to GitHub Pages
 
 on:
@@ -26,8 +26,6 @@ jobs:
           node-version: 22
           cache: npm
       - uses: actions/configure-pages@v5
-        with:
-          enablement: true
       - run: npm ci
       - run: npm test
       - run: npm run build
