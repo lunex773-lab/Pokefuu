@@ -66,6 +66,7 @@ npm run dev        # http://localhost:5173 （同じWi-Fiのスマホからは�
 npm run typecheck   # 型チェック
 npm test            # 単体テスト＋データ整合性テスト（vitest）
 npm run build       # 本番ビルド（dist/）
+npm run build:single  # 1つのHTMLファイルにまとめたビルド（dist-single/pokefuu.html）。ファイルを開くだけで遊べる
 ```
 
 ## ドキュメント

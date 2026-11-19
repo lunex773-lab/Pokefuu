@@ -68,6 +68,8 @@ export class DialogueBox extends Phaser.GameObjects.Container implements InputCo
     this.setDepth(5000).setVisible(false);
     scene.add.existing(this);
     this.addToUpdateList();
+    // シーン終了時に入力スタックへ残らないようにする
+    this.once(Phaser.GameObjects.Events.DESTROY, () => this.inputMgr.remove(this));
   }
 
   get isOpen(): boolean {
@@ -163,6 +165,7 @@ export class ChoiceBox extends Phaser.GameObjects.Container {
     this.add([this.bg, this.promptText, this.listView]);
     this.setDepth(5100).setVisible(false);
     scene.add.existing(this);
+    this.once(Phaser.GameObjects.Events.DESTROY, () => this.inputMgr.remove(this.listView));
   }
 
   show(options: string[], prompt?: string, cancellable = false): Promise<number> {

@@ -30,6 +30,7 @@ const ENEMY_Y = 330;
 
 interface EnemyView {
   sprite: Phaser.GameObjects.Image;
+  shadow: Phaser.GameObjects.Ellipse;
   plate: Phaser.GameObjects.Container;
   hp: Gauge;
   status: Phaser.GameObjects.Text;
@@ -139,7 +140,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       const st = label(this, 322, 10, '', Theme.size.xs, Theme.color.accentSoft).setOrigin(1, 0);
       const types = label(this, 18, 86, sp.types.map((t) => this.ctx.reg.types.get(t)?.name).join('・'), 18, Theme.color.dim);
       plate.add([g, nm, hp, st, types]);
-      this.enemyViews.set(c.id, { sprite, plate, hp, status: st });
+      this.enemyViews.set(c.id, { sprite, shadow, plate, hp, status: st });
     });
   }
 
@@ -509,7 +510,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
           this.ctx.bus.emit('kaii:calmed', { speciesId: c.kaii.speciesId });
           if (v.enemy) {
             this.tweens.add({ targets: [v.enemy.sprite], alpha: 0, y: v.enemy.sprite.y - 60, duration: 900 });
-            this.tweens.add({ targets: v.enemy.plate, alpha: 0, duration: 600 });
+            this.tweens.add({ targets: [v.enemy.plate, v.enemy.shadow], alpha: 0, duration: 600 });
           }
           await this.msg(`${nm(e.target)}は鎮まった……`, 1000);
           break;
@@ -571,7 +572,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
       const glow = this.add.image(sprite.x, sprite.y, TEX.light).setTint(0xffd080).setBlendMode(Phaser.BlendModes.ADD).setScale(0.5).setDepth(41);
       this.tweens.add({ targets: glow, scale: 3, alpha: 0, duration: 700, onComplete: () => glow.destroy() });
       this.tweens.add({ targets: [charm, sprite], alpha: 0, duration: 500 });
-      this.tweens.add({ targets: v.enemy.plate, alpha: 0, duration: 400 });
+      this.tweens.add({ targets: [v.enemy.plate, v.enemy.shadow], alpha: 0, duration: 400 });
       const c = this.engine.get(targetId)!;
       await this.msg(`${this.ctx.reg.species(c.kaii.speciesId).name}を封印した！`, 1100);
     } else {

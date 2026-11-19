@@ -10,7 +10,8 @@
     "preview": "vite preview --host",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "validate:data": "vitest run tests/data.test.ts"
+    "validate:data": "vitest run tests/data.test.ts",
+    "build:single": "tsc --noEmit && vite build --mode single && node scripts/inline-single.mjs"
   },
   "dependencies": {
     "@fontsource/dotgothic16": "^5.2.6",
