@@ -1,0 +1,126 @@
+[
+ {
+  "id": "locked_door",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "鍵がかかっている。"
+   }
+  ]
+ },
+ {
+  "id": "vending",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "自動販売機だ。あたたかい飲み物が並んでいる。"
+   },
+   {
+    "cmd": "shop",
+    "id": "vending"
+   }
+  ]
+ },
+ {
+  "id": "school_closed",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "校門は閉まっている。夜の学校には入れない。"
+   },
+   {
+    "cmd": "say",
+    "text": "（明日また来よう。家のベッドで眠ると朝になる）"
+   }
+  ]
+ },
+ {
+  "id": "back_candle",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "ろうそくの灯りが揺れている。不思議と、心が落ち着く……"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "どうする？",
+    "options": [
+     {
+      "text": "記録する（セーブ）",
+      "then": [
+       {
+        "cmd": "saveMenu"
+       }
+      ]
+     },
+     {
+      "text": "灯りのそばで休む",
+      "then": [
+       {
+        "cmd": "rest",
+        "sanity": 40,
+        "hpRatio": 0.5
+       },
+       {
+        "cmd": "sfx",
+        "id": "heal"
+       },
+       {
+        "cmd": "say",
+        "text": "少しだけ、心と体が軽くなった。"
+       }
+      ]
+     },
+     {
+      "text": "やめる",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "on_defeat",
+  "commands": [
+   {
+    "cmd": "fade",
+    "to": "black",
+    "ms": 800
+   },
+   {
+    "cmd": "say",
+    "text": "……意識が、遠のいていく。"
+   },
+   {
+    "cmd": "respawn"
+   },
+   {
+    "cmd": "setTime",
+    "hour": 7,
+    "minute": 0,
+    "nextDay": true
+   },
+   {
+    "cmd": "fade",
+    "to": "clear",
+    "ms": 800
+   },
+   {
+    "cmd": "say",
+    "text": "……目を覚ますと、自分の部屋だった。"
+   },
+   {
+    "cmd": "say",
+    "text": "体が鉛のように重い。怪異たちも、ひどく消耗しているようだ。"
+   }
+  ]
+ },
+ {
+  "id": "rest_heal_all",
+  "commands": [
+   {
+    "cmd": "heal"
+   }
+  ]
+ }
+]

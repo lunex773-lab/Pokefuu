@@ -1,0 +1,7 @@
+[
+  { "id": "clear",    "name": "晴れ",   "darknessAdd": 0,    "weight": { "reality": 6, "back": 3 } },
+  { "id": "rain",     "name": "雨",     "darknessAdd": 0.12, "tint": "#5a6a8a", "tintAlpha": 0.14, "rain": 1, "weight": { "reality": 2, "back": 1 } },
+  { "id": "fog",      "name": "霧",     "darknessAdd": 0.05, "fog": 0.6, "weight": { "reality": 1.4, "back": 2 } },
+  { "id": "blackout", "name": "停電",   "darknessAdd": 0.12, "powerOut": true, "when": { "phase": ["night", "midnight"] }, "weight": { "reality": 0.7, "back": 1 } },
+  { "id": "redmoon",  "name": "赤い月", "darknessAdd": 0.04, "tint": "#ff2020", "tintAlpha": 0.22, "encounterMul": 1.6, "levelBonus": 2, "when": { "phase": ["midnight"] }, "weight": { "back": 0.9 } }
+]

@@ -1,0 +1,230 @@
+{
+ "id": "back_school_2f",
+ "name": "裏・桜ヶ丘高校 2F",
+ "layer": "back",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 3,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_school",
+ "weather": [
+  "clear",
+  "fog",
+  "redmoon"
+ ],
+ "ground": [
+  "tttttttttttttttttttttttttttttttttttttttttt",
+  "tcccccctttttttttttttttttttrrrrrrrrrrrrtttt",
+  "tcccccctttttttttttttttttttrrrrrrrrrrrrtttt",
+  "tccccccttttttttttttttttttttttttttttttttttt",
+  "ttttttttttttttttttttt%tttttt%tttttttttt^^t",
+  "tttttttttt%tttttttttt%ttttttttttttttttt^^t",
+  "tttttttttttttttt%tttt%ttttttttttttt%ttt^^t",
+  "ttttttttttttttttttttt%ttttttttttttttttt^^t",
+  "tttttttttttttttttttttttttttttttttttttttttt",
+  "txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxt",
+  "txxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxt",
+  "tttttttttttttttttttttttttttttttttttttttttt"
+ ],
+ "objects": [
+  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+  "&o M   &&&&&&&&&&&&&&&&&&& B   p   B  &&&&",
+  "&      &&&&&&&&&&&&&&&&&&&            &&&&",
+  "&      &&&&&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&",
+  "&      &                                 &",
+  "&                                        &",
+  "&                                        &",
+  "&       o               o                &",
+  "&&&&&W&&&&&W&&&&&W&&&&&&&&&&&W&&&&&&&&&&&&",
+  "&xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&",
+  "&xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&",
+  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+ ],
+ "above": [
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          "
+ ],
+ "overrides": [
+  {
+   "x": 13,
+   "y": 3,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "revealed_back2f_door"
+   }
+  },
+  {
+   "x": 34,
+   "y": 8,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "door13_open"
+   }
+  },
+  {
+   "x": 34,
+   "y": 9,
+   "layer": "objects",
+   "char": " ",
+   "when": {
+    "flag": "door13_open"
+   }
+  },
+  {
+   "x": 34,
+   "y": 9,
+   "layer": "ground",
+   "char": "^",
+   "when": {
+    "flag": "door13_open"
+   }
+  }
+ ],
+ "encounters": {
+  "table": "back_2f_west",
+  "maxSymbols": 2
+ },
+ "npcs": [
+  {
+   "id": "nanashi_meet",
+   "name": "？？？",
+   "sprite": "shadow_girl",
+   "x": 10,
+   "y": 5,
+   "facing": "left",
+   "script": "back_nanashi",
+   "when": {
+    "notFlag": "nanashi_joined"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "mirror_back",
+   "x": 3,
+   "y": 1,
+   "script": "back_mirror"
+  },
+  {
+   "id": "piano_back",
+   "x": 31,
+   "y": 1,
+   "script": "back_piano"
+  },
+  {
+   "id": "lullaby",
+   "x": 36,
+   "y": 2,
+   "script": "back_lullaby",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_mem_lullaby"
+   }
+  },
+  {
+   "id": "candle_w",
+   "x": 1,
+   "y": 1,
+   "script": "back_candle"
+  },
+  {
+   "id": "door13",
+   "x": 34,
+   "y": 8,
+   "script": "back_door13_hint",
+   "when": {
+    "notFlag": "door13_open"
+   }
+  }
+ ],
+ "triggers": [
+  {
+   "id": "loop",
+   "x": 21,
+   "y": 4,
+   "w": 1,
+   "h": 4,
+   "script": "back_loop",
+   "when": {
+    "notFlag": "loop_broken"
+   }
+  },
+  {
+   "id": "first_enter",
+   "x": 2,
+   "y": 2,
+   "w": 4,
+   "h": 2,
+   "script": "back_first",
+   "when": {
+    "notFlag": "nanashi_joined"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "id": "hidden_down",
+   "x": 13,
+   "y": 3,
+   "w": 1,
+   "h": 1,
+   "to": "back_school_1f",
+   "tx": 2,
+   "ty": 3,
+   "facing": "down",
+   "hidden": true,
+   "when": {
+    "flag": "revealed_back2f_door"
+   },
+   "transition": "distort",
+   "revealFlag": "revealed_back2f_door"
+  },
+  {
+   "id": "east_down",
+   "x": 40,
+   "y": 4,
+   "w": 1,
+   "h": 4,
+   "to": "back_school_1f",
+   "tx": 37,
+   "ty": 6,
+   "facing": "left"
+  },
+  {
+   "id": "to_stairs13",
+   "x": 34,
+   "y": 9,
+   "w": 1,
+   "h": 1,
+   "to": "back_stairs_13",
+   "tx": 7,
+   "ty": 27,
+   "facing": "up",
+   "when": {
+    "flag": "door13_open"
+   },
+   "transition": "distort"
+  }
+ ],
+ "distortions": [
+  {
+   "x": 13,
+   "y": 3
+  }
+ ],
+ "onEnter": "back_2f_enter"
+}

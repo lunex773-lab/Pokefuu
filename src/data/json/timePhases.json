@@ -1,0 +1,8 @@
+[
+  { "id": "dawn",     "name": "明け方", "start": 240,  "darkness": 0.42, "tint": "#7a86c8", "tintAlpha": 0.18, "shadowAngle": 200, "shadowLength": 1.4, "shadowAlpha": 0.12 },
+  { "id": "morning",  "name": "朝",     "start": 360,  "darkness": 0.0,  "tint": "#fff0d0", "tintAlpha": 0.08, "shadowAngle": 160, "shadowLength": 1.1, "shadowAlpha": 0.26 },
+  { "id": "day",      "name": "昼",     "start": 600,  "darkness": 0.0,  "tint": "#ffffff", "tintAlpha": 0.0,  "shadowAngle": 100, "shadowLength": 0.55,"shadowAlpha": 0.3 },
+  { "id": "evening",  "name": "夕方",   "start": 960,  "darkness": 0.18, "tint": "#ff8a3a", "tintAlpha": 0.24, "shadowAngle": 25,  "shadowLength": 1.6, "shadowAlpha": 0.24 },
+  { "id": "night",    "name": "夜",     "start": 1080, "darkness": 0.74, "tint": "#2a3a7a", "tintAlpha": 0.26, "shadowAngle": 0,   "shadowLength": 0,   "shadowAlpha": 0 },
+  { "id": "midnight", "name": "深夜",   "start": 1380, "darkness": 0.88, "tint": "#1a1f4a", "tintAlpha": 0.3,  "shadowAngle": 0,   "shadowLength": 0,   "shadowAlpha": 0 }
+]

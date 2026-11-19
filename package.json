@@ -1,0 +1,24 @@
+{
+  "name": "pokefuu",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Project Phantom（仮）— Psychological Horror Creature RPG",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "validate:data": "vitest run tests/data.test.ts"
+  },
+  "dependencies": {
+    "@fontsource/dotgothic16": "^5.2.6",
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.4.6",
+    "vitest": "^4.1.12"
+  }
+}

@@ -1,0 +1,119 @@
+{
+ "id": "conbini",
+ "name": "ヨツバマート",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "asagiri",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "shop",
+ "ground": [
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq",
+  "qqqqqqqqqqqqq"
+ ],
+ "objects": [
+  "#############",
+  "#hhhhh hhhhV#",
+  "#           #",
+  "#hhh hhh  CC#",
+  "#         C #",
+  "#hhh hhh  C #",
+  "#           #",
+  "#          s#",
+  "######d######"
+ ],
+ "above": [
+  "             ",
+  "             ",
+  "             ",
+  "             ",
+  "             ",
+  "             ",
+  "             ",
+  "             ",
+  "             "
+ ],
+ "lights": [
+  {
+   "x": 4,
+   "y": 3,
+   "radius": 120,
+   "color": "#f0f8ff",
+   "power": true
+  },
+  {
+   "x": 9,
+   "y": 4,
+   "radius": 110,
+   "color": "#f0f8ff",
+   "power": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "clerk",
+   "name": "店員",
+   "sprite": "clerk",
+   "x": 11,
+   "y": 4,
+   "facing": "left",
+   "script": "conbini_clerk"
+  },
+  {
+   "id": "manager",
+   "name": "店長",
+   "sprite": "manager",
+   "x": 11,
+   "y": 6,
+   "facing": "left",
+   "script": "conbini_manager",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "counter",
+   "x": 10,
+   "y": 4,
+   "script": "conbini_clerk"
+  },
+  {
+   "id": "magazine",
+   "x": 2,
+   "y": 1,
+   "script": "conbini_magazine"
+  },
+  {
+   "id": "vending_in",
+   "x": 11,
+   "y": 1,
+   "script": "vending"
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_town",
+   "x": 6,
+   "y": 8,
+   "w": 1,
+   "h": 1,
+   "to": "asagiri_town",
+   "tx": 32,
+   "ty": 17,
+   "facing": "down"
+  }
+ ]
+}

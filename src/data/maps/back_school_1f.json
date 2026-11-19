@@ -1,0 +1,151 @@
+{
+ "id": "back_school_1f",
+ "name": "裏・桜ヶ丘高校 1F",
+ "layer": "back",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 4,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_school",
+ "weather": [
+  "clear",
+  "fog",
+  "redmoon",
+  "blackout"
+ ],
+ "ground": [
+  "tttttttttttttttttttttttttttttttttttttttttt",
+  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
+  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
+  "t^^twwwwwwwwwwwwwttcccccccttcccccccccttttt",
+  "tttttttttttttttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttt%ttttttttttttt^^^t",
+  "tttttt%ttttttttttttttttttttttttttttttt^^^t",
+  "ttttttttttttt%ttttttttttttttttt%tttttt^^^t",
+  "tttttttttttttttttttttttttttttttttttttttttt",
+  "ttttttttttttttcccccccccccccttttttttttttttt",
+  "ttttttttttttttcccccccccccccttttttttttttttt",
+  "tttttttttttttttttttttttttttttttttttttttttt"
+ ],
+ "objects": [
+  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",
+  "&  &BBBBBBBBBBBBB&&uuuuuuu&& s s     &&&&&",
+  "&  & k  k  k  k  &&       &&     k k &&&&&",
+  "&  &             &&       &&         &&&&&",
+  "&& &&&&&&& &&&&&&&&&&& &&&&&&&&& &&&&&&&&&",
+  "&                                        &",
+  "&                                        &",
+  "& o                                 o    &",
+  "&&&&&&&&&&&&&&&&&&&& &&&&&&&&&&&&&&&&&&&&&",
+  "&xxxxxxxxxxxxx XX  o  XX   xxxxxxxxxxxxxx&",
+  "&xxxxxxxxxxxxxX           Xxxxxxxxxxxxxxx&",
+  "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+ ],
+ "above": [
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          ",
+  "                                          "
+ ],
+ "encounters": {
+  "table": "back_1f",
+  "maxSymbols": 4
+ },
+ "interactables": [
+  {
+   "id": "randoseru",
+   "x": 8,
+   "y": 2,
+   "script": "back_randoseru",
+   "when": {
+    "notFlag": "got_mem_randoseru"
+   }
+  },
+  {
+   "id": "score",
+   "x": 14,
+   "y": 2,
+   "script": "back_score",
+   "when": {
+    "notItem": "score_piece",
+    "notFlag": "piano_played"
+   }
+  },
+  {
+   "id": "stall3_back",
+   "x": 21,
+   "y": 1,
+   "script": "back_stall3"
+  },
+  {
+   "id": "mirror_shard",
+   "x": 24,
+   "y": 1,
+   "script": "back_mirror_shard",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_back_shard"
+   }
+  },
+  {
+   "id": "notebook",
+   "x": 35,
+   "y": 2,
+   "script": "back_notebook",
+   "when": {
+    "notFlag": "got_notebook"
+   }
+  },
+  {
+   "id": "candle_save",
+   "x": 19,
+   "y": 9,
+   "script": "back_candle"
+  },
+  {
+   "id": "shelf_dust",
+   "x": 31,
+   "y": 1,
+   "script": "back_shelf",
+   "hidden": true,
+   "when": {
+    "notFlag": "got_back_shelf"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "id": "west_up",
+   "x": 1,
+   "y": 1,
+   "w": 2,
+   "h": 1,
+   "to": "back_school_2f",
+   "tx": 13,
+   "ty": 4,
+   "facing": "down"
+  },
+  {
+   "id": "east_up",
+   "x": 40,
+   "y": 5,
+   "w": 1,
+   "h": 3,
+   "to": "back_school_2f",
+   "tx": 39,
+   "ty": 5,
+   "facing": "left"
+  }
+ ],
+ "onEnter": "back_1f_enter"
+}

@@ -1,0 +1,161 @@
+{
+ "id": "school_2f",
+ "name": "桜ヶ丘高校 2F",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "school",
+ "ground": [
+  "tttttttttttttttttttttttttttttt",
+  "trrrrrrrrrrttttttttttttc^^^cct",
+  "trrrrrrrrrrttttttttttttcccccct",
+  "trrrrrrrrrrttttttttttttcccccct",
+  "trrrrrrrrrrttttttttttttcccccct",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt"
+ ],
+ "objects": [
+  "##############################",
+  "######B#B####       s##P    M#",
+  "#  p       ## k k k  ##      #",
+  "#          ## k k k  ##      #",
+  "#          ##        ##      #",
+  "###### ########## #####      #",
+  "#                            #",
+  "#                            #",
+  "#l                         l #",
+  "####W#####W#####W#####W#######",
+  "##############################"
+ ],
+ "above": [
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              "
+ ],
+ "lights": [
+  {
+   "x": 6,
+   "y": 3,
+   "radius": 90,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 16,
+   "y": 3,
+   "radius": 90,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 12,
+   "y": 7,
+   "radius": 100,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 25,
+   "y": 3,
+   "radius": 80,
+   "color": "#ffe8c0",
+   "power": true,
+   "flicker": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "minato_landing",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 25,
+   "y": 3,
+   "facing": "up",
+   "script": "landing_minato",
+   "when": {
+    "flag": "class_done",
+    "notFlag": "ch1_entered_back"
+   }
+  },
+  {
+   "id": "music_student",
+   "name": "女子生徒",
+   "sprite": "student_c",
+   "x": 5,
+   "y": 3,
+   "facing": "left",
+   "script": "school_music_student",
+   "when": {
+    "notFlag": "class_done"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "piano",
+   "x": 3,
+   "y": 2,
+   "script": "school_piano"
+  },
+  {
+   "id": "portraits",
+   "x": 6,
+   "y": 1,
+   "script": "school_portraits"
+  },
+  {
+   "id": "model",
+   "x": 20,
+   "y": 1,
+   "script": "school_model"
+  },
+  {
+   "id": "mirror",
+   "x": 28,
+   "y": 1,
+   "script": "landing_mirror"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "landing_event",
+   "x": 23,
+   "y": 2,
+   "w": 6,
+   "h": 3,
+   "script": "landing_event",
+   "when": {
+    "flag": "class_done",
+    "notFlag": "ch1_entered_back"
+   },
+   "once": false
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_1f",
+   "x": 24,
+   "y": 1,
+   "w": 3,
+   "h": 1,
+   "to": "school_1f",
+   "tx": 26,
+   "ty": 2,
+   "facing": "down"
+  }
+ ]
+}

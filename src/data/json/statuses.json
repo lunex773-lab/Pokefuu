@@ -1,0 +1,7 @@
+[
+  { "id": "panic", "name": "恐慌", "description": "恐怖で取り乱し、ときどき行動できない。", "color": "#8a6bff", "skipChance": 0.33, "defaultTurns": 3 },
+  { "id": "bind", "name": "呪縛", "description": "見えない何かに縛られ、動けないことが多い。", "color": "#d066b8", "skipChance": 0.6, "defaultTurns": 2 },
+  { "id": "erosion", "name": "蝕み", "description": "毎ターン、少しずつ心身を削られる。", "color": "#7a4a8a", "dotRatio": 0.1, "defaultTurns": 4 },
+  { "id": "silence", "name": "失声", "description": "声が出せず、気力を使う技が使えない。", "color": "#4aa3df", "silence": true, "defaultTurns": 3 },
+  { "id": "weaken", "name": "萎縮", "description": "心がすくみ、攻撃と精神が下がる。", "color": "#5fbf5f", "statMul": { "atk": 0.7, "mnd": 0.7 }, "defaultTurns": 3 }
+]

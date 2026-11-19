@@ -1,0 +1,12 @@
+[
+  { "id": "r_ofuda", "result": "ofuda", "qty": 1, "inputs": [ { "item": "hanshi", "qty": 1 }, { "item": "sumi", "qty": 1 } ] },
+  { "id": "r_strong_ofuda", "result": "strong_ofuda", "qty": 1, "inputs": [ { "item": "ofuda", "qty": 1 }, { "item": "memory_dust", "qty": 2 } ] },
+  { "id": "r_morijio", "result": "morijio", "qty": 1, "inputs": [ { "item": "salt", "qty": 2 } ] },
+  { "id": "r_ohagi", "result": "ohagi", "qty": 1, "inputs": [ { "item": "dango", "qty": 2 }, { "item": "memory_dust", "qty": 1 } ] },
+  { "id": "r_juzu", "result": "juzu", "qty": 1, "inputs": [ { "item": "magatama_shard", "qty": 2 }, { "item": "red_thread", "qty": 1 } ] },
+  { "id": "r_charm_bell", "result": "charm_bell", "qty": 1, "inputs": [ { "item": "bell", "qty": 1 }, { "item": "cloth", "qty": 1 } ] },
+  { "id": "r_charm_magatama", "result": "charm_magatama", "qty": 1, "inputs": [ { "item": "magatama_shard", "qty": 1 }, { "item": "cloth", "qty": 1 } ] },
+  { "id": "r_charm_mirror", "result": "charm_mirror", "qty": 1, "inputs": [ { "item": "mirror_shard", "qty": 1 }, { "item": "cloth", "qty": 1 } ] },
+  { "id": "r_charm_thread", "result": "charm_thread", "qty": 1, "inputs": [ { "item": "red_thread", "qty": 2 }, { "item": "cloth", "qty": 1 } ] },
+  { "id": "r_charm_dust", "result": "charm_dust", "qty": 1, "inputs": [ { "item": "memory_dust", "qty": 3 }, { "item": "cloth", "qty": 1 } ] }
+]

@@ -1,0 +1,60 @@
+[
+ {
+  "id": "tutorial",
+  "enemies": [
+   {
+    "kaii": "kageboushi",
+    "level": 3
+   },
+   {
+    "kaii": "kageboushi",
+    "level": 2
+   }
+  ],
+  "canFlee": false
+ },
+ {
+  "id": "piano",
+  "enemies": [
+   {
+    "kaii": "yonakipiano",
+    "level": 9
+   },
+   {
+    "kaii": "gakubuchi",
+    "level": 7
+   }
+  ],
+  "canFlee": false
+ },
+ {
+  "id": "stall3",
+  "enemies": [
+   {
+    "kaii": "sanbanme",
+    "level": 7
+   }
+  ],
+  "canFlee": true
+ },
+ {
+  "id": "boss_juusandan",
+  "enemies": [
+   {
+    "kaii": "kageboushi",
+    "level": 9
+   },
+   {
+    "kaii": "juusandan",
+    "level": 13
+   },
+   {
+    "kaii": "kageboushi",
+    "level": 9
+   }
+  ],
+  "canFlee": false,
+  "boss": true,
+  "forceResonance": true
+ }
+]

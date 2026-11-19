@@ -1,0 +1,312 @@
+[
+ {
+  "id": "town_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "town_first"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "朝霧町。いつもの通学路だ。北の坂の上に、桜ヶ丘高校が見える。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "town_first",
+      "value": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "town_minato",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "よう、{name}！ 聞いたか？ うちの学校の『十三階段』の噂。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "二階の西階段の踊り場さ。ふだんは十二段なのに、夕方だけ十三段になるんだって。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "で、十三段目を踏んだやつは……鏡の向こうに連れていかれる。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "放課後、確かめに行こうぜ。都市伝説調査会の活動ってことで！"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "met_minato",
+    "value": true
+   },
+   {
+    "cmd": "moveNpc",
+    "npc": "minato_town",
+    "dx": 0,
+    "dy": -3
+   },
+   {
+    "cmd": "hideNpc",
+    "npc": "minato_town"
+   }
+  ]
+ },
+ {
+  "id": "town_granny",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch1_entered_back"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "……あんた、向こうの匂いがするね。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "見えるようになっちまったんだろう。……飲まれるんじゃないよ。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "weather": [
+      "fog"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "おや、おはよう。今日は霧が濃いねえ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "霧の日はね、あっち側と近くなるんだよ。……気をつけなさい。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "おや、{name}ちゃん。学校かい。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "おばあさん",
+      "text": "この町はね、昔から『裏』があるって言われてたのさ。鏡の向こう、ってやつだよ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "town_student",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "evening"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "女子生徒",
+      "text": "最近、夕方の校舎って変な感じしない？ ……誰もいないのに、足音がするの。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "女子生徒",
+      "text": "七不思議？ 音楽室のピアノが夜に鳴るってやつなら知ってるよ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "town_streamer",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "配信者",
+    "text": "どうも〜！ 今夜も心霊スポット凸ってま〜す……って、きみ地元の子？"
+   },
+   {
+    "cmd": "say",
+    "speaker": "配信者",
+    "text": "この公園の池さ、夜になると水面に『もう一人』映るんだって。見たことある？"
+   },
+   {
+    "cmd": "say",
+    "speaker": "配信者",
+    "text": "……あれ？ 今、カメラにきみの隣……いや、なんでもない。ノイズかな。"
+   }
+  ]
+ },
+ {
+  "id": "town_police",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "警察官",
+    "text": "こんな時間に何してる？ 最近停電が多いからな。早く帰りなさい。"
+   }
+  ]
+ },
+ {
+  "id": "town_neighbor",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "weather": [
+      "rain",
+      "fog"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "近所の人",
+      "text": "雨の日の朝霧町は、霧が出やすいんだ。足元に気をつけて。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "speaker": "近所の人",
+      "text": "おはよう。朝の散歩は気持ちいいね。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "sign_school",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『私立 桜ヶ丘高校』"
+   }
+  ]
+ },
+ {
+  "id": "sign_park",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『朝霧中央公園 ― 池に入らないでください』"
+   }
+  ]
+ },
+ {
+  "id": "sign_conbini",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『ヨツバマート 朝霧店 24h』"
+   }
+  ]
+ },
+ {
+  "id": "sign_town",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "『ようこそ 朝霧町へ』……誰かが、町の名前の上に赤いペンで線を引いている。"
+   }
+  ]
+ },
+ {
+  "id": "town_pond",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "night",
+      "midnight"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "暗い水面に、自分が映っている。"
+     },
+     {
+      "cmd": "wait",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "……すこし遅れて、隣にもう一人。小さな影が。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "whisper"
+     },
+     {
+      "cmd": "if",
+      "when": {
+       "notFlag": "pond_seen"
+      },
+      "then": [
+       {
+        "cmd": "sanity",
+        "delta": -3
+       },
+       {
+        "cmd": "setFlag",
+        "key": "pond_seen",
+        "value": true
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "池の水面が、空の光をきらきらと反射している。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "town_midnight",
+  "commands": [
+   {
+    "cmd": "setFlag",
+    "key": "walked_midnight",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "text": "深夜の朝霧町は、音がしない。街灯の明かりだけが、ぽつぽつと続いている。"
+   }
+  ]
+ }
+]

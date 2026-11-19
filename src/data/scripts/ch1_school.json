@@ -1,0 +1,481 @@
+[
+ {
+  "id": "school_teacher",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "担任",
+    "text": "おう、{name}。席に着けー。ホームルーム始めるぞ。"
+   },
+   {
+    "cmd": "say",
+    "text": "（自分の席は、窓際の後ろから二番目だ）"
+   }
+  ]
+ },
+ {
+  "id": "school_seat",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "class_done"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "自分の席に着いた。"
+     },
+     {
+      "cmd": "fade",
+      "to": "black",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "……退屈な授業が続いた。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "chime"
+     },
+     {
+      "cmd": "wait",
+      "ms": 1600
+     },
+     {
+      "cmd": "setTime",
+      "hour": 16,
+      "minute": 30
+     },
+     {
+      "cmd": "setFlag",
+      "key": "class_done",
+      "value": true
+     },
+     {
+      "cmd": "if",
+      "when": {
+       "notFlag": "met_minato"
+      },
+      "then": [
+       {
+        "cmd": "setFlag",
+        "key": "met_minato",
+        "value": true
+       }
+      ]
+     },
+     {
+      "cmd": "refreshMap"
+     },
+     {
+      "cmd": "fade",
+      "to": "clear",
+      "ms": 600
+     },
+     {
+      "cmd": "say",
+      "text": "放課後。教室には、もう誰もいない。"
+     },
+     {
+      "cmd": "say",
+      "text": "机の中に、湊のメモが入っていた。『二階・西階段の踊り場で待つ！』"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "自分の席だ。机の隅に、小さな落書きがある。『13』……？"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "school_minato",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "met_minato"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "おっ、{name}！ 聞いたか？ うちの学校の『十三階段』の噂。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "湊",
+      "text": "二階の西階段の踊り場。夕方だけ、十二段が十三段になるんだってさ。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "met_minato",
+      "value": true
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "授業終わったら、十三階段な！ 忘れんなよ。"
+   }
+  ]
+ },
+ {
+  "id": "school_classmate_a",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "クラスメイト",
+    "text": "ねえ、知ってる？ 三番目のトイレ、ノックを三回すると返事があるんだって。"
+   }
+  ]
+ },
+ {
+  "id": "school_classmate_b",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "クラスメイト",
+    "text": "最近、夜に学校の前を通ると、ピアノの音が聞こえるらしいぜ。"
+   }
+  ]
+ },
+ {
+  "id": "school_blackboard",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "黒板の隅に、小さな字で『みつけて』と書かれている。……誰の字だろう。"
+   }
+  ]
+ },
+ {
+  "id": "school_stall3",
+  "commands": [
+   {
+    "cmd": "choice",
+    "prompt": "三番目の個室だ。ノックしてみる？",
+    "options": [
+     {
+      "text": "ノックする",
+      "then": [
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 300
+       },
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 300
+       },
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 1400
+       },
+       {
+        "cmd": "say",
+        "text": "……。"
+       },
+       {
+        "cmd": "wait",
+        "ms": 800
+       },
+       {
+        "cmd": "say",
+        "text": "…………コン。"
+       },
+       {
+        "cmd": "sanity",
+        "delta": -2
+       },
+       {
+        "cmd": "say",
+        "text": "返事が、あった気がした。"
+       }
+      ]
+     },
+     {
+      "text": "やめておく",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "school_stall",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "誰も入っていない。"
+   }
+  ]
+ },
+ {
+  "id": "school_shoebox",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "自分の下駄箱だ。上履きの隣に、なぜかもう一足、小さな上履きが入っている。……気のせいだ。"
+   }
+  ]
+ },
+ {
+  "id": "school_staffroom",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "職員室だ。今は用事はない。"
+   }
+  ]
+ },
+ {
+  "id": "school_class_hint",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "（教室だ。自分の席に着こう）"
+   }
+  ]
+ },
+ {
+  "id": "school_music_student",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "女子生徒",
+    "text": "このピアノ、夜になると勝手に鳴るんだって。……弾きかけの曲を、ずっと。"
+   }
+  ]
+ },
+ {
+  "id": "school_piano",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "古いピアノだ。鍵盤の一つが、押しても音が出ない。"
+   }
+  ]
+ },
+ {
+  "id": "school_portraits",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "音楽家の肖像画が並んでいる。……一枚だけ、顔が真っ黒に塗りつぶされている。"
+   }
+  ]
+ },
+ {
+  "id": "school_model",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "人体模型が置かれている。半分だけ、皮膚がない。"
+   },
+   {
+    "cmd": "say",
+    "text": "……目が合った気がした。"
+   }
+  ]
+ },
+ {
+  "id": "landing_minato",
+  "commands": [
+   {
+    "cmd": "call",
+    "script": "landing_event"
+   }
+  ]
+ },
+ {
+  "id": "landing_event",
+  "commands": [
+   {
+    "cmd": "music",
+    "id": null
+   },
+   {
+    "cmd": "setTime",
+    "hour": 17,
+    "minute": 0
+   },
+   {
+    "cmd": "setWeather",
+    "weather": "clear",
+    "lock": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "来たな、{name}。夕方の今がチャンスだ。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "数えるぞ。……いち、に、さん、し……"
+   },
+   {
+    "cmd": "wait",
+    "ms": 700
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "……じゅういち、じゅうに。"
+   },
+   {
+    "cmd": "wait",
+    "ms": 900
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "……じゅう、さん。"
+   },
+   {
+    "cmd": "sfx",
+    "id": "bell"
+   },
+   {
+    "cmd": "shake",
+    "ms": 600,
+    "intensity": 0.004
+   },
+   {
+    "cmd": "say",
+    "text": "どこからか、チャイムが鳴り響いた。"
+   },
+   {
+    "cmd": "say",
+    "text": "一回、二回、三回……十二回。"
+   },
+   {
+    "cmd": "wait",
+    "ms": 800
+   },
+   {
+    "cmd": "sfx",
+    "id": "bell"
+   },
+   {
+    "cmd": "distort",
+    "ms": 1200,
+    "intensity": 0.6
+   },
+   {
+    "cmd": "say",
+    "text": "……十三回。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "お、おい、{name}……鏡……お前の、後ろ……"
+   },
+   {
+    "cmd": "flash",
+    "color": "#ffffff",
+    "ms": 300
+   },
+   {
+    "cmd": "sfx",
+    "id": "distort"
+   },
+   {
+    "cmd": "distort",
+    "ms": 1500,
+    "intensity": 1
+   },
+   {
+    "cmd": "fade",
+    "to": "black",
+    "ms": 500
+   },
+   {
+    "cmd": "say",
+    "text": "鏡の中から、無数の手が伸びてきた――"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch1_entered_back",
+    "value": true
+   },
+   {
+    "cmd": "unlockWeather"
+   },
+   {
+    "cmd": "warp",
+    "map": "back_school_2f",
+    "x": 3,
+    "y": 2,
+    "facing": "down",
+    "transition": "distort"
+   }
+  ]
+ },
+ {
+  "id": "landing_mirror",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch1_entered_back"
+    },
+    "then": [
+     {
+      "cmd": "choice",
+      "prompt": "鏡の向こうから、呼ばれている気がする。裏層へ行く？",
+      "options": [
+       {
+        "text": "行く",
+        "then": [
+         {
+          "cmd": "sfx",
+          "id": "distort"
+         },
+         {
+          "cmd": "warp",
+          "map": "back_school_2f",
+          "x": 3,
+          "y": 2,
+          "facing": "down",
+          "transition": "distort"
+         }
+        ]
+       },
+       {
+        "text": "やめる",
+        "then": []
+       }
+      ]
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "踊り場の大きな鏡。少し曇っている。"
+     }
+    ]
+   }
+  ]
+ }
+]

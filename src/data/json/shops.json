@@ -1,0 +1,4 @@
+[
+  { "id": "conbini", "name": "ヨツバマート", "items": ["dango", "candy", "senkou", "hanshi", "sumi", "salt", "cloth", "flashlight"] },
+  { "id": "vending", "name": "自動販売機", "items": ["cocoa"] }
+]

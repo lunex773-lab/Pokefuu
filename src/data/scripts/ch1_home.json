@@ -1,0 +1,435 @@
+[
+ {
+  "id": "home_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "intro_done"
+    },
+    "then": [
+     {
+      "cmd": "fade",
+      "to": "black",
+      "ms": 0
+     },
+     {
+      "cmd": "music",
+      "id": null
+     },
+     {
+      "cmd": "wait",
+      "ms": 800
+     },
+     {
+      "cmd": "say",
+      "text": "……ねえ。"
+     },
+     {
+      "cmd": "say",
+      "text": "……ねえ、きこえる？"
+     },
+     {
+      "cmd": "wait",
+      "ms": 400
+     },
+     {
+      "cmd": "say",
+      "text": "わたしを、みつけて。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "bell"
+     },
+     {
+      "cmd": "wait",
+      "ms": 1200
+     },
+     {
+      "cmd": "fade",
+      "to": "clear",
+      "ms": 1600
+     },
+     {
+      "cmd": "say",
+      "text": "（……夢、か）"
+     },
+     {
+      "cmd": "say",
+      "text": "見慣れた天井。いつもの朝だ。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "intro_done",
+      "value": true
+     },
+     {
+      "cmd": "title",
+      "text": "Chapter 1",
+      "sub": "学校"
+     },
+     {
+      "cmd": "say",
+      "text": "【操作】左側で移動、右の『調べる』で会話・調査。『ダッシュ』を押しながらで走る。"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_mom",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch1_clear"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "おかえり、{name}。……顔色が悪いわよ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "何か、あったの？"
+     },
+     {
+      "cmd": "say",
+      "text": "言葉が出なかった。母は、それ以上は聞かなかった。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "hasItem": "old_ofuda"
+      },
+      {
+       "notFlag": "mom_saw_ofuda"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "……{name}、それ。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "その御札……どこで見つけたの。"
+     },
+     {
+      "cmd": "say",
+      "text": "母の顔が、一瞬こわばった。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "……ううん、なんでもない。大事にしまっておきなさい。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "mom_saw_ofuda",
+      "value": true
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "dawn",
+      "morning"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "おはよう、{name}。今日から二学期でしょう。遅刻しないようにね。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "母",
+      "text": "最近、夜になると町が停電するんだって。帰りは早めにね。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "if",
+      "when": {
+       "phase": [
+        "day"
+       ]
+      },
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "母",
+        "text": "あら、学校は？ ……早く行きなさい。"
+       }
+      ],
+      "else": [
+       {
+        "cmd": "if",
+        "when": {
+         "phase": [
+          "evening"
+         ]
+        },
+        "then": [
+         {
+          "cmd": "say",
+          "speaker": "母",
+          "text": "おかえり。ご飯、もうすぐできるから。"
+         }
+        ],
+        "else": [
+         {
+          "cmd": "say",
+          "speaker": "母",
+          "text": "こんな時間まで、どこにいたの。……早く寝なさい。"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_bed",
+  "commands": [
+   {
+    "cmd": "choice",
+    "prompt": "自分のベッドだ。眠る？",
+    "options": [
+     {
+      "text": "眠る（翌朝まで）",
+      "then": [
+       {
+        "cmd": "sleep"
+       }
+      ]
+     },
+     {
+      "text": "やめる",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_mirror",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "ch1_clear"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "鏡の奥で、小さな影が手を振った気がした。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "mirror_seen"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "鏡に映る自分。"
+     },
+     {
+      "cmd": "wait",
+      "ms": 500
+     },
+     {
+      "cmd": "say",
+      "text": "……その後ろに、一瞬だれかが立っていた気がした。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "whisper"
+     },
+     {
+      "cmd": "sanity",
+      "delta": -2
+     },
+     {
+      "cmd": "setFlag",
+      "key": "mirror_seen",
+      "value": true
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "いつもの自分の顔だ。……少し、疲れている。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_drawer",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "got_old_ofuda"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "引き出しの奥に、和紙の包みがある。"
+     },
+     {
+      "cmd": "say",
+      "text": "『封印神社』の朱印が押された、古い御札だ。"
+     },
+     {
+      "cmd": "giveItem",
+      "item": "old_ofuda",
+      "qty": 3
+     },
+     {
+      "cmd": "sfx",
+      "id": "item"
+     },
+     {
+      "cmd": "toast",
+      "text": "古い御札 ×3 を手に入れた"
+     },
+     {
+      "cmd": "say",
+      "text": "なぜか、手放してはいけない気がした。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "got_old_ofuda",
+      "value": true
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "文房具がしまってある。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_photo",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "got_mem_photo"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "棚の上の家族写真。"
+     },
+     {
+      "cmd": "say",
+      "text": "……右端が、不自然に切り取られている。"
+     },
+     {
+      "cmd": "memory",
+      "id": "mem_photo"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "got_mem_photo",
+      "value": true
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "切り取られた家族写真。母の腕は、誰かを抱いた形のままだ。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_tv",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "phase": [
+      "night",
+      "midnight"
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "テレビは砂嵐を映している。"
+     },
+     {
+      "cmd": "say",
+      "text": "ザ……ザザ……み……つ……け……"
+     },
+     {
+      "cmd": "sanity",
+      "delta": -3
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "ニュース『朝霧町周辺で、原因不明の停電が相次いでいます。電力会社は――』"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "home_kitchen",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "味噌汁のいい匂いがする。"
+   }
+  ]
+ },
+ {
+  "id": "home_shelf",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "漫画と参考書が並んでいる。参考書のほうは、ほとんど新品だ。"
+   }
+  ]
+ }
+]

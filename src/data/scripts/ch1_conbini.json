@@ -1,0 +1,70 @@
+[
+ {
+  "id": "conbini_clerk",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "店員",
+    "text": "いらっしゃいませー。"
+   },
+   {
+    "cmd": "shop",
+    "id": "conbini"
+   }
+  ]
+ },
+ {
+  "id": "conbini_manager",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "店長",
+    "text": "お、{name}さん。今日もシフト入れる？ 4時間で2400円だよ。"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "アルバイトする？（4時間経過）",
+    "options": [
+     {
+      "text": "働く",
+      "then": [
+       {
+        "cmd": "parttime",
+        "hours": 4,
+        "pay": 2400
+       },
+       {
+        "cmd": "say",
+        "speaker": "店長",
+        "text": "お疲れさま！ 助かったよ。"
+       }
+      ]
+     },
+     {
+      "text": "やめておく",
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "店長",
+        "text": "そっか。また頼むよ。"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "conbini_magazine",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "オカルト雑誌『月刊ウラガワ』。特集：『全国・十三階段マップ』。"
+   },
+   {
+    "cmd": "say",
+    "text": "……桜ヶ丘高校の名前もある。"
+   }
+  ]
+ }
+]

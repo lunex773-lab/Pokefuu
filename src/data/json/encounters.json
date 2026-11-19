@@ -1,0 +1,16 @@
+[
+  { "id": "back_2f_west", "groupWeights": [5, 3, 0],
+    "entries": [ { "kaii": "kageboushi", "min": 3, "max": 5, "weight": 6 }, { "kaii": "hitorioni", "min": 3, "max": 5, "weight": 4 } ],
+    "extra": [ { "when": { "weather": ["redmoon"] }, "entries": [ { "kaii": "sanbanme", "min": 5, "max": 6, "weight": 2 } ] } ] },
+  { "id": "back_1f", "groupWeights": [4, 4, 2],
+    "entries": [ { "kaii": "kageboushi", "min": 5, "max": 7, "weight": 4 }, { "kaii": "kiritsu", "min": 5, "max": 8, "weight": 4 },
+                 { "kaii": "gakubuchi", "min": 5, "max": 7, "weight": 3 }, { "kaii": "hitorioni", "min": 5, "max": 7, "weight": 3 },
+                 { "kaii": "sanbanme", "min": 6, "max": 8, "weight": 1 } ],
+    "extra": [ { "when": { "weather": ["redmoon"] }, "entries": [ { "kaii": "sanbanme", "min": 8, "max": 10, "weight": 3 } ] } ] },
+  { "id": "back_2f_east", "groupWeights": [3, 4, 3],
+    "entries": [ { "kaii": "gakubuchi", "min": 7, "max": 9, "weight": 4 }, { "kaii": "honemi", "min": 7, "max": 9, "weight": 4 },
+                 { "kaii": "kiritsu", "min": 7, "max": 9, "weight": 3 }, { "kaii": "yonakipiano", "min": 8, "max": 9, "weight": 1 } ] },
+  { "id": "back_stairs", "groupWeights": [3, 4, 3],
+    "entries": [ { "kaii": "kageboushi", "min": 8, "max": 11, "weight": 4 }, { "kaii": "honemi", "min": 8, "max": 11, "weight": 4 },
+                 { "kaii": "sanbanme", "min": 9, "max": 11, "weight": 2 } ] }
+]

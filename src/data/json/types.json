@@ -1,0 +1,9 @@
+[
+  { "id": "fear", "name": "恐怖", "color": "#8a6bff", "description": "暗闇・未知・死への恐れから生まれる。" },
+  { "id": "loneliness", "name": "孤独", "color": "#4aa3df", "description": "誰にも見つけてもらえない寂しさから生まれる。" },
+  { "id": "anger", "name": "怒り", "color": "#e04848", "description": "理不尽への憤りから生まれる。" },
+  { "id": "obsession", "name": "執着", "color": "#d066b8", "description": "手放せない想いから生まれる。" },
+  { "id": "guilt", "name": "罪悪感", "color": "#6f86b0", "description": "償えなかった後悔から生まれる。" },
+  { "id": "envy", "name": "嫉妬", "color": "#5fbf5f", "description": "誰かと比べる心から生まれる。" },
+  { "id": "despair", "name": "絶望", "color": "#9a9a9a", "description": "希望を失った空洞から生まれる。" }
+]

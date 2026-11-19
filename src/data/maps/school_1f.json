@@ -1,0 +1,214 @@
+{
+ "id": "school_1f",
+ "name": "桜ヶ丘高校 1F",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "school",
+ "ground": [
+  "tttttttttttttttttttttttttttttt",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "twwwwwwwwwwwttcccccttttt^^^^^t",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "tttttttttttttttttttttttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "ttttttttttcccccccccccttttttttt",
+  "tttttttttttttttttttttttttttttt"
+ ],
+ "objects": [
+  "##############################",
+  "##BBBBBBBBB###uuuuu#####     #",
+  "#           ##     #####     #",
+  "# k k k k k ##     #####     #",
+  "# k k k k k ##     #####     #",
+  "#           ##     #####     #",
+  "########## ##### #######    ##",
+  "# P                          #",
+  "#l                         l #",
+  "##########           #########",
+  "########## XXX   XXX #########",
+  "##########           #########",
+  "##########           #########",
+  "###############dd#############"
+ ],
+ "above": [
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              ",
+  "                              "
+ ],
+ "lights": [
+  {
+   "x": 6,
+   "y": 3,
+   "radius": 110,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 8,
+   "y": 7,
+   "radius": 90,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 20,
+   "y": 7,
+   "radius": 90,
+   "color": "#f0f4ff",
+   "power": true
+  },
+  {
+   "x": 15,
+   "y": 10,
+   "radius": 90,
+   "color": "#f0f4ff",
+   "power": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "teacher",
+   "name": "担任",
+   "sprite": "teacher",
+   "x": 6,
+   "y": 2,
+   "facing": "down",
+   "script": "school_teacher",
+   "when": {
+    "notFlag": "class_done"
+   }
+  },
+  {
+   "id": "classmate_a",
+   "name": "クラスメイト",
+   "sprite": "student_a",
+   "x": 4,
+   "y": 5,
+   "facing": "up",
+   "script": "school_classmate_a",
+   "when": {
+    "notFlag": "ch1_entered_back"
+   }
+  },
+  {
+   "id": "classmate_b",
+   "name": "クラスメイト",
+   "sprite": "student_b",
+   "x": 18,
+   "y": 8,
+   "facing": "left",
+   "script": "school_classmate_b",
+   "when": {
+    "notFlag": "ch1_entered_back"
+   }
+  },
+  {
+   "id": "minato_school",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 9,
+   "y": 4,
+   "facing": "left",
+   "script": "school_minato",
+   "when": {
+    "notFlag": "class_done"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "seat",
+   "x": 8,
+   "y": 4,
+   "script": "school_seat"
+  },
+  {
+   "id": "blackboard",
+   "x": 5,
+   "y": 1,
+   "script": "school_blackboard"
+  },
+  {
+   "id": "stall3",
+   "x": 16,
+   "y": 1,
+   "script": "school_stall3"
+  },
+  {
+   "id": "stall1",
+   "x": 14,
+   "y": 1,
+   "script": "school_stall"
+  },
+  {
+   "id": "shoebox",
+   "x": 12,
+   "y": 10,
+   "script": "school_shoebox"
+  },
+  {
+   "id": "staffroom",
+   "x": 21,
+   "y": 6,
+   "script": "school_staffroom"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "enter_class",
+   "x": 10,
+   "y": 6,
+   "w": 1,
+   "h": 1,
+   "script": "school_class_hint",
+   "when": {
+    "notFlag": "class_done"
+   },
+   "once": false
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_town",
+   "x": 15,
+   "y": 13,
+   "w": 2,
+   "h": 1,
+   "to": "asagiri_town",
+   "tx": 19,
+   "ty": 5,
+   "facing": "down"
+  },
+  {
+   "id": "to_2f",
+   "x": 24,
+   "y": 1,
+   "w": 5,
+   "h": 1,
+   "to": "school_2f",
+   "tx": 25,
+   "ty": 2,
+   "facing": "down"
+  }
+ ]
+}

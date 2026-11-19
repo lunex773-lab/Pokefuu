@@ -1,0 +1,154 @@
+{
+ "id": "home",
+ "name": "主人公の家",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "asagiri",
+ "indoor": true,
+ "dangerLevel": 0,
+ "ambience": "home",
+ "ambientDarkness": 0.0,
+ "ground": [
+  "wwwwwwwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wmmmmmwwwwwwww",
+  "wwwwwwwwwwwwww"
+ ],
+ "objects": [
+  "##############",
+  "#e sMk#jjj  v#",
+  "#e    #      #",
+  "#     #  nn  #",
+  "#        nn  #",
+  "#     #      #",
+  "#s    #     s#",
+  "#########D####"
+ ],
+ "above": [
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              ",
+  "              "
+ ],
+ "lights": [
+  {
+   "x": 3,
+   "y": 3,
+   "radius": 96,
+   "color": "#ffe0b0",
+   "power": true
+  },
+  {
+   "x": 10,
+   "y": 3,
+   "radius": 110,
+   "color": "#ffe0b0",
+   "power": true
+  }
+ ],
+ "npcs": [
+  {
+   "id": "mom_morning",
+   "name": "母",
+   "sprite": "mom",
+   "x": 8,
+   "y": 2,
+   "facing": "up",
+   "script": "home_mom",
+   "when": {
+    "phase": [
+     "dawn",
+     "morning",
+     "day"
+    ]
+   }
+  },
+  {
+   "id": "mom_evening",
+   "name": "母",
+   "sprite": "mom",
+   "x": 11,
+   "y": 4,
+   "facing": "left",
+   "script": "home_mom",
+   "when": {
+    "phase": [
+     "evening",
+     "night"
+    ]
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "bed",
+   "x": 1,
+   "y": 1,
+   "script": "home_bed"
+  },
+  {
+   "id": "bed2",
+   "x": 1,
+   "y": 2,
+   "script": "home_bed"
+  },
+  {
+   "id": "mirror",
+   "x": 4,
+   "y": 1,
+   "script": "home_mirror"
+  },
+  {
+   "id": "drawer",
+   "x": 5,
+   "y": 1,
+   "script": "home_drawer"
+  },
+  {
+   "id": "photo",
+   "x": 3,
+   "y": 1,
+   "script": "home_photo"
+  },
+  {
+   "id": "tv",
+   "x": 12,
+   "y": 1,
+   "script": "home_tv"
+  },
+  {
+   "id": "kitchen",
+   "x": 8,
+   "y": 1,
+   "script": "home_kitchen"
+  },
+  {
+   "id": "shelf2",
+   "x": 1,
+   "y": 6,
+   "script": "home_shelf"
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_town",
+   "x": 9,
+   "y": 7,
+   "w": 1,
+   "h": 1,
+   "to": "asagiri_town",
+   "tx": 5,
+   "ty": 17,
+   "facing": "down"
+  }
+ ],
+ "onEnter": "home_enter"
+}

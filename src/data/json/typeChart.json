@@ -1,0 +1,17 @@
+{
+  "notes": [
+    "【案】7つの感情は環状に相性を持つ：怒り→恐怖→執着→孤独→嫉妬→罪悪感→絶望→怒り（→は『よく響く』）",
+    "怒りは恐怖を塗りつぶす／恐怖は執着を手放させる／執着は孤独を縛り埋める／比べる相手がいなければ嫉妬は生まれない（孤独→嫉妬）",
+    "嫉妬は罪悪感を正当化する／罪悪感は『まだ償える』という希望を残し絶望に抗う／絶望は怒る気力すら奪う",
+    "同じ感情どうしは共感しすぎて響きにくい（0.5倍）"
+  ],
+  "chart": {
+    "anger":      { "fear": 1.6, "despair": 0.6, "anger": 0.5 },
+    "fear":       { "obsession": 1.6, "anger": 0.6, "fear": 0.5 },
+    "obsession":  { "loneliness": 1.6, "fear": 0.6, "obsession": 0.5 },
+    "loneliness": { "envy": 1.6, "obsession": 0.6, "loneliness": 0.5 },
+    "envy":       { "guilt": 1.6, "loneliness": 0.6, "envy": 0.5 },
+    "guilt":      { "despair": 1.6, "envy": 0.6, "guilt": 0.5 },
+    "despair":    { "anger": 1.6, "guilt": 0.6, "despair": 0.5 }
+  }
+}

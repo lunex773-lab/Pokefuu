@@ -1,0 +1,6 @@
+[
+  { "id": "normal", "name": "Normal End", "condition": "（未定・要相談）", "status": "planned" },
+  { "id": "bad", "name": "Bad End", "condition": "（未定・要相談）", "status": "planned" },
+  { "id": "true", "name": "True End", "condition": "妹を受け入れる。", "status": "planned" },
+  { "id": "secret", "name": "Secret End", "condition": "（未定・要相談）", "status": "planned" }
+]

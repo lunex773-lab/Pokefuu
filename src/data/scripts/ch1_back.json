@@ -1,0 +1,878 @@
+[
+ {
+  "id": "back_2f_enter",
+  "commands": []
+ },
+ {
+  "id": "back_first",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "……冷たい床。"
+   },
+   {
+    "cmd": "say",
+    "text": "目を開けると、そこは学校だった。……けれど、何かがおかしい。"
+   },
+   {
+    "cmd": "say",
+    "text": "壁は赤黒く染まり、窓の外には何もない。湊の姿も、ない。"
+   },
+   {
+    "cmd": "say",
+    "text": "廊下の先から、すすり泣くような声が聞こえる。"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "back_first_done",
+    "value": true
+   }
+  ]
+ },
+ {
+  "id": "back_nanashi",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "小さな影が、うずくまって震えている。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "……こないで。……ちがう、あなたじゃない。"
+   },
+   {
+    "cmd": "sfx",
+    "id": "encounter"
+   },
+   {
+    "cmd": "say",
+    "text": "影の背後から、ひょろ長い何かが二つ、這い出してきた。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "たすけて……！"
+   },
+   {
+    "cmd": "choice",
+    "prompt": "どうする？",
+    "options": [
+     {
+      "text": "小さな影を庇う",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "考えるより先に、体が動いていた。"
+       }
+      ]
+     },
+     {
+      "text": "逃げる",
+      "then": [
+       {
+        "cmd": "say",
+        "text": "……足が動かない。逃げられない。"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "say",
+    "text": "小さな影が、手を握ってきた。氷のように冷たい手だった。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "notItem": "old_ofuda"
+      },
+      {
+       "notItem": "ofuda"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "ポケットの中に、いつの間にか御札が入っていた。"
+     },
+     {
+      "cmd": "giveItem",
+      "item": "old_ofuda",
+      "qty": 2
+     }
+    ]
+   },
+   {
+    "cmd": "recruit",
+    "kaii": "nanashi",
+    "level": 5,
+    "quiet": true
+   },
+   {
+    "cmd": "say",
+    "text": "【戦闘】怪異は倒すのではなく『鎮める』。HPを0にすると鎮静し、消えていく。"
+   },
+   {
+    "cmd": "say",
+    "text": "【封印】弱らせた怪異に、主人公の行動『封印』で御札を使うと捕まえられる。戦闘後に『共鳴』できれば仲間になる。"
+   },
+   {
+    "cmd": "battle",
+    "encounter": "tutorial",
+    "noLose": true
+   },
+   {
+    "cmd": "hideNpc",
+    "npc": "nanashi_meet"
+   },
+   {
+    "cmd": "say",
+    "text": "影たちが消えると、小さな影がこちらを見上げた。"
+   },
+   {
+    "cmd": "resonanceTalk",
+    "kaii": "nanashi"
+   },
+   {
+    "cmd": "say",
+    "text": "名前のない影――ナナシは、そっと隣に寄り添った。"
+   },
+   {
+    "cmd": "toast",
+    "text": "ナナシが仲間になった"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "nanashi_joined",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "……あっち。かべの むこう。……『視て』。"
+   },
+   {
+    "cmd": "say",
+    "text": "【視る】アクションボタン（Cキー）で、主人公だけに視える『歪み』を探せる。隠された道や物が見つかることがある。"
+   },
+   {
+    "cmd": "autosave"
+   }
+  ]
+ },
+ {
+  "id": "back_loop",
+  "commands": [
+   {
+    "cmd": "incFlag",
+    "key": "loop_count"
+   },
+   {
+    "cmd": "sfx",
+    "id": "distort"
+   },
+   {
+    "cmd": "warpLocal",
+    "x": 9,
+    "y": 5,
+    "facing": "right"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flagGte": {
+      "key": "loop_count",
+      "value": 4
+     }
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "同じ廊下が、延々と続く。"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "if",
+      "when": {
+       "flagGte": {
+        "key": "loop_count",
+        "value": 3
+       }
+      },
+      "then": [
+       {
+        "cmd": "say",
+        "speaker": "ナナシ",
+        "text": "まっすぐじゃ、だめ。……かべを『視て』。"
+       }
+      ],
+      "else": [
+       {
+        "cmd": "if",
+        "when": {
+         "flagGte": {
+          "key": "loop_count",
+          "value": 2
+         }
+        },
+        "then": [
+         {
+          "cmd": "say",
+          "text": "廊下が、繋がっていない。"
+         }
+        ],
+        "else": [
+         {
+          "cmd": "say",
+          "text": "……？ さっき通った場所に戻っている。"
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_mirror",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "鏡には、何も映っていない。……自分の姿さえも。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "nanashi_joined"
+    },
+    "then": [
+     {
+      "cmd": "choice",
+      "prompt": "鏡に手を触れる？",
+      "options": [
+       {
+        "text": "現実へ戻る",
+        "then": [
+         {
+          "cmd": "sfx",
+          "id": "distort"
+         },
+         {
+          "cmd": "warp",
+          "map": "school_2f",
+          "x": 27,
+          "y": 2,
+          "facing": "down",
+          "transition": "distort"
+         },
+         {
+          "cmd": "say",
+          "text": "気がつくと、踊り場の鏡の前に立っていた。"
+         }
+        ]
+       },
+       {
+        "text": "やめる",
+        "then": []
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_piano",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "flag": "piano_played"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "ピアノは、静かに佇んでいる。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "hasItem": "score_piece"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "譜面台に、楽譜の切れ端を置いた。"
+     },
+     {
+      "cmd": "say",
+      "text": "鍵盤が、ひとりでに沈み始める――"
+     },
+     {
+      "cmd": "sfx",
+      "id": "encounter"
+     },
+     {
+      "cmd": "battle",
+      "encounter": "piano"
+     },
+     {
+      "cmd": "takeItem",
+      "item": "score_piece",
+      "qty": 1
+     },
+     {
+      "cmd": "setFlag",
+      "key": "piano_played",
+      "value": true
+     },
+     {
+      "cmd": "say",
+      "text": "最後の和音が鳴り響くと、廊下の南の壁に扉が浮かび上がった。"
+     },
+     {
+      "cmd": "sfx",
+      "id": "bell"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "door13_open",
+      "value": true
+     },
+     {
+      "cmd": "refreshMap"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "……じゅうさんだんめ。"
+     },
+     {
+      "cmd": "autosave"
+     }
+    ],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "古いピアノ。譜面台には何も載っていない。"
+     },
+     {
+      "cmd": "say",
+      "text": "……何か楽譜があれば、弾けるかもしれない。"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_lullaby",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "ピアノの奥から、かすかな歌声が聞こえる。"
+   },
+   {
+    "cmd": "say",
+    "text": "子守唄だ。……母の声に、よく似ている。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_lullaby"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_lullaby",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_door13_hint",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "壁に、うっすらと扉の形が浮かんでいる。……開かない。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "おと……ピアノの おと、きこえない？"
+   }
+  ]
+ },
+ {
+  "id": "back_1f_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "back_1f_first"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "一階。空気が重い。……何かが、廊下を這い回っている気配がする。"
+     },
+     {
+      "cmd": "say",
+      "text": "（赤い目の『気配』に触れると怪異との戦闘になる。暗闇では見えにくい）"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "back_1f_first",
+      "value": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_randoseru",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "机の横に、同じ色のランドセルが二つ掛かっている。"
+   },
+   {
+    "cmd": "say",
+    "text": "片方の名札には『{name}』。……もう片方の名札は、空欄だった。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_randoseru"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_mem_randoseru",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "…………。"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_score",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "机の中に、破れた楽譜が入っていた。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "score_piece",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "楽譜の切れ端を手に入れた"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_stall3",
+  "commands": [
+   {
+    "cmd": "choice",
+    "prompt": "三番目の個室。ノックする？",
+    "options": [
+     {
+      "text": "ノックする",
+      "then": [
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 300
+       },
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 300
+       },
+       {
+        "cmd": "sfx",
+        "id": "door"
+       },
+       {
+        "cmd": "wait",
+        "ms": 900
+       },
+       {
+        "cmd": "say",
+        "text": "……『はぁい』"
+       },
+       {
+        "cmd": "sanity",
+        "delta": -4
+       },
+       {
+        "cmd": "if",
+        "when": {
+         "notFlag": "stall3_battle"
+        },
+        "then": [
+         {
+          "cmd": "setFlag",
+          "key": "stall3_battle",
+          "value": true
+         },
+         {
+          "cmd": "battle",
+          "encounter": "stall3"
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "text": "やめておく",
+      "then": []
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "back_mirror_shard",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "個室の隅で、鏡の欠片が光った。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "mirror_shard",
+    "qty": 2
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "鏡の欠片 ×2 を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_back_shard",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_notebook",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "机の上に、生徒手帳が落ちている。"
+   },
+   {
+    "cmd": "say",
+    "text": "……湊のものだ。最後のページに、震える字で『13』とだけ書かれている。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "student_notebook",
+    "qty": 1
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_notebook",
+    "value": true
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "このひと、うえに いる。……いちばん、うえ。"
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "back_shelf",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "棚の奥に、何かの残滓が溜まっている。"
+   },
+   {
+    "cmd": "giveItem",
+    "item": "memory_dust",
+    "qty": 3
+   },
+   {
+    "cmd": "sfx",
+    "id": "item"
+   },
+   {
+    "cmd": "toast",
+    "text": "記憶の残滓 ×3 を手に入れた"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "got_back_shelf",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   }
+  ]
+ },
+ {
+  "id": "stairs_enter",
+  "commands": [
+   {
+    "cmd": "if",
+    "when": {
+     "notFlag": "stairs_first"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "どこまでも続く階段。一段のぼるごとに、頭の中で誰かが数を数える。"
+     },
+     {
+      "cmd": "say",
+      "text": "（危険度5『精神侵食』。ここにいるだけで正気度が削られていく）"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "stairs_first",
+      "value": true
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "stairs_count",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "……いち、に、さん……"
+   },
+   {
+    "cmd": "say",
+    "text": "数える声が、自分の声に変わっていく。"
+   },
+   {
+    "cmd": "sanity",
+    "delta": -5
+   },
+   {
+    "cmd": "setFlag",
+    "key": "stairs_counted",
+    "value": true
+   }
+  ]
+ },
+ {
+  "id": "stairs_boss",
+  "commands": [
+   {
+    "cmd": "say",
+    "text": "最上段。そこに、それはいた。"
+   },
+   {
+    "cmd": "shake",
+    "ms": 800,
+    "intensity": 0.006
+   },
+   {
+    "cmd": "say",
+    "speaker": "？？？",
+    "text": "のぼって こい。……のぼって こい。"
+   },
+   {
+    "cmd": "say",
+    "text": "十三の段が背骨のように連なった、巨大な怪異――"
+   },
+   {
+    "cmd": "say",
+    "speaker": "ナナシ",
+    "text": "こわい……でも、いっしょに。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "partySizeGte": 3
+    },
+    "then": [],
+    "else": [
+     {
+      "cmd": "say",
+      "text": "（仲間がまだ少ない。準備を整えてから挑むこともできる）"
+     }
+    ]
+   },
+   {
+    "cmd": "choice",
+    "prompt": "挑む？",
+    "options": [
+     {
+      "text": "挑む",
+      "then": []
+     },
+     {
+      "text": "まだだ（引き返す）",
+      "then": [
+       {
+        "cmd": "movePlayer",
+        "dx": 0,
+        "dy": 2
+       },
+       {
+        "cmd": "end"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "cmd": "battle",
+    "encounter": "boss_juusandan"
+   },
+   {
+    "cmd": "setFlag",
+    "key": "boss_cleared",
+    "value": true
+   },
+   {
+    "cmd": "refreshMap"
+   },
+   {
+    "cmd": "say",
+    "text": "階段が、静かに崩れていく。"
+   },
+   {
+    "cmd": "say",
+    "text": "……その先に、湊が倒れていた。"
+   }
+  ]
+ },
+ {
+  "id": "stairs_minato",
+  "commands": [
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "……う……{name}？"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "ずっと、階段を登ってた。……登っても登っても、終わらなくて。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "なあ……さっき、お前の隣に、ちっちゃい女の子がいなかったか？"
+   },
+   {
+    "cmd": "say",
+    "text": "ナナシの姿は、湊には見えていないようだった。"
+   },
+   {
+    "cmd": "say",
+    "text": "……鼻の奥に、消毒液の匂いがした。"
+   },
+   {
+    "cmd": "memory",
+    "id": "mem_hospital"
+   },
+   {
+    "cmd": "fade",
+    "to": "black",
+    "ms": 900
+   },
+   {
+    "cmd": "setFlag",
+    "key": "ch1_clear",
+    "value": true
+   },
+   {
+    "cmd": "setTime",
+    "hour": 20,
+    "minute": 0
+   },
+   {
+    "cmd": "warp",
+    "map": "school_2f",
+    "x": 25,
+    "y": 3,
+    "facing": "down",
+    "transition": "fade"
+   },
+   {
+    "cmd": "say",
+    "text": "気がつくと、踊り場の鏡の前に立っていた。窓の外は、もう真っ暗だった。"
+   },
+   {
+    "cmd": "say",
+    "speaker": "湊",
+    "text": "……今日のことは、二人だけの秘密な。……いや、三人、か？"
+   },
+   {
+    "cmd": "playerExp",
+    "amount": 60
+   },
+   {
+    "cmd": "autosave"
+   },
+   {
+    "cmd": "title",
+    "text": "Chapter 1 Clear",
+    "sub": "十三段目の先"
+   },
+   {
+    "cmd": "say",
+    "text": "―― Chapter 2「住宅街」へ続く（制作中）――"
+   },
+   {
+    "cmd": "say",
+    "text": "（裏層へは、踊り場の鏡からいつでも行ける。怪異の育成や記憶片集めを続けられる）"
+   }
+  ]
+ }
+]

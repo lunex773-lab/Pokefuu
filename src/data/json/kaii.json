@@ -1,0 +1,201 @@
+[
+  {
+    "id": "nanashi", "no": 1, "name": "ナナシ", "types": ["loneliness"],
+    "origin": "名前を呼ばれることのなかった、誰かの孤独。",
+    "legend": "民間伝承『名無し』— 名を持たぬものは、この世にもあの世にも居場所がないという。",
+    "description": "主人公にだけ懐く、小さな影の子。白い顔には表情がない。胸の名札は、いつも空欄のまま。",
+    "base": { "hp": 22, "atk": 7, "def": 7, "spd": 10, "mnd": 11 },
+    "growth": { "hp": 3.3, "atk": 1.4, "def": 1.4, "spd": 1.8, "mnd": 2.0 },
+    "expYield": 40, "sealRate": 0, "sprite": "kaii_nanashi",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "murmur" }, { "level": 4, "skill": "call_name" },
+      { "level": 7, "skill": "hide" }, { "level": 10, "skill": "nestle" }, { "level": 14, "skill": "far_call" }, { "level": 19, "skill": "empty_room" }
+    ],
+    "drops": [],
+    "resonance": {
+      "prompt": "……わたしの なまえ、しってる？",
+      "options": [
+        { "text": "知らない。でも、一緒に探そう", "value": 2, "reply": "……さがして、くれるの？" },
+        { "text": "名前なんて、どうでもいい", "value": 1, "reply": "……そっか。" },
+        { "text": "近寄るな", "value": 0, "reply": "…………。" }
+      ]
+    }
+  },
+  {
+    "id": "kageboushi", "no": 2, "name": "カゲボウシ", "types": ["fear"],
+    "origin": "夜の廊下をひとりで歩く子どもが抱いた、暗闇への恐怖。",
+    "legend": "影法師／『夜の廊下で自分の影が一つ多い』という学校の怪談。",
+    "description": "つば広の帽子をかぶった、ひょろ長い影。光の届かない場所で、じっと誰かの背中を見ている。",
+    "base": { "hp": 18, "atk": 9, "def": 6, "spd": 12, "mnd": 8 },
+    "growth": { "hp": 2.8, "atk": 1.8, "def": 1.1, "spd": 2.0, "mnd": 1.3 },
+    "expYield": 30, "sealRate": 1.2, "sprite": "kaii_kageboushi",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "behind_you" }, { "level": 5, "skill": "startle" },
+      { "level": 9, "skill": "shadow_stitch" }, { "level": 13, "skill": "dark_hand" }, { "level": 18, "skill": "nightmare" }
+    ],
+    "drops": [ { "item": "cloth", "chance": 0.3 }, { "item": "memory_dust", "chance": 0.25 } ],
+    "resonance": {
+      "prompt": "くらいところは こわい。ずっと、ひとりで 見張ってた。",
+      "options": [
+        { "text": "怖いのは、当たり前だよ", "value": 2, "reply": "……あたりまえ、なんだ。" },
+        { "text": "明かりをつければいい", "value": 1, "reply": "ひかりは、すぐ きえる。" },
+        { "text": "お前のほうが怖い", "value": 0, "reply": "……………。" }
+      ]
+    }
+  },
+  {
+    "id": "hitorioni", "no": 3, "name": "ヒトリオニ", "types": ["loneliness"],
+    "origin": "かくれんぼの途中で忘れられ、誰にも探してもらえなかった子どもの孤独。",
+    "legend": "都市伝説『ひとりかくれんぼ』— 鬼役をぬいぐるみに任せる、一人きりの遊び。",
+    "description": "赤い糸でぐるぐる巻きにされた布人形。バツ印の目で、いまも見つけてくれる誰かを待っている。",
+    "base": { "hp": 20, "atk": 8, "def": 8, "spd": 9, "mnd": 9 },
+    "growth": { "hp": 3.0, "atk": 1.5, "def": 1.5, "spd": 1.4, "mnd": 1.6 },
+    "expYield": 32, "sealRate": 1.1, "sprite": "kaii_hitorioni",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "murmur" }, { "level": 5, "skill": "cold_finger" },
+      { "level": 8, "skill": "hide" }, { "level": 12, "skill": "cling" }, { "level": 16, "skill": "far_call" }
+    ],
+    "drops": [ { "item": "red_thread", "chance": 0.35 }, { "item": "cloth", "chance": 0.3 } ],
+    "resonance": {
+      "prompt": "みつけて。ずっと かくれてるのに、だれも さがしに こない。",
+      "options": [
+        { "text": "……見つけたよ", "value": 2, "reply": "みつかっ……た。" },
+        { "text": "隠れるのをやめれば？", "value": 1, "reply": "やめかたが、わからない。" },
+        { "text": "勝手に隠れてろ", "value": 0, "reply": "…………。" }
+      ]
+    }
+  },
+  {
+    "id": "sanbanme", "no": 4, "name": "サンバンメ", "types": ["obsession"],
+    "origin": "唯一の逃げ場所を失いたくないという、ひとりの生徒の執着。",
+    "legend": "学校の怪談『三番目の個室』— ノックを三回すると、返事がある。",
+    "description": "トイレの個室の扉そのものが怪異になった姿。わずかな隙間から、大きな目が一つのぞいている。",
+    "base": { "hp": 24, "atk": 8, "def": 10, "spd": 7, "mnd": 10 },
+    "growth": { "hp": 3.4, "atk": 1.4, "def": 1.8, "spd": 1.0, "mnd": 1.7 },
+    "expYield": 38, "sealRate": 0.8, "sprite": "kaii_sanbanme",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "peek" }, { "level": 6, "skill": "cling" },
+      { "level": 10, "skill": "never_let_go" }, { "level": 15, "skill": "behind_you" }
+    ],
+    "drops": [ { "item": "mirror_shard", "chance": 0.3 }, { "item": "memory_dust", "chance": 0.3 } ],
+    "resonance": {
+      "prompt": "ここから でたくない。ここだけが、わたしの ばしょ。",
+      "options": [
+        { "text": "無理に出なくていい。また来るよ", "value": 2, "reply": "……また、きて くれるの？" },
+        { "text": "外のほうが楽しいよ", "value": 1, "reply": "そとは、こわい。" },
+        { "text": "気味が悪い", "value": 0, "reply": "（扉が固く閉ざされた）" }
+      ]
+    }
+  },
+  {
+    "id": "kiritsu", "no": 5, "name": "キリツ", "types": ["anger"],
+    "origin": "理不尽に叱られ続けた生徒たちの、行き場のない怒り。",
+    "legend": "学校の怪談『誰もいない教室の号令』— 夜の教室から『起立、礼』の声が聞こえる。",
+    "description": "天板が口のように開く古い学習机。チョークの粉を吐きながら、誰もいない教室に号令をかけ続ける。",
+    "base": { "hp": 22, "atk": 11, "def": 9, "spd": 7, "mnd": 6 },
+    "growth": { "hp": 3.2, "atk": 2.0, "def": 1.6, "spd": 1.1, "mnd": 1.0 },
+    "expYield": 36, "sealRate": 1.0, "sprite": "kaii_kiritsu",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "shout" }, { "level": 6, "skill": "slam" },
+      { "level": 10, "skill": "command" }, { "level": 15, "skill": "rage" }
+    ],
+    "drops": [ { "item": "bell", "chance": 0.25 }, { "item": "memory_dust", "chance": 0.3 } ],
+    "resonance": {
+      "prompt": "キリツ！ レイ！ ……なぜ、だれも したがわない！",
+      "options": [
+        { "text": "ずっと、怒られてきたんだね", "value": 2, "reply": "……おこられて、きた。ずっと。" },
+        { "text": "……座ってもいい？", "value": 1, "reply": "チャクセキ……。" },
+        { "text": "うるさい", "value": 0, "reply": "キリツ！！" }
+      ]
+    }
+  },
+  {
+    "id": "gakubuchi", "no": 6, "name": "ガクブチ", "types": ["envy"],
+    "origin": "いつも『偉い誰か』と比べられてきた心の嫉妬。",
+    "legend": "学校の怪談『音楽室の肖像画』— 夜になると、肖像画の目が動く。",
+    "description": "金の額縁に収まった真っ黒な肖像。白い目だけが、こちらではない誰かをじっと追っている。",
+    "base": { "hp": 19, "atk": 7, "def": 8, "spd": 10, "mnd": 11 },
+    "growth": { "hp": 2.8, "atk": 1.2, "def": 1.4, "spd": 1.6, "mnd": 2.0 },
+    "expYield": 34, "sealRate": 1.0, "sprite": "kaii_gakubuchi",
+    "learnset": [
+      { "level": 1, "skill": "stare" }, { "level": 1, "skill": "compare" }, { "level": 5, "skill": "jealous_eye" },
+      { "level": 9, "skill": "snatch" }, { "level": 14, "skill": "blame" }
+    ],
+    "drops": [ { "item": "mirror_shard", "chance": 0.25 }, { "item": "magatama_shard", "chance": 0.15 } ],
+    "resonance": {
+      "prompt": "みんな あっちばかり みる。ぼくだって、ここに いるのに。",
+      "options": [
+        { "text": "ちゃんと見てるよ", "value": 2, "reply": "……ほんとに？ ぼくを？" },
+        { "text": "比べなくていいんだよ", "value": 1, "reply": "くらべないと、わからない。" },
+        { "text": "見る価値がない", "value": 0, "reply": "（目が、そっと閉じた）" }
+      ]
+    }
+  },
+  {
+    "id": "yonakipiano", "no": 7, "name": "ヨナキピアノ", "types": ["guilt"],
+    "origin": "発表会の日に逃げ出してしまった少女の後悔と罪悪感。",
+    "legend": "学校の怪談『夜中に鳴るピアノ』— 誰もいない音楽室から、同じ曲が繰り返し聞こえる。",
+    "description": "鍵盤が歯のように並ぶ小さなアップライトピアノ。弾き終えられなかった曲を、夜通し弾き続けている。",
+    "base": { "hp": 23, "atk": 8, "def": 9, "spd": 6, "mnd": 12 },
+    "growth": { "hp": 3.3, "atk": 1.3, "def": 1.6, "spd": 0.9, "mnd": 2.1 },
+    "expYield": 44, "sealRate": 0.9, "sprite": "kaii_yonakipiano",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "discord" }, { "level": 7, "skill": "confess" },
+      { "level": 11, "skill": "blame" }, { "level": 16, "skill": "nightmare" }
+    ],
+    "drops": [ { "item": "bell", "chance": 0.3 }, { "item": "memory_dust", "chance": 0.3 } ],
+    "resonance": {
+      "prompt": "あの日、ひけなかった。にげだした。だから ずっと、ずっと ひいてる。",
+      "options": [
+        { "text": "逃げたって、よかったんだ", "value": 2, "reply": "……にげても、よかったの？" },
+        { "text": "もう一回弾けばいい", "value": 1, "reply": "もういっかい……もういっかい……。" },
+        { "text": "下手くそ", "value": 0, "reply": "（不協和音が響いた）" }
+      ]
+    }
+  },
+  {
+    "id": "honemi", "no": 8, "name": "ホネミ", "types": ["despair"],
+    "origin": "本当の自分を見せても理解されなかった、という絶望。",
+    "legend": "学校の怪談『走る人体模型』— 夜の理科室から人体模型が抜け出す。",
+    "description": "半身だけ皮膚のある人体模型。空っぽの眼窩で、自分の中身を見てくれる誰かを探している。",
+    "base": { "hp": 24, "atk": 10, "def": 10, "spd": 6, "mnd": 7 },
+    "growth": { "hp": 3.5, "atk": 1.7, "def": 1.8, "spd": 0.9, "mnd": 1.2 },
+    "expYield": 40, "sealRate": 0.9, "sprite": "kaii_honemi",
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "hollow_eye" }, { "level": 6, "skill": "collapse" },
+      { "level": 11, "skill": "hollow" }, { "level": 16, "skill": "stare" }
+    ],
+    "drops": [ { "item": "magatama_shard", "chance": 0.3 }, { "item": "memory_dust", "chance": 0.3 } ],
+    "resonance": {
+      "prompt": "なかみを みせても、だれも わかって くれない。",
+      "options": [
+        { "text": "わからなくても、そばにいる", "value": 2, "reply": "……そばに。" },
+        { "text": "全部見せなくてもいいよ", "value": 1, "reply": "かくしかたが、わからない。" },
+        { "text": "気持ち悪い", "value": 0, "reply": "（模型はばらばらに崩れた）" }
+      ]
+    }
+  },
+  {
+    "id": "juusandan", "no": 9, "name": "ジュウサンダン", "types": ["fear", "despair"],
+    "origin": "終わりの見えない受験と将来への恐怖。何度登っても報われない、という絶望。",
+    "legend": "学校の怪談『十三階段』— 十二段のはずの階段が、ある時だけ十三段になる。",
+    "description": "十三の段が背骨のように連なった巨大な怪異。頂上の大きな目は、登る者を延々と見下ろしている。",
+    "base": { "hp": 60, "atk": 11, "def": 11, "spd": 8, "mnd": 12 },
+    "growth": { "hp": 7.0, "atk": 1.8, "def": 1.8, "spd": 1.2, "mnd": 2.0 },
+    "expYield": 120, "sealRate": 0, "sprite": "kaii_juusandan", "boss": true,
+    "ai": { "specialEvery": 3, "special": "thirteenth_step", "weights": { "endless_stairs": 2, "look_down": 0.6 } },
+    "learnset": [
+      { "level": 1, "skill": "touch" }, { "level": 1, "skill": "endless_stairs" }, { "level": 1, "skill": "look_down" },
+      { "level": 1, "skill": "thirteenth_step" }, { "level": 20, "skill": "nightmare" }
+    ],
+    "drops": [ { "item": "magatama_shard", "chance": 1 }, { "item": "memory_dust", "chance": 1 } ],
+    "resonance": {
+      "prompt": "のぼっても のぼっても、おわらない。どこまで いけば、ゆるされる？",
+      "options": [
+        { "text": "一段ずつでいい。休んでもいい", "value": 2, "reply": "……やすんで、いいの。" },
+        { "text": "頂上を目指すしかない", "value": 1, "reply": "ちょうじょうは、どこ……？" },
+        { "text": "もう登らなくていい。消えろ", "value": 0, "reply": "（階段は音もなく崩れていった）" }
+      ]
+    }
+  }
+]

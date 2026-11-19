@@ -1,0 +1,324 @@
+{
+ "id": "asagiri_town",
+ "name": "朝霧町",
+ "layer": "reality",
+ "chapter": "ch1",
+ "region": "asagiri",
+ "indoor": false,
+ "dangerLevel": 0,
+ "ambience": "town",
+ "weather": [
+  "clear",
+  "rain",
+  "fog",
+  "blackout"
+ ],
+ "ground": [
+  ".....cccccccccccccccccccccccccccccc.....",
+  ".....cccccccccccccccccccccccccccccc.....",
+  ".....cccccccccccccccccccccccccccccc.....",
+  ".....cccccccccccccccccccccccccccccc.....",
+  ".....cccccccccccccccccccccccccccccc.....",
+  ".....cccccccccccc::::::cccccccccccc.....",
+  ".....cccccccccccc::::::cccccccccccc.....",
+  ".....cccccccccccc::::::cccccccccccc.....",
+  "________________________________________",
+  "==================zzzz==================",
+  "------------------zzzz------------------",
+  "==================zzzz==================",
+  "________________________________________",
+  "..........:.............___.............",
+  "..........:.,.::::::.,..___.............",
+  "..........:..:~~~~~~:...___.............",
+  "..........:..:~~~~~~:...___.............",
+  "..:::_:::.:..:~~~~~~:...______________..",
+  "..........:..:~~~~~~:...___.............",
+  "..........:...::::::,...___.............",
+  "..........:.,...,.......___.............",
+  "..........:.............___.............",
+  "________________________________________",
+  "========================================",
+  "----------------------------------------",
+  "========================================",
+  "________________________________________",
+  "........................................",
+  "........................................",
+  "........................................"
+ ],
+ "objects": [
+  "b       SSSSSSSSSSSSSSSSSSSSSSSS       b",
+  "b       SWSWSWSWSWSWSWSWSWSWSWSW       b",
+  "b       SWSWSWSWSWSWSWSWSWSWSWSW       b",
+  "b       SSSSSSSSSSSddSSSSSSSSSSS       b",
+  "b                 i                    b",
+  "b             P          P             b",
+  "b     T   T                  T   T     b",
+  "fffffffffffffffffG    Gfffffffffffffffff",
+  "    L         L           L         L   ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "         |                     |        ",
+  "y QQQQQQQ   b    L    b     RRRRRRRRR  y",
+  "y QQQQQQQ                   RRRRRRRRR  y",
+  "yyHOHHHOHy T                HOOOHOOOH  y",
+  "yyHHHDHHHy           N i   iHHHHdHHHHV y",
+  "y b     b            N                 y",
+  "y RRRRRRR                    RRRRRRR   y",
+  "y RRRRRRR             T      RRRRRRR   y",
+  "y HOHHHOH                    HOHHHOH   y",
+  "y HHHDHHH   T         b      HHHDHHH   y",
+  "              |                         ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "        L           L           L       ",
+  "      i                                 ",
+  "   T       T     T         T       T    ",
+  "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+ ],
+ "above": [
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "      K   K                  K   K      ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "           A                            ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                      A                 ",
+  "                                        ",
+  "            A                           ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "                                        ",
+  "   A       A     A         A       A    ",
+  "                                        ",
+  "                                        "
+ ],
+ "npcs": [
+  {
+   "id": "granny",
+   "name": "おばあさん",
+   "sprite": "granny",
+   "x": 6,
+   "y": 22,
+   "facing": "down",
+   "script": "town_granny",
+   "when": {
+    "phase": [
+     "morning",
+     "day",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "minato_town",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 20,
+   "y": 8,
+   "facing": "down",
+   "script": "town_minato",
+   "when": {
+    "notFlag": "met_minato",
+    "phase": [
+     "morning",
+     "day"
+    ]
+   }
+  },
+  {
+   "id": "student_town",
+   "name": "女子生徒",
+   "sprite": "student_c",
+   "x": 15,
+   "y": 8,
+   "facing": "right",
+   "script": "town_student",
+   "when": {
+    "phase": [
+     "morning",
+     "evening"
+    ]
+   }
+  },
+  {
+   "id": "streamer",
+   "name": "配信者",
+   "sprite": "streamer",
+   "x": 18,
+   "y": 20,
+   "facing": "up",
+   "script": "town_streamer",
+   "when": {
+    "phase": [
+     "night",
+     "midnight"
+    ]
+   }
+  },
+  {
+   "id": "police",
+   "name": "警察官",
+   "sprite": "police",
+   "x": 25,
+   "y": 12,
+   "facing": "left",
+   "script": "town_police",
+   "when": {
+    "phase": [
+     "night",
+     "midnight"
+    ]
+   },
+   "wander": 2
+  },
+  {
+   "id": "jogger",
+   "name": "近所の人",
+   "sprite": "student_b",
+   "x": 30,
+   "y": 22,
+   "facing": "left",
+   "script": "town_neighbor",
+   "when": {
+    "phase": [
+     "dawn",
+     "morning",
+     "day"
+    ]
+   },
+   "wander": 3
+  }
+ ],
+ "interactables": [
+  {
+   "id": "sign_school",
+   "x": 18,
+   "y": 4,
+   "script": "sign_school"
+  },
+  {
+   "id": "sign_park",
+   "x": 23,
+   "y": 16,
+   "script": "sign_park"
+  },
+  {
+   "id": "sign_conbini",
+   "x": 27,
+   "y": 16,
+   "script": "sign_conbini"
+  },
+  {
+   "id": "sign_town",
+   "x": 6,
+   "y": 27,
+   "script": "sign_town"
+  },
+  {
+   "id": "vending",
+   "x": 37,
+   "y": 16,
+   "script": "vending"
+  },
+  {
+   "id": "granny_door",
+   "x": 5,
+   "y": 21,
+   "script": "locked_door"
+  },
+  {
+   "id": "east_door",
+   "x": 32,
+   "y": 21,
+   "script": "locked_door"
+  },
+  {
+   "id": "pond",
+   "x": 16,
+   "y": 15,
+   "script": "town_pond"
+  },
+  {
+   "id": "pond2",
+   "x": 17,
+   "y": 18,
+   "script": "town_pond"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "midnight_walk",
+   "x": 0,
+   "y": 8,
+   "w": 40,
+   "h": 20,
+   "script": "town_midnight",
+   "when": {
+    "phase": [
+     "midnight"
+    ],
+    "notFlag": "walked_midnight"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "id": "to_home",
+   "x": 5,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "to": "home",
+   "tx": 9,
+   "ty": 6,
+   "facing": "up"
+  },
+  {
+   "id": "to_conbini",
+   "x": 32,
+   "y": 16,
+   "w": 1,
+   "h": 1,
+   "to": "conbini",
+   "tx": 6,
+   "ty": 7,
+   "facing": "up"
+  },
+  {
+   "id": "to_school",
+   "x": 19,
+   "y": 3,
+   "w": 2,
+   "h": 1,
+   "to": "school_1f",
+   "tx": 15,
+   "ty": 12,
+   "facing": "up",
+   "when": {
+    "notPhase": [
+     "night",
+     "midnight"
+    ]
+   },
+   "blockedScript": "school_closed"
+  }
+ ],
+ "onEnter": "town_enter"
+}

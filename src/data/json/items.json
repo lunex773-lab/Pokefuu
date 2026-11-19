@@ -1,0 +1,34 @@
+[
+  { "id": "dango", "name": "お供え団子", "category": "consumable", "icon": "dango", "price": 100, "description": "怪異1体のHPを40回復する。", "use": { "healHp": 40, "usableInField": true, "usableInBattle": true, "target": "kaii" } },
+  { "id": "ohagi", "name": "おはぎ", "category": "consumable", "icon": "ohagi", "description": "怪異1体のHPを全体の70%回復する。", "use": { "healRatio": 0.7, "usableInField": true, "usableInBattle": true, "target": "kaii" } },
+  { "id": "morijio", "name": "盛り塩", "category": "consumable", "icon": "salt", "description": "怪異1体の状態異常を祓う。", "use": { "cureStatus": true, "usableInField": true, "usableInBattle": true, "target": "kaii" } },
+  { "id": "senkou", "name": "お線香", "category": "consumable", "icon": "incense", "price": 300, "description": "消耗した怪異1体を、HP半分で呼び戻す。", "use": { "revive": 0.5, "usableInField": true, "usableInBattle": true, "target": "kaii" } },
+  { "id": "candy", "name": "金平糖", "category": "consumable", "icon": "candy", "price": 120, "description": "怪異1体の気力を5回復する。", "use": { "en": 5, "usableInField": true, "usableInBattle": true, "target": "kaii" } },
+  { "id": "cocoa", "name": "ホットココア", "category": "consumable", "icon": "cocoa", "price": 150, "description": "主人公の正気度を30回復する。", "use": { "sanity": 30, "usableInField": true, "usableInBattle": true, "target": "player" } },
+
+  { "id": "old_ofuda", "name": "古い御札", "category": "seal", "icon": "ofuda_old", "sealPower": 1.2, "description": "『封印神社』の印がある古い御札。弱った怪異を封印する。" },
+  { "id": "ofuda", "name": "御札", "category": "seal", "icon": "ofuda", "sealPower": 1.0, "description": "手作りの御札。弱った怪異を封印する。" },
+  { "id": "strong_ofuda", "name": "強い御札", "category": "seal", "icon": "ofuda_strong", "sealPower": 1.6, "description": "記憶の残滓を漉き込んだ御札。封印しやすい。" },
+
+  { "id": "hanshi", "name": "半紙", "category": "material", "icon": "paper", "price": 50, "description": "書道用の紙。御札の材料。" },
+  { "id": "sumi", "name": "墨", "category": "material", "icon": "ink", "price": 80, "description": "書道用の墨。御札の材料。" },
+  { "id": "salt", "name": "塩", "category": "material", "icon": "salt", "price": 60, "description": "ただの食塩。清めに使える。" },
+  { "id": "cloth", "name": "布切れ", "category": "material", "icon": "cloth", "price": 90, "description": "古びた布。御守りの材料。" },
+  { "id": "memory_dust", "name": "記憶の残滓", "category": "material", "icon": "dust", "description": "鎮まった怪異が残した、誰かの記憶のかけら。" },
+  { "id": "red_thread", "name": "赤い糸", "category": "material", "icon": "thread", "description": "人形に巻かれていた赤い糸。" },
+  { "id": "bell", "name": "鈴", "category": "material", "icon": "bell", "description": "澄んだ音のする小さな鈴。裏層に影響するという。" },
+  { "id": "magatama_shard", "name": "勾玉の欠片", "category": "material", "icon": "magatama", "description": "砕けた勾玉。裏層に影響するという。" },
+  { "id": "mirror_shard", "name": "鏡の欠片", "category": "material", "icon": "mirror", "description": "割れた鏡。のぞくと、知らない景色が映る。" },
+
+  { "id": "smartphone", "name": "スマホのライト", "category": "equipment", "icon": "phone", "description": "スマホのライト。足元くらいは照らせる。", "equip": { "slot": "light", "lightRadius": 72 } },
+  { "id": "flashlight", "name": "懐中電灯", "category": "equipment", "icon": "flashlight", "price": 1500, "description": "明るい懐中電灯。暗闇を広く照らす。", "equip": { "slot": "light", "lightRadius": 120 } },
+  { "id": "juzu", "name": "数珠", "category": "equipment", "icon": "juzu", "description": "主人公の正気度の減りを半分にする。", "equip": { "slot": "charm", "sanityDrainMul": 0.5 } },
+  { "id": "charm_bell", "name": "鈴の御守り", "category": "equipment", "icon": "charm_bell", "description": "怪異に持たせる。素早さ+15%。", "equip": { "slot": "kaiiCharm", "statMul": { "spd": 1.15 } } },
+  { "id": "charm_magatama", "name": "勾玉の御守り", "category": "equipment", "icon": "charm_magatama", "description": "怪異に持たせる。守り+15%。", "equip": { "slot": "kaiiCharm", "statMul": { "def": 1.15 } } },
+  { "id": "charm_mirror", "name": "鏡の御守り", "category": "equipment", "icon": "charm_mirror", "description": "怪異に持たせる。精神+15%。", "equip": { "slot": "kaiiCharm", "statMul": { "mnd": 1.15 } } },
+  { "id": "charm_thread", "name": "赤糸の御守り", "category": "equipment", "icon": "charm_thread", "description": "怪異に持たせる。攻撃+15%。", "equip": { "slot": "kaiiCharm", "statMul": { "atk": 1.15 } } },
+  { "id": "charm_dust", "name": "残滓の御守り", "category": "equipment", "icon": "charm_dust", "description": "怪異に持たせる。HP+15%。", "equip": { "slot": "kaiiCharm", "statMul": { "hp": 1.15 } } },
+
+  { "id": "score_piece", "name": "楽譜の切れ端", "category": "key", "icon": "score", "description": "破れた楽譜。音楽室のピアノの譜面台に合いそうだ。" },
+  { "id": "student_notebook", "name": "湊の生徒手帳", "category": "key", "icon": "notebook", "description": "湊の生徒手帳。最後のページに『13』とだけ書かれている。" }
+]

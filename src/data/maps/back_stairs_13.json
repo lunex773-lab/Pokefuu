@@ -1,0 +1,178 @@
+{
+ "id": "back_stairs_13",
+ "name": "十三階段",
+ "layer": "back",
+ "chapter": "ch1",
+ "region": "sakuragaoka",
+ "indoor": true,
+ "dangerLevel": 5,
+ "fixedPhase": "midnight",
+ "palette": "back",
+ "ambience": "back_stairs",
+ "weather": [
+  "clear",
+  "fog",
+  "redmoon"
+ ],
+ "ground": [
+  "xxxxxxxxxxxxxxx",
+  "xxxxxcccccxxxxx",
+  "xxxxxcccccxxxxx",
+  "xxxxxcccccxxxxx",
+  "xxxxx^^^^^xxxxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^xxxxxxxxx",
+  "xxx^%^xxxxxxxxx",
+  "xxx^^^xxxxxxxxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^%^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxxxxxxxx^^^xxx",
+  "xxxxxxxxx^^^xxx",
+  "xxxxxxxxx^%^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^xxxxxxxxx",
+  "xxx^^^xxxxxxxxx",
+  "xxx^%^xxxxxxxxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxx^^^^^^^^^xxx",
+  "xxxxxx^^^xxxxxx",
+  "xxxxxx^^^xxxxxx",
+  "xxxxxx^^^xxxxxx",
+  "xxxxxxxxxxxxxxx"
+ ],
+ "objects": [
+  "xxxxxxxxxxxxxxx",
+  "xxxxx     xxxxx",
+  "xxxxo     oxxxx",
+  "xxxxx     xxxxx",
+  "xxxxx     xxxxx",
+  "xxx         xxx",
+  "xxx         oxx",
+  "xxx         xxx",
+  "xxx   xxxxxxxxx",
+  "xxx   xxxxxxxxx",
+  "xxx   xxxxxxxxx",
+  "xxx         xxx",
+  "xxo         xxx",
+  "xxx         xxx",
+  "xxxxxxxxx   xxx",
+  "xxxxxxxxx   xxx",
+  "xxxxxxxxx   xxx",
+  "xxx         xxx",
+  "xxx         oxx",
+  "xxx         xxx",
+  "xxx   xxxxxxxxx",
+  "xxx   xxxxxxxxx",
+  "xxx   xxxxxxxxx",
+  "xxx         xxx",
+  "xxo         xxx",
+  "xxx         xxx",
+  "xxxxxx   xxxxxx",
+  "xxxxxx   xxxxxx",
+  "xxxxxx   xxxxxx",
+  "xxxxxxxxxxxxxxx"
+ ],
+ "above": [
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               ",
+  "               "
+ ],
+ "encounters": {
+  "table": "back_stairs",
+  "maxSymbols": 3
+ },
+ "npcs": [
+  {
+   "id": "minato_top",
+   "name": "湊",
+   "sprite": "minato",
+   "x": 7,
+   "y": 1,
+   "facing": "down",
+   "script": "stairs_minato",
+   "when": {
+    "flag": "boss_cleared",
+    "notFlag": "ch1_clear"
+   }
+  }
+ ],
+ "interactables": [
+  {
+   "id": "candle_top",
+   "x": 4,
+   "y": 2,
+   "script": "back_candle"
+  }
+ ],
+ "triggers": [
+  {
+   "id": "count",
+   "x": 3,
+   "y": 17,
+   "w": 9,
+   "h": 1,
+   "script": "stairs_count",
+   "when": {
+    "notFlag": "stairs_counted"
+   }
+  },
+  {
+   "id": "boss",
+   "x": 5,
+   "y": 4,
+   "w": 5,
+   "h": 1,
+   "script": "stairs_boss",
+   "when": {
+    "notFlag": "boss_cleared"
+   }
+  }
+ ],
+ "warps": [
+  {
+   "id": "back_down",
+   "x": 6,
+   "y": 28,
+   "w": 3,
+   "h": 1,
+   "to": "back_school_2f",
+   "tx": 34,
+   "ty": 7,
+   "facing": "up"
+  }
+ ],
+ "onEnter": "stairs_enter"
+}
