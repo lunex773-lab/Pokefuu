@@ -8,16 +8,14 @@ export const GameConfig = {
   height: 1080,
   /** 1タイル = 32×32 ドット */
   tileSize: 32,
-  /** ワールドカメラの拡大率（640×360 ドット相当を表示） */
+  /** ワールドカメラの拡大率（高さ360ドット相当を表示。幅は端末の縦横比で変わる） */
   worldZoom: 3,
   /** 戦闘画面の怪異スプライト拡大率 */
   battleSpriteScale: 4,
   targetFps: 60,
   player: {
-    walkSpeed: 84,
-    dashSpeed: 150,
-    /** 当たり判定（足元） */
-    hitbox: { w: 14, h: 10, offsetY: 10 },
+    walkSpeed: 128,
+    dashSpeed: 240,
   },
   clock: {
     /** 現実1秒 = ゲーム内1分 → 1日24分 */

@@ -171,3 +171,12 @@ export function buildItemIcon(icon: string, category: string): HTMLCanvasElement
   pc.outline('#0c0810');
   return pc.toCanvas();
 }
+
+/** 次に行く場所の目印（▼） */
+export function buildArrowTexture(): HTMLCanvasElement {
+  const pc = new PixelCanvas(9, 7);
+  pc.poly([[0, 0], [8, 0], [4, 5]], '#ffd84a');
+  pc.hline(1, 7, 0, '#fff4b0');
+  pc.outline('#2a1a10');
+  return pc.toCanvas();
+}

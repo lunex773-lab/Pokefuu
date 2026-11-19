@@ -9,6 +9,7 @@ import {
   buildItemIcon,
   buildLightTexture,
   buildRainTexture,
+  buildArrowTexture,
   buildShadowBlob,
 } from './sprites/effects';
 import { buildDistortionSprite, buildKaiiSprite, buildWispSheet } from './sprites/kaii';
@@ -25,6 +26,7 @@ export const TEX = {
   shadow: 'fx_shadow',
   wisp: 'wisp',
   distortion: 'distortion',
+  arrow: 'fx_arrow',
   backdropReality: 'bg_reality',
   backdropBack: 'bg_back',
 } as const;
@@ -101,8 +103,10 @@ export class TextureFactory {
     this.addCanvas(TEX.dot, buildDotTexture('#ffffff', 2));
     this.addCanvas(TEX.ember, buildDotTexture('#ff5070', 2));
     this.addCanvas(TEX.shadow, buildShadowBlob());
-    this.addCanvas(TEX.backdropReality, buildBattleBackdrop(960, 540, false));
-    this.addCanvas(TEX.backdropBack, buildBattleBackdrop(960, 540, true));
+    this.addCanvas(TEX.arrow, buildArrowTexture());
+    const bw = Math.round(this.scene.scale.width / 2);
+    this.addCanvas(TEX.backdropReality, buildBattleBackdrop(bw, 540, false));
+    this.addCanvas(TEX.backdropBack, buildBattleBackdrop(bw, 540, true));
   }
 
   private buildIcons(): void {

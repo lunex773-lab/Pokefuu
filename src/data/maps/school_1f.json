@@ -102,9 +102,9 @@
    "id": "classmate_a",
    "name": "クラスメイト",
    "sprite": "student_a",
-   "x": 4,
-   "y": 5,
-   "facing": "up",
+   "x": 11,
+   "y": 2,
+   "facing": "left",
    "script": "school_classmate_a",
    "when": {
     "notFlag": "ch1_entered_back"
@@ -126,9 +126,9 @@
    "id": "minato_school",
    "name": "湊",
    "sprite": "minato",
-   "x": 9,
-   "y": 4,
-   "facing": "left",
+   "x": 3,
+   "y": 2,
+   "facing": "down",
    "script": "school_minato",
    "when": {
     "notFlag": "class_done"
@@ -154,9 +154,12 @@
  "interactables": [
   {
    "id": "seat",
-   "x": 8,
-   "y": 4,
-   "script": "school_seat"
+   "x": 2,
+   "y": 3,
+   "script": "school_seat",
+   "marker": {
+    "notFlag": "class_done"
+   }
   },
   {
    "id": "blackboard",

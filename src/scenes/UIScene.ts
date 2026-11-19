@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import type { GameContext } from '@/core/GameContext';
+import { UI } from '@/config/Screen';
 import { formatClock } from '@/domain/world/Clock';
 import type { MemoryDef } from '@/domain/types';
 import type { InputAction, InputConsumer } from '@/input/InputManager';
@@ -55,8 +56,8 @@ export class UIScene extends Phaser.Scene {
     // 暗転中でも会話が読めるよう、フェードより手前に表示する
     this.dialogue.setDepth(9100);
     this.choice.setDepth(9200);
-    this.fadeRect = this.add.rectangle(0, 0, 1920, 1080, 0x000000, 1).setOrigin(0).setDepth(9000).setAlpha(0);
-    this.flashRect = this.add.rectangle(0, 0, 1920, 1080, 0xffffff, 0).setOrigin(0).setDepth(9001);
+    this.fadeRect = this.add.rectangle(0, 0, UI.W, UI.H, 0x000000, 1).setOrigin(0).setDepth(9000).setAlpha(0);
+    this.flashRect = this.add.rectangle(0, 0, UI.W, UI.H, 0xffffff, 0).setOrigin(0).setDepth(9001);
     if (this.registry.get('uiStartBlack')) {
       this.fadeRect.setAlpha(1);
       this.registry.set('uiStartBlack', false);
@@ -84,17 +85,20 @@ export class UIScene extends Phaser.Scene {
   private buildHud(): void {
     this.hud = this.add.container(0, 0).setDepth(100);
     const bg = this.add.graphics();
-    drawPanel(bg, 24, 20, 620, 150, { alpha: 0.7, radius: 16 });
-    this.locText = label(this, 50, 34, '', Theme.size.m);
-    this.timeText = label(this, 50, 92, '', Theme.size.s, Theme.color.dim);
-    this.dangerText = label(this, 360, 92, '', Theme.size.s, Theme.color.accent);
+    // セーフエリア（ノッチ）を避けて左右の端に寄せる
+    const L = UI.L;
+    const R = UI.R;
+    drawPanel(bg, L, 20, 620, 150, { alpha: 0.7, radius: 16 });
+    this.locText = label(this, L + 26, 34, '', Theme.size.m);
+    this.timeText = label(this, L + 26, 92, '', Theme.size.s, Theme.color.dim);
+    this.dangerText = label(this, L + 336, 92, '', Theme.size.s, Theme.color.accent);
     const sbg = this.add.graphics();
-    drawPanel(sbg, 1920 - 600, 20, 380, 100, { alpha: 0.7, radius: 16 });
-    this.sanityText = label(this, 1920 - 576, 30, '正気度', Theme.size.xs, Theme.color.dim);
-    this.sanityGauge = new Gauge(this, 1920 - 576, 72, 330, 26, 0x9a80e0);
+    drawPanel(sbg, R - 576, 20, 380, 100, { alpha: 0.7, radius: 16 });
+    this.sanityText = label(this, R - 552, 30, '正気度', Theme.size.xs, Theme.color.dim);
+    this.sanityGauge = new Gauge(this, R - 552, 72, 330, 26, 0x9a80e0);
     this.hud.add([bg, this.locText, this.timeText, this.dangerText, sbg, this.sanityText, this.sanityGauge]);
     // メニューボタン
-    const menu = this.add.container(1920 - 196, 20);
+    const menu = this.add.container(R - 172, 20);
     const mg = this.add.graphics();
     drawPanel(mg, 0, 0, 172, 100, { alpha: 0.8, radius: 16 });
     const menuHit = this.add.zone(0, 0, 172, 100).setOrigin(0).setInteractive();
@@ -139,18 +143,20 @@ export class UIScene extends Phaser.Scene {
       g.fillRect(0, 0, 480, 270);
       this.textures.addCanvas('fx_vignette', c);
     }
-    this.vignette = this.add.image(960, 540, 'fx_vignette').setDisplaySize(1920, 1080).setTint(0x000000).setAlpha(0.15).setDepth(50);
+    this.vignette = this.add.image(UI.CX, UI.H / 2, 'fx_vignette').setDisplaySize(UI.W, UI.H).setTint(0x000000).setAlpha(0.15).setDepth(50);
   }
 
   // ------------------------------------------------------------ 仮想操作
 
   private buildControls(): void {
     this.controls = this.add.container(0, 0).setDepth(200);
+    // 親指が届きやすい位置（セーフエリアの内側・下寄せ）
+    this.stickOrigin = { x: UI.L + 210, y: UI.B - 220 };
     this.stickBase = this.add.circle(this.stickOrigin.x, this.stickOrigin.y, 140, 0xffffff, 0.08).setStrokeStyle(4, 0xffffff, 0.25);
     this.stickKnob = this.add.circle(this.stickOrigin.x, this.stickOrigin.y, 62, 0xffffff, 0.22).setStrokeStyle(3, 0xffffff, 0.45);
     this.controls.add([this.stickBase, this.stickKnob]);
 
-    const stickZone = this.add.zone(0, 180, 860, 900).setOrigin(0).setInteractive();
+    const stickZone = this.add.zone(0, 180, UI.W * 0.45, UI.H - 180).setOrigin(0).setInteractive();
     this.controls.add(stickZone);
     stickZone.on('pointerdown', (p: Phaser.Input.Pointer) => {
       this.ctx.audio.unlock();
@@ -199,9 +205,11 @@ export class UIScene extends Phaser.Scene {
       this.controls.add(c);
       return c;
     };
-    btn(1715, 850, 105, '調べる', 0xe04860, () => this.ctx.input.dispatch('confirm'));
-    btn(1490, 960, 78, 'ダッシュ', 0x6080e0, () => this.ctx.input.setTouchDash(true), () => this.ctx.input.setTouchDash(false));
-    this.sightBtn = btn(1500, 740, 78, '視る', 0xa040e0, () => this.ctx.input.dispatch('sight'));
+    const bx = UI.R - 110;
+    const by = UI.B - 200;
+    btn(bx, by, 105, '調べる', 0xe04860, () => this.ctx.input.dispatch('confirm'));
+    btn(bx - 230, by + 110, 78, 'ダッシュ', 0x6080e0, () => this.ctx.input.setTouchDash(true), () => this.ctx.input.setTouchDash(false));
+    this.sightBtn = btn(bx - 215, by - 110, 78, '視る', 0xa040e0, () => this.ctx.input.dispatch('sight'));
     this.controls.setVisible(isTouchDevice());
   }
 
@@ -226,7 +234,7 @@ export class UIScene extends Phaser.Scene {
 
   toast(text: string, color: string = Theme.color.text): void {
     const y = 200 + this.toasts.length * 86;
-    const c = this.add.container(960, y).setDepth(9400);
+    const c = this.add.container(UI.CX, y).setDepth(9400);
     const t = this.add.text(0, 0, text, textStyle(Theme.size.s, color)).setOrigin(0.5);
     const g = this.add.graphics();
     drawPanel(g, -t.width / 2 - 36, -36, t.width + 72, 72, { alpha: 0.9, radius: 14 });
@@ -265,7 +273,7 @@ export class UIScene extends Phaser.Scene {
   }
 
   titleCard(text: string, sub: string): Promise<void> {
-    const c = this.add.container(960, 480).setDepth(9500).setAlpha(0);
+    const c = this.add.container(UI.CX, 480).setDepth(9500).setAlpha(0);
     const t1 = this.add.text(0, -40, text, textStyle(Theme.size.l, Theme.color.dim)).setOrigin(0.5);
     const t2 = this.add.text(0, 50, sub, textStyle(Theme.size.xxl, Theme.color.text)).setOrigin(0.5);
     const line = this.add.rectangle(0, 130, 600, 3, Theme.hex(Theme.color.accent), 0.8);
@@ -289,7 +297,7 @@ export class UIScene extends Phaser.Scene {
     this.ctx.audio.sfx('resonance');
     const w = 1300;
     const h = 520;
-    const c = this.add.container((1920 - w) / 2, (1080 - h) / 2 - 60).setDepth(9300).setAlpha(0);
+    const c = this.add.container((UI.W - w) / 2, (UI.H - h) / 2 - 60).setDepth(9300).setAlpha(0);
     const g = this.add.graphics();
     drawPanel(g, 0, 0, w, h, { alpha: 0.97, border: Theme.color.borderHi });
     const head = label(this, w / 2, 50, '― 記憶片 ―', Theme.size.s, Theme.color.accentSoft).setOrigin(0.5, 0);
@@ -304,7 +312,7 @@ export class UIScene extends Phaser.Scene {
   /** 決定またはタップを待ってからコンテナを閉じる */
   waitConfirm(c: Phaser.GameObjects.Container): Promise<void> {
     return new Promise((res) => {
-      const zone = this.add.zone(0, 0, 1920, 1080).setOrigin(0).setInteractive().setDepth(c.depth + 1);
+      const zone = this.add.zone(0, 0, UI.W, UI.H).setOrigin(0).setInteractive().setDepth(c.depth + 1);
       let done = false;
       const finish = () => {
         if (done) return;

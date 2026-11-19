@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { UI } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import type { Gender } from '@/domain/types';
 import { charFrame } from '@/render/TextureFactory';
@@ -20,10 +21,10 @@ export class NewGameScene extends Phaser.Scene {
   create(): void {
     this.ctx = this.registry.get('ctx') as GameContext;
     this.cameras.main.setBackgroundColor('#07060c');
-    this.add.text(960, 110, 'あなたは、どんな高校生？', textStyle(Theme.size.l)).setOrigin(0.5);
+    this.add.text(UI.CX, 110, 'あなたは、どんな高校生？', textStyle(Theme.size.l)).setOrigin(0.5);
     const opts: { g: Gender; key: string; label: string; x: number }[] = [
-      { g: 'male', key: 'player_male', label: '男子', x: 700 },
-      { g: 'female', key: 'player_female', label: '女子', x: 1220 },
+      { g: 'male', key: 'player_male', label: '男子', x: UI.CX - 260 },
+      { g: 'female', key: 'player_female', label: '女子', x: UI.CX + 260 },
     ];
     this.frames = [];
     for (const o of opts) {
@@ -36,9 +37,9 @@ export class NewGameScene extends Phaser.Scene {
       img.play(`${o.key}_walk_down`);
     }
     this.pick('male');
-    label(this, 960, 700, '名前', Theme.size.s, Theme.color.dim).setOrigin(0.5);
+    label(this, UI.CX, 700, '名前', Theme.size.s, Theme.color.dim).setOrigin(0.5);
     this.makeInput();
-    new Button(this, 760, 900, 400, 110, 'はじめる', () => this.start(), { size: Theme.size.l, sfx: (id) => this.ctx.audio.sfx(id) });
+    new Button(this, UI.CX - 200, 900, 400, 110, 'はじめる', () => this.start(), { size: Theme.size.l, sfx: (id) => this.ctx.audio.sfx(id) });
     const consumer = {
       onAction: (a: string) => {
         if (a === 'left') this.pick('male');
@@ -61,7 +62,7 @@ export class NewGameScene extends Phaser.Scene {
     this.frames.forEach((f, i) => {
       f.clear();
       const sel = (i === 0 ? 'male' : 'female') === g;
-      drawPanel(f, (i === 0 ? 700 : 1220) - 200, 200, 400, 460, { alpha: sel ? 0.9 : 0.4, border: sel ? Theme.color.borderHi : Theme.color.border, lineWidth: sel ? 6 : 3 });
+      drawPanel(f, (i === 0 ? UI.CX - 260 : UI.CX + 260) - 200, 200, 400, 460, { alpha: sel ? 0.9 : 0.4, border: sel ? Theme.color.borderHi : Theme.color.border, lineWidth: sel ? 6 : 3 });
     });
   }
 

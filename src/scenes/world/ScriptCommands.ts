@@ -1,4 +1,3 @@
-import { GameConfig } from '@/config/GameConfig';
 import { healFull, kaiiStats, MAX_EN } from '@/domain/creature/Kaii';
 import { SCRIPT_COMMANDS } from '@/domain/script/commands';
 import { formatText } from '@/domain/script/format';
@@ -7,7 +6,6 @@ import type { Direction, ScriptCommand, WeatherId } from '@/domain/types';
 import type { WorldScene } from '../WorldScene';
 import { toFacing4 } from './Actors';
 
-const T = GameConfig.tileSize;
 const str = (v: unknown, d = ''): string => (v === undefined || v === null ? d : String(v));
 const num = (v: unknown, d = 0): number => (typeof v === 'number' ? v : d);
 const sleep = (scene: Phaser.Scene, ms: number) => new Promise<void>((r) => scene.time.delayedCall(ms, r));
@@ -65,15 +63,7 @@ export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): voi
   });
   runner.register('facePlayer', (c) => w.player.face(toFacing4(str(c.dir, 'down') as Direction)));
   runner.register('movePlayer', async (c) => {
-    const p = w.player;
-    const tx = p.x + num(c.dx) * T;
-    const ty = p.y + num(c.dy) * T;
-    p.facing = num(c.dy) > 0 ? 'down' : num(c.dy) < 0 ? 'up' : num(c.dx) < 0 ? 'left' : 'right';
-    p.setAnim(true);
-    await new Promise<void>((res) =>
-      w.tweens.add({ targets: p, x: tx, y: ty, duration: 220 * (Math.abs(num(c.dx)) + Math.abs(num(c.dy))), onUpdate: () => p.sync(), onComplete: () => res() }),
-    );
-    p.setAnim(false);
+    await w.player.walkTiles(num(c.dx), num(c.dy));
   });
   runner.register('warp', async (c) => {
     visual();
@@ -83,10 +73,8 @@ export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): voi
   runner.register('warpLocal', async (c) => {
     w.pulseFx(0.8);
     await ui().fade('black', 120);
-    w.player.x = (num(c.x) + 0.5) * T;
-    w.player.y = (num(c.y) + 1) * T - 4;
+    w.player.setTile(num(c.x), num(c.y));
     w.player.face(toFacing4(str(c.facing, 'down') as Direction));
-    w.player.sync();
     w.cameras.main.centerOn(w.player.x, w.player.y);
     await ui().fade('clear', 220);
   });

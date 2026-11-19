@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameConfig } from '@/config/GameConfig';
+import { UI } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import { SaveError } from '@/domain/save/SaveManager';
 import { TEX } from '@/render/TextureFactory';
@@ -22,25 +23,26 @@ export class TitleScene extends Phaser.Scene {
     this.started = false;
     this.cameras.main.setBackgroundColor('#05040a');
     // 赤い月と霧、校舎のシルエット
-    const moon = this.add.image(1500, 240, TEX.light).setScale(3.2).setTint(0xc01830).setAlpha(0.45).setBlendMode(Phaser.BlendModes.ADD);
-    this.add.circle(1500, 240, 90, 0x9a1426, 1);
-    this.add.circle(1470, 220, 90, 0x05040a, 0.25);
+    const mx = UI.W - 420;
+    const moon = this.add.image(mx, 240, TEX.light).setScale(3.2).setTint(0xc01830).setAlpha(0.45).setBlendMode(Phaser.BlendModes.ADD);
+    this.add.circle(mx, 240, 90, 0x9a1426, 1);
+    this.add.circle(mx - 30, 220, 90, 0x05040a, 0.25);
     this.tweens.add({ targets: moon, alpha: 0.25, yoyo: true, repeat: -1, duration: 2600 });
     const g = this.add.graphics();
     g.fillStyle(0x0b0912, 1);
-    g.fillRect(0, 760, 1920, 320);
+    g.fillRect(0, 760, UI.W, 320);
     g.fillRect(260, 560, 900, 220);
     g.fillRect(620, 470, 180, 100);
     g.fillStyle(0x16121e, 1);
     for (let x = 300; x < 1140; x += 80) for (let y = 600; y < 740; y += 70) g.fillRect(x, y, 40, 36);
     g.fillStyle(0xffd890, 0.7);
     g.fillRect(780, 670, 40, 36);
-    const fog = this.add.tileSprite(0, 560, 480, 130, TEX.fog).setOrigin(0).setAlpha(0.45).setScale(4);
+    const fog = this.add.tileSprite(0, 560, Math.ceil(UI.W / 4), 130, TEX.fog).setOrigin(0).setAlpha(0.45).setScale(4);
     this.events.on('update', (_t: number, dt: number) => (fog.tilePositionX += dt * 0.004));
-    this.add.text(960, 250, 'Project Phantom', textStyle(110, '#ece6f2', { stroke: '#2a0a14', strokeThickness: 10 })).setOrigin(0.5);
-    this.add.text(960, 370, '― 裏 層 ―', textStyle(Theme.size.l, Theme.color.accentSoft)).setOrigin(0.5);
-    label(this, 1890, 1050, `v${__APP_VERSION__}（仮）`, Theme.size.xs, Theme.color.dim).setOrigin(1, 1);
-    const hint = label(this, 960, 900, 'タップ／Enter ではじめる', Theme.size.m, Theme.color.text).setOrigin(0.5);
+    this.add.text(UI.CX, 250, 'Project Phantom', textStyle(110, '#ece6f2', { stroke: '#2a0a14', strokeThickness: 10 })).setOrigin(0.5);
+    this.add.text(UI.CX, 370, '― 裏 層 ―', textStyle(Theme.size.l, Theme.color.accentSoft)).setOrigin(0.5);
+    label(this, UI.R, UI.B, `v${__APP_VERSION__}（仮）`, Theme.size.xs, Theme.color.dim).setOrigin(1, 1);
+    const hint = label(this, UI.CX, 900, 'タップ／Enter ではじめる', Theme.size.m, Theme.color.text).setOrigin(0.5);
     this.tweens.add({ targets: hint, alpha: 0.2, yoyo: true, repeat: -1, duration: 900 });
     const start = () => {
       if (this.started) return;
@@ -63,8 +65,8 @@ export class TitleScene extends Phaser.Scene {
     const auto = await this.ctx.save.meta('auto');
     const anySlot = (await Promise.all(GameConfig.save.slots.map((s) => this.ctx.save.meta(s)))).some(Boolean);
     const g = this.add.graphics();
-    drawPanel(g, 660, 560, 600, 400, { alpha: 0.85 });
-    this.list = new ListView(this, 690, 590, 540, 86, 4, (id) => this.ctx.audio.sfx(id));
+    drawPanel(g, UI.CX - 300, 560, 600, 400, { alpha: 0.85 });
+    this.list = new ListView(this, UI.CX - 270, 590, 540, 86, 4, (id) => this.ctx.audio.sfx(id));
     const items: ListItem[] = [
       { text: 'つづきから', sub: auto ? `${auto.location}  Lv${auto.playerLevel}` : undefined, disabled: !auto },
       { text: 'はじめから' },
@@ -117,7 +119,7 @@ export class TitleScene extends Phaser.Scene {
       this.scene.start('World', start);
     } catch (e) {
       const msg = e instanceof SaveError ? e.message : '読み込みに失敗しました';
-      label(this, 960, 1010, msg, Theme.size.s, Theme.color.bad).setOrigin(0.5);
+      label(this, UI.CX, 1010, msg, Theme.size.s, Theme.color.bad).setOrigin(0.5);
     }
   }
 }

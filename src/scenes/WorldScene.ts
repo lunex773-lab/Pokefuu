@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameConfig } from '@/config/GameConfig';
+import { Screen } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import type { GameSession } from '@/core/GameSession';
 import { weightedPick, randInt } from '@/core/Rng';
@@ -9,7 +10,7 @@ import type { Direction, EncounterEntry, MapDef, MapObject, MapWarp, TimePhase }
 import type { InputAction, InputConsumer } from '@/input/InputManager';
 import { DistortPipeline } from '@/render/fx/DistortPipeline';
 import { TEX } from '@/render/TextureFactory';
-import { KaiiSymbol, Npc, Player, dirVector, toFacing4, type Blocker } from './world/Actors';
+import { KaiiSymbol, Npc, Player, dirVector, toFacing4 } from './world/Actors';
 import { Lighting, SunShadows, WeatherFx } from './world/Lighting';
 import { MapView } from './world/MapView';
 import { registerScriptCommands } from './world/ScriptCommands';
@@ -170,8 +171,8 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     const s = this.session;
     const atlas = this.ctx.tileAtlas!;
     this.map = new MapView(this, def, this.ctx.reg, atlas, s.check);
-    const viewW = GameConfig.width / GameConfig.worldZoom;
-    const viewH = GameConfig.height / GameConfig.worldZoom;
+    const viewW = Screen.width / GameConfig.worldZoom;
+    const viewH = Screen.height / GameConfig.worldZoom;
     // 水面反射用マスク
     if (this.map.water.length) {
       this.waterMaskGfx = this.make.graphics({}, false);
@@ -180,7 +181,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       this.waterMask = this.waterMaskGfx.createGeometryMask();
     }
     const spriteKey = s.state.player.gender === 'female' ? 'player_female' : 'player_male';
-    this.player = new Player(this, spriteKey, (tx + 0.5) * T, (ty + 1) * T - 4, this.waterMask);
+    this.player = new Player(this, spriteKey, tx, ty, this.waterMask);
     this.player.face(toFacing4(facing));
     this.player.onStep = (x, y) => this.ctx.audio.sfx(`step_${this.map!.stepKind(x, y)}`, 0.8);
     this.spawnNpcs();
@@ -202,8 +203,8 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     cam.centerOn(this.player.x, this.player.y);
     this.insideTriggers.clear();
     // 到着地点にあるトリガーは発火させない
-    for (const tr of def.triggers ?? []) if (this.pointIn(tr, this.player.x, this.player.y - 4)) this.insideTriggers.add(tr.id);
-    for (const w of def.warps ?? []) if (this.pointIn(w, this.player.x, this.player.y - 4)) this.insideTriggers.add(`warp:${w.id}`);
+    for (const tr of def.triggers ?? []) if (this.tileIn(tr, tx, ty)) this.insideTriggers.add(tr.id);
+    for (const w of def.warps ?? []) if (this.tileIn(w, tx, ty)) this.insideTriggers.add(`warp:${w.id}`);
     this.symbolRespawn = 1500;
     this.graceMs = 1500;
   }
@@ -269,6 +270,13 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     this.markers = [];
     if (!this.mapDef) return;
     const s = this.session;
+    // 次に行く場所の目印（▼）
+    for (const o of this.mapDef.interactables ?? []) {
+      if (!o.marker || !s.check(o.marker) || !s.check(o.when)) continue;
+      const m = this.add.image((o.x + 0.5) * T, o.y * T - 4, TEX.arrow).setDepth(9650);
+      this.tweens.add({ targets: m, y: m.y - 5, yoyo: true, repeat: -1, duration: 450, ease: 'Sine.inOut' });
+      this.markers.push(m);
+    }
     for (const o of this.mapDef.interactables ?? []) {
       if (!o.hidden || !this.isRevealed(o) || !s.check(o.when)) continue;
       const m = this.add.image((o.x + 0.5) * T, (o.y + 0.5) * T, TEX.distortion).setDepth(9600).setBlendMode(Phaser.BlendModes.ADD).setScale(0.6);
@@ -337,13 +345,15 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     const frozen = this.busy || this.runner.running;
     if (!frozen) s.clock.update(dt);
 
-    const blockers: Blocker[] = [...this.npcs.values()].map((n) => n.blocker());
-    if (!frozen) this.player.move(dt, input.move.x, input.move.y, input.dash, this.map, blockers);
-    else this.player.setAnim(false);
-    this.player.sync();
+    // マス目移動（上下左右のみ）。NPCのいるマスと壁には入れない
+    const map = this.map;
+    const npcList = [...this.npcs.values()];
+    const playerCanEnter = (x: number, y: number) => !map.isSolidTile(x, y) && !npcList.some((n) => n.occupies(x, y));
+    if (!frozen) this.player.update(dt, input.dir4, input.dash, playerCanEnter);
+    else this.player.update(dt, null, false, playerCanEnter);
     this.player.updateReflection(this.map, !!this.waterMask);
     for (const n of this.npcs.values()) {
-      n.update(frozen ? 0 : dt, this.map, this.player);
+      n.update(frozen ? 0 : dt, (x, y) => !map.isSolidTile(x, y) && !this.player.occupies(x, y) && !npcList.some((o) => o !== n && o.occupies(x, y)));
       n.updateReflection(this.map, !!this.waterMask);
     }
     this.map.update(dt);
@@ -544,16 +554,14 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
 
   private async interact(): Promise<void> {
     const def = this.mapDef!;
+    if (this.player.stepping) return;
+    // 向いている方向の隣のマスを調べる
     const v = dirVector(this.player.facing);
-    const fx = this.player.x + v.x * 22;
-    const fy = this.player.y - 6 + v.y * 22;
-    const tx = Math.floor(fx / T);
-    const ty = Math.floor(fy / T);
+    const tx = this.player.tx + v.x;
+    const ty = this.player.ty + v.y;
     const s = this.session;
     for (const n of this.npcs.values()) {
-      const t = n.tile;
-      const near = Math.hypot(n.x - fx, n.y - 8 - fy) < 20;
-      if ((t.x === tx && t.y === ty) || near) {
+      if (n.occupies(tx, ty)) {
         if (!n.def.script) return;
         n.faceTowards(this.player.x, this.player.y);
         await this.runScript(n.def.script);
@@ -608,18 +616,19 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
 
   // ------------------------------------------------------------ トリガー・ワープ
 
-  private pointIn(r: { x: number; y: number; w: number; h: number }, px: number, py: number): boolean {
-    return px >= r.x * T && px < (r.x + r.w) * T && py >= r.y * T && py < (r.y + r.h) * T;
+  private tileIn(r: { x: number; y: number; w: number; h: number }, tx: number, ty: number): boolean {
+    return tx >= r.x && tx < r.x + r.w && ty >= r.y && ty < r.y + r.h;
   }
 
   private checkZones(): void {
     const def = this.mapDef!;
     const s = this.session;
-    const px = this.player.x;
-    const py = this.player.y - 4;
+    // 判定は「到着したマス」で行う（移動途中のマスでは発動しない）
+    const px = this.player.tx;
+    const py = this.player.ty;
     for (const w of def.warps ?? []) {
       const key = `warp:${w.id}`;
-      const inside = this.pointIn(w, px, py);
+      const inside = this.tileIn(w, px, py);
       if (!inside) {
         this.insideTriggers.delete(key);
         continue;
@@ -636,7 +645,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       return;
     }
     for (const tr of def.triggers ?? []) {
-      const inside = this.pointIn(tr, px, py);
+      const inside = this.tileIn(tr, px, py);
       if (!inside) {
         this.insideTriggers.delete(tr.id);
         continue;
@@ -652,11 +661,9 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     }
   }
 
+  /** 通れないワープに入ったら、1つ前のマスへ戻す */
   private pushBack(): void {
-    const v = dirVector(this.player.facing);
-    this.player.y -= v.y * 10;
-    this.player.x -= v.x * 10;
-    this.player.sync();
+    this.player.setTile(this.player.prevTx, this.player.prevTy);
   }
 
   // ------------------------------------------------------------ スクリプト
@@ -681,7 +688,7 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     if (!this.ctx.hasSession || !this.mapDef) return;
     const p = this.player;
     const s = this.session;
-    s.state.player.position = { mapId: this.mapDef.id, x: Math.floor(p.x / T), y: Math.floor((p.y - 4) / T), facing: p.facing };
+    s.state.player.position = { mapId: this.mapDef.id, x: p.tx, y: p.ty, facing: p.facing };
     try {
       await this.ctx.save.save('auto', s.state, this.mapDef.name);
       this.ctx.bus.emit('save:completed', { slot: 'auto', auto: true });
@@ -695,8 +702,8 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     if (!this.mapDef) return;
     this.session.state.player.position = {
       mapId: this.mapDef.id,
-      x: Math.floor(this.player.x / T),
-      y: Math.floor((this.player.y - 4) / T),
+      x: this.player.tx,
+      y: this.player.ty,
       facing: this.player.facing,
     };
   }

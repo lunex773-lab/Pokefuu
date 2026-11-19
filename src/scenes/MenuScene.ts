@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameConfig } from '@/config/GameConfig';
+import { UI } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import type { GameSession } from '@/core/GameSession';
 import { expToNext, kaiiStats, MAX_EN, playerExpToNext, swapSkill } from '@/domain/creature/Kaii';
@@ -36,6 +37,8 @@ export class MenuScene extends Phaser.Scene {
   private detail!: Phaser.GameObjects.Text;
   private detailImg!: Phaser.GameObjects.Image;
   private money!: Phaser.GameObjects.Text;
+  /** 画面幅に合わせた3列レイアウト */
+  private lay = { tabsX: 30, mainX: 450, mainW: 760, detailX: 1230, detailW: 660, bottom: 1050 };
 
   constructor() {
     super('Menu');
@@ -49,17 +52,24 @@ export class MenuScene extends Phaser.Scene {
     this.ctx = this.registry.get('ctx') as GameContext;
     this.data_ = data;
     const sfx = (id: string) => this.ctx.audio.sfx(id);
-    this.add.rectangle(0, 0, 1920, 1080, 0x05040a, 0.88).setOrigin(0);
+    const detailW = 660;
+    const detailX = UI.R - detailW;
+    const tabsX = UI.L;
+    const mainX = tabsX + 420;
+    this.lay = { tabsX, mainX, mainW: detailX - 20 - mainX, detailX, detailW, bottom: UI.B };
+    const L = this.lay;
+    const panelH = L.bottom - 30;
+    this.add.rectangle(0, 0, UI.W, UI.H, 0x05040a, 0.88).setOrigin(0);
     const g = this.add.graphics();
-    drawPanel(g, 30, 30, 400, 1020);
-    drawPanel(g, 450, 30, 760, 1020);
-    drawPanel(g, 1230, 30, 660, 1020);
-    this.title = label(this, 480, 50, '', Theme.size.m, Theme.color.accentSoft);
-    this.money = label(this, 1180, 58, '', Theme.size.s, Theme.color.gold).setOrigin(1, 0);
-    this.detailImg = this.add.image(1560, 240, '__DEFAULT').setVisible(false);
-    this.detail = label(this, 1260, 60, '', Theme.size.s, Theme.color.text);
-    this.tabs = new ListView(this, 50, 60, 360, 86, 11, sfx);
-    this.main = new ListView(this, 470, 130, 720, 98, 9, sfx);
+    drawPanel(g, L.tabsX, 30, 400, panelH);
+    drawPanel(g, L.mainX, 30, L.mainW, panelH);
+    drawPanel(g, L.detailX, 30, L.detailW, panelH);
+    this.title = label(this, L.mainX + 30, 50, '', Theme.size.m, Theme.color.accentSoft);
+    this.money = label(this, L.mainX + L.mainW - 30, 58, '', Theme.size.s, Theme.color.gold).setOrigin(1, 0);
+    this.detailImg = this.add.image(L.detailX + 330, 240, '__DEFAULT').setVisible(false);
+    this.detail = label(this, L.detailX + 30, 60, '', Theme.size.s, Theme.color.text);
+    this.tabs = new ListView(this, L.tabsX + 20, 60, 360, 86, Math.min(11, Math.floor((panelH - 40) / 86)), sfx);
+    this.main = new ListView(this, L.mainX + 20, 130, L.mainW - 40, 98, Math.floor((L.bottom - 150) / 98), sfx);
     this.subBg = this.add.graphics().setDepth(20);
     this.sub = new ListView(this, 0, 0, 560, 86, 7, sfx);
     this.sub.setDepth(21).setVisible(false);
@@ -128,9 +138,9 @@ export class MenuScene extends Phaser.Scene {
     this.detailImg.setVisible(!!img);
     if (img) {
       this.detailImg.setTexture(img.key).setScale(img.scale);
-      this.detail.setPosition(1260, 420);
-    } else this.detail.setPosition(1260, 60);
-    this.detail.setText(wrapText(text, Theme.size.s, 600));
+      this.detail.setPosition(this.lay.detailX + 30, 420);
+    } else this.detail.setPosition(this.lay.detailX + 30, 60);
+    this.detail.setText(wrapText(text, Theme.size.s, this.lay.detailW - 60));
   }
 
   private setMain(title: string, items: ListItem[], onConfirm?: (i: number) => void, onSelect?: (i: number) => void, keep = false): void {
@@ -145,7 +155,7 @@ export class MenuScene extends Phaser.Scene {
 
   /** 小さなポップアップ選択 */
   private popup(title: string, items: ListItem[]): Promise<number> {
-    const x = 640;
+    const x = this.lay.mainX + 190;
     const y = 300;
     const rows = Math.min(7, items.length);
     this.subBg.clear();

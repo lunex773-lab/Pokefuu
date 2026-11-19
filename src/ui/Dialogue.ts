@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import type { InputAction, InputConsumer, InputManager } from '@/input/InputManager';
+import { UI } from '@/config/Screen';
 import { textStyle, Theme } from './Theme';
 import { drawPanel, label, ListView, type Sfx } from './Widgets';
 
@@ -51,11 +52,11 @@ export class DialogueBox extends Phaser.GameObjects.Container implements InputCo
     scene: Phaser.Scene,
     private readonly inputMgr: InputManager,
     private readonly sfx: Sfx,
-    readonly boxW = 1720,
+    readonly boxW = Math.min(1760, UI.R - UI.L),
     readonly boxH = 250,
   ) {
-    super(scene, (1920 - boxW) / 2, 1080 - boxH - 40);
-    this.blocker = scene.add.zone(-this.x, -this.y, 1920, 1080).setOrigin(0).setInteractive();
+    super(scene, (UI.W - boxW) / 2, UI.B - boxH);
+    this.blocker = scene.add.zone(-this.x, -this.y, UI.W, UI.H).setOrigin(0).setInteractive();
     this.blocker.on('pointerup', () => this.advance());
     this.bg = scene.add.graphics();
     drawPanel(this.bg, 0, 0, boxW, boxH, { alpha: 0.94 });
@@ -174,8 +175,8 @@ export class ChoiceBox extends Phaser.GameObjects.Container {
     const rows = Math.min(5, options.length);
     const promptH = prompt ? 110 : 0;
     const h = rows * 92 + 50 + promptH;
-    const x = (1920 - w) / 2;
-    const y = Math.max(60, 1080 - 330 - h);
+    const x = (UI.W - w) / 2;
+    const y = Math.max(60, UI.B - 290 - h);
     this.bg.clear();
     drawPanel(this.bg, x, y, w, h, { alpha: 0.96, border: Theme.color.borderHi });
     this.promptText.setText(prompt ? wrapText(prompt, Theme.size.m, w - 80) : '').setPosition(x + 40, y + 30);

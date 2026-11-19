@@ -93,82 +93,162 @@ export class Character {
   }
 }
 
-export interface Blocker {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
+/** タイル座標 → 足元のピクセル座標 */
+export const tileToFeet = (tx: number, ty: number): { x: number; y: number } => ({ x: (tx + 0.5) * T, y: (ty + 1) * T - 4 });
 
-const overlaps = (a: Blocker, b: Blocker) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+const vecToFacing = (dx: number, dy: number): Facing4 => (dx < 0 ? 'left' : dx > 0 ? 'right' : dy < 0 ? 'up' : 'down');
 
-/** 主人公：8方向移動と当たり判定 */
+/**
+ * 主人公：BW2風のマス目移動（上下左右の4方向のみ）。
+ * 1マスずつ進み、移動中は次のマスを予約する。短く押すと、その場で向きだけ変える。
+ */
 export class Player extends Character {
-  private stepAcc = 0;
+  tx = 0;
+  ty = 0;
+  /** 直前にいたマス（通れないワープからの押し戻し用） */
+  prevTx = 0;
+  prevTy = 0;
+  private step?: { fx: number; fy: number; tx: number; ty: number; t: number };
+  private turnTimer = 0;
+  /** マスに到着した瞬間だけ true（トリガー判定用） */
+  arrived = false;
   onStep?: (px: number, py: number) => void;
 
-  hitbox(x = this.x, y = this.y): Blocker {
-    const hb = GameConfig.player.hitbox;
-    return { x: x - hb.w / 2, y: y - hb.h, w: hb.w, h: hb.h };
+  constructor(scene: Phaser.Scene, key: string, tx: number, ty: number, mask?: Phaser.Display.Masks.GeometryMask) {
+    const p = tileToFeet(tx, ty);
+    super(scene, key, p.x, p.y, mask);
+    this.setTile(tx, ty);
   }
 
-  move(dt: number, vx: number, vy: number, dash: boolean, map: MapView, blockers: Blocker[]): void {
-    const speed = dash ? GameConfig.player.dashSpeed : GameConfig.player.walkSpeed;
-    const moving = vx !== 0 || vy !== 0;
-    if (moving) {
-      if (Math.abs(vx) > 0.01) this.facing = vx < 0 ? 'left' : 'right';
-      else this.facing = vy < 0 ? 'up' : 'down';
-    }
-    const s = (speed * dt) / 1000;
-    const blocked = (b: Blocker) => map.hitsWall(b.x, b.y, b.w, b.h) || blockers.some((o) => overlaps(b, o));
-    let moved = 0;
-    // 軸ごとに判定（壁沿いに滑る）
-    if (vx !== 0) {
-      const nx = this.x + vx * s;
-      if (!blocked(this.hitbox(nx, this.y))) {
-        moved += Math.abs(nx - this.x);
-        this.x = nx;
-      } else {
-        // 角に引っかからないよう、少しだけ縦にずらしてみる
-        for (const nudge of [-3, 3]) {
-          if (vy === 0 && !blocked(this.hitbox(nx, this.y + nudge)) && !blocked(this.hitbox(this.x, this.y + nudge))) {
-            this.y += Math.sign(nudge) * Math.min(Math.abs(nudge), s);
-            break;
-          }
-        }
-      }
-    }
-    if (vy !== 0) {
-      const ny = this.y + vy * s;
-      if (!blocked(this.hitbox(this.x, ny))) {
-        moved += Math.abs(ny - this.y);
-        this.y = ny;
-      } else {
-        for (const nudge of [-3, 3]) {
-          if (vx === 0 && !blocked(this.hitbox(this.x + nudge, ny)) && !blocked(this.hitbox(this.x + nudge, this.y))) {
-            this.x += Math.sign(nudge) * Math.min(Math.abs(nudge), s);
-            break;
-          }
-        }
-      }
-    }
-    this.setAnim(moving, dash ? 1.7 : 1);
-    if (moving && moved > 0) {
-      this.stepAcc += moved;
-      if (this.stepAcc > (dash ? 22 : 18)) {
-        this.stepAcc = 0;
-        this.onStep?.(this.x, this.y);
-      }
-    }
+  get stepping(): boolean {
+    return !!this.step;
+  }
+
+  /** 移動先として予約しているマス（移動中のみ） */
+  get targetTile(): { x: number; y: number } | null {
+    return this.step ? { x: this.step.tx, y: this.step.ty } : null;
+  }
+
+  setTile(tx: number, ty: number): void {
+    this.step = undefined;
+    this.prevTx = this.tx;
+    this.prevTy = this.ty;
+    this.tx = tx;
+    this.ty = ty;
+    const p = tileToFeet(tx, ty);
+    this.x = p.x;
+    this.y = p.y;
+    this.setAnim(false);
     this.sync();
+  }
+
+  occupies(tx: number, ty: number): boolean {
+    return (this.tx === tx && this.ty === ty) || (!!this.step && this.step.tx === tx && this.step.ty === ty);
+  }
+
+  update(dt: number, dir: { x: number; y: number } | null, dash: boolean, canEnter: (tx: number, ty: number) => boolean): void {
+    this.arrived = false;
+    const speed = dash ? GameConfig.player.dashSpeed : GameConfig.player.walkSpeed;
+    let budget = (speed * dt) / 1000;
+    // 移動中：目標マスまで進む。余った分は次のマスへ持ち越して、歩きを滑らかにする
+    while (budget > 0) {
+      if (!this.step) {
+        if (!dir) break;
+        const want = vecToFacing(dir.x, dir.y);
+        if (!this.moving && want !== this.facing) {
+          // 止まっている状態で別の方向を押したら、まず向きだけ変える
+          this.face(want);
+          this.turnTimer = 90;
+          break;
+        }
+        if (this.turnTimer > 0) {
+          this.turnTimer -= dt;
+          break;
+        }
+        this.facing = want;
+        const nx = this.tx + dir.x;
+        const ny = this.ty + dir.y;
+        if (!canEnter(nx, ny)) {
+          this.setAnim(false);
+          this.sprite.setFrame(charFrame(this.facing));
+          break;
+        }
+        this.step = { fx: this.x, fy: this.y, tx: nx, ty: ny, t: 0 };
+      }
+      const target = tileToFeet(this.step.tx, this.step.ty);
+      const dist = Math.hypot(target.x - this.x, target.y - this.y);
+      this.setAnim(true, dash ? 1.7 : 1);
+      if (budget >= dist) {
+        budget -= dist;
+        this.prevTx = this.tx;
+        this.prevTy = this.ty;
+        this.tx = this.step.tx;
+        this.ty = this.step.ty;
+        this.x = target.x;
+        this.y = target.y;
+        this.step = undefined;
+        this.arrived = true;
+        this.onStep?.(this.x, this.y);
+        // 方向キーを離していたらここで止まる（マスの中央で止まる）
+        if (!dir) break;
+        // 到着したマスでトリガーを判定させるため、ここで1フレーム区切る
+        break;
+      }
+      this.x += ((target.x - this.x) / dist) * budget;
+      this.y += ((target.y - this.y) / dist) * budget;
+      budget = 0;
+    }
+    if (!this.step && !dir) this.setAnim(false);
+    if (!dir) this.turnTimer = 0;
+    this.sync();
+  }
+
+  /** スクリプトからの移動（マス単位・当たり判定なし） */
+  walkTiles(dx: number, dy: number, speed = 110): Promise<void> {
+    const path: { x: number; y: number }[] = [];
+    let cx = this.tx;
+    let cy = this.ty;
+    const sx = Math.sign(dx);
+    const sy = Math.sign(dy);
+    for (let i = 0; i < Math.abs(dx); i++) path.push({ x: (cx += sx), y: cy });
+    for (let i = 0; i < Math.abs(dy); i++) path.push({ x: cx, y: (cy += sy) });
+    return new Promise((res) => {
+      const next = () => {
+        const n = path.shift();
+        if (!n) {
+          this.setTile(cx, cy);
+          res();
+          return;
+        }
+        this.facing = vecToFacing(n.x - this.tx, n.y - this.ty);
+        this.setAnim(true);
+        const p = tileToFeet(n.x, n.y);
+        this.scene.tweens.add({
+          targets: this,
+          x: p.x,
+          y: p.y,
+          duration: (T / speed) * 1000,
+          onUpdate: () => this.sync(),
+          onComplete: () => {
+            this.tx = n.x;
+            this.ty = n.y;
+            next();
+          },
+        });
+      };
+      next();
+    });
   }
 }
 
-/** NPC：条件で出現し、ゆっくり歩き回る */
+/** NPC：条件で出現し、マス目に沿ってゆっくり歩き回る */
 export class Npc extends Character {
-  private home: { x: number; y: number };
+  tx: number;
+  ty: number;
+  private homeTx: number;
+  private homeTy: number;
   private wanderTimer = 1000 + Math.random() * 2000;
-  private target?: { x: number; y: number };
+  private step?: { tx: number; ty: number };
   busy = false;
 
   constructor(
@@ -176,86 +256,99 @@ export class Npc extends Character {
     readonly def: MapNpc,
     mask?: Phaser.Display.Masks.GeometryMask,
   ) {
-    super(scene, def.sprite, (def.x + 0.5) * T, (def.y + 1) * T - 4, mask);
-    this.home = { x: this.x, y: this.y };
+    const p = tileToFeet(def.x, def.y);
+    super(scene, def.sprite, p.x, p.y, mask);
+    this.tx = def.x;
+    this.ty = def.y;
+    this.homeTx = def.x;
+    this.homeTy = def.y;
     this.face(toFacing4(def.facing ?? 'down'));
   }
 
   get tile(): { x: number; y: number } {
-    return { x: Math.floor(this.x / T), y: Math.floor((this.y - 4) / T) };
+    return { x: this.tx, y: this.ty };
   }
 
-  blocker(): Blocker {
-    return { x: this.x - 10, y: this.y - 12, w: 20, h: 12 };
+  occupies(tx: number, ty: number): boolean {
+    return (this.tx === tx && this.ty === ty) || (!!this.step && this.step.tx === tx && this.step.ty === ty);
   }
 
-  update(dt: number, map: MapView, player: Player): void {
+  update(dt: number, canEnter: (tx: number, ty: number) => boolean): void {
     if (this.busy || !this.def.wander) {
       this.sync();
       return;
     }
-    if (this.target) {
-      const dx = this.target.x - this.x;
-      const dy = this.target.y - this.y;
-      const d = Math.hypot(dx, dy);
-      const step = (40 * dt) / 1000;
-      const nb = { x: this.x + (dx / d) * step - 10, y: this.y + (dy / d) * step - 12, w: 20, h: 12 };
-      const hitsPlayer = overlaps(nb, player.hitbox());
-      if (d < step || map.hitsWall(nb.x, nb.y, nb.w, nb.h) || hitsPlayer) {
-        this.target = undefined;
+    if (this.step) {
+      const target = tileToFeet(this.step.tx, this.step.ty);
+      const d = Math.hypot(target.x - this.x, target.y - this.y);
+      const s = (48 * dt) / 1000;
+      if (d <= s) {
+        this.x = target.x;
+        this.y = target.y;
+        this.tx = this.step.tx;
+        this.ty = this.step.ty;
+        this.step = undefined;
         this.setAnim(false);
       } else {
-        this.x += (dx / d) * step;
-        this.y += (dy / d) * step;
-        this.facing = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : dy < 0 ? 'up' : 'down';
-        this.setAnim(true);
+        this.x += ((target.x - this.x) / d) * s;
+        this.y += ((target.y - this.y) / d) * s;
       }
     } else {
       this.wanderTimer -= dt;
       if (this.wanderTimer <= 0) {
         this.wanderTimer = 1500 + Math.random() * 3000;
-        const r = (this.def.wander ?? 0) * T;
         const dirs = [
           [1, 0],
           [-1, 0],
           [0, 1],
           [0, -1],
         ];
-        const [ax, ay] = dirs[Math.floor(Math.random() * 4)];
-        const tx = this.home.x + ax * Math.random() * r;
-        const ty = this.home.y + ay * Math.random() * r;
-        this.target = { x: tx, y: ty };
+        const [dx, dy] = dirs[Math.floor(Math.random() * 4)];
+        const nx = this.tx + dx;
+        const ny = this.ty + dy;
+        const r = this.def.wander ?? 0;
+        this.facing = vecToFacing(dx, dy);
+        if (Math.abs(nx - this.homeTx) <= r && Math.abs(ny - this.homeTy) <= r && canEnter(nx, ny)) {
+          this.step = { tx: nx, ty: ny };
+          this.setAnim(true);
+        } else this.sprite.setFrame(charFrame(this.facing));
       }
     }
     this.sync();
   }
 
-  /** スクリプトからの移動（タイル単位） */
+  /** スクリプトからの移動（マス単位） */
   walkBy(dx: number, dy: number, speed = 70): Promise<void> {
     this.busy = true;
     const steps: { x: number; y: number; f: Facing4 }[] = [];
-    if (dx) steps.push({ x: this.x + dx * T, y: this.y, f: dx < 0 ? 'left' : 'right' });
-    if (dy) steps.push({ x: this.x + dx * T, y: this.y + dy * T, f: dy < 0 ? 'up' : 'down' });
+    if (dx) steps.push({ x: this.tx + dx, y: this.ty, f: dx < 0 ? 'left' : 'right' });
+    if (dy) steps.push({ x: this.tx + dx, y: this.ty + dy, f: dy < 0 ? 'up' : 'down' });
     return new Promise((res) => {
       const next = () => {
         const s = steps.shift();
         if (!s) {
           this.setAnim(false);
-          this.home = { x: this.x, y: this.y };
+          this.homeTx = this.tx;
+          this.homeTy = this.ty;
           this.busy = false;
           res();
           return;
         }
         this.facing = s.f;
         this.setAnim(true);
-        const dist = Math.hypot(s.x - this.x, s.y - this.y);
+        const p = tileToFeet(s.x, s.y);
+        const dist = Math.hypot(p.x - this.x, p.y - this.y);
         this.scene.tweens.add({
           targets: this,
-          x: s.x,
-          y: s.y,
+          x: p.x,
+          y: p.y,
           duration: (dist / speed) * 1000,
           onUpdate: () => this.sync(),
-          onComplete: next,
+          onComplete: () => {
+            this.tx = s.x;
+            this.ty = s.y;
+            next();
+          },
         });
       };
       next();

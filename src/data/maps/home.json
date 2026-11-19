@@ -59,9 +59,9 @@
    "id": "mom_morning",
    "name": "母",
    "sprite": "mom",
-   "x": 8,
+   "x": 10,
    "y": 2,
-   "facing": "up",
+   "facing": "left",
    "script": "home_mom",
    "when": {
     "phase": [

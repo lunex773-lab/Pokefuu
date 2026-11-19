@@ -164,6 +164,47 @@ describe('マップ', async () => {
     }
   });
 
+  it('調べられる物はすべて、歩いて行けるマスから向き合える（NPCが道をふさいでいても）', () => {
+    for (const m of maps) {
+      const ground = m.ground.map((r) => [...r]);
+      const objects = m.objects.map((r) => [...r]);
+      for (const o of m.overrides ?? []) {
+        if (o.layer === 'ground') ground[o.y][o.x] = o.char;
+        if (o.layer === 'objects') objects[o.y][o.x] = o.char;
+      }
+      const npcTiles = new Set((m.npcs ?? []).map((n) => `${n.x},${n.y}`));
+      const solid = (x: number, y: number) => {
+        const g = ground[y]?.[x];
+        const o = objects[y]?.[x];
+        if (g === undefined || o === undefined) return true;
+        return !!(reg.tilesByChar.get(g)?.solid || reg.tilesByChar.get(o)?.solid) || npcTiles.has(`${x},${y}`);
+      };
+      // このマップへの到着地点（他マップのワープ先）から歩けるマス
+      const starts: [number, number][] = [];
+      for (const other of maps) for (const w of other.warps ?? []) if (w.to === m.id) starts.push([w.tx, w.ty]);
+      if (m.id === 'home') starts.push([4, 3]);
+      const seen = new Set<string>();
+      const q: [number, number][] = [];
+      for (const st of starts) {
+        seen.add(`${st[0]},${st[1]}`);
+        q.push(st);
+      }
+      while (q.length) {
+        const [x, y] = q.shift()!;
+        for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+          const k = `${x + dx},${y + dy}`;
+          if (seen.has(k) || solid(x + dx, y + dy)) continue;
+          seen.add(k);
+          q.push([x + dx, y + dy]);
+        }
+      }
+      for (const o of m.interactables ?? []) {
+        const ok = [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => seen.has(`${o.x + dx},${o.y + dy}`)) || seen.has(`${o.x},${o.y}`);
+        expect(ok, `${m.id}.${o.id} (${o.x},${o.y}) に近づけない`).toBe(true);
+      }
+    }
+  });
+
   it('朝霧町：家を出た地点から、学校・コンビニ・東の道へ歩いて行ける', () => {
     const town = byIdTown();
     const start = { x: 5, y: 17 };

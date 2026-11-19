@@ -29,9 +29,25 @@ const KEYMAP: Record<string, InputAction> = {
   KeyD: 'right',
 };
 
+const DIR_KEYS: Record<string, { x: number; y: number }> = {
+  ArrowUp: { x: 0, y: -1 },
+  KeyW: { x: 0, y: -1 },
+  ArrowDown: { x: 0, y: 1 },
+  KeyS: { x: 0, y: 1 },
+  ArrowLeft: { x: -1, y: 0 },
+  KeyA: { x: -1, y: 0 },
+  ArrowRight: { x: 1, y: 0 },
+  KeyD: { x: 1, y: 0 },
+};
+
 export class InputManager {
+  /** 移動方向（上下左右のいずれか。斜めにはならない） */
   readonly move = { x: 0, y: 0 };
+  /** 移動方向。押されていなければ null */
+  dir4: { x: number; y: number } | null = null;
   private held = new Set<string>();
+  /** 押された順の方向キー（最後に押したものを優先） */
+  private dirOrder: string[] = [];
   private stick = { x: 0, y: 0 };
   private touchDash = false;
   private stack: InputConsumer[] = [];
@@ -53,6 +69,10 @@ export class InputManager {
     if ((e.target as HTMLElement | null)?.tagName === 'INPUT') return;
     this.usingTouch = false;
     this.held.add(e.code);
+    if (DIR_KEYS[e.code] && !e.repeat) {
+      this.dirOrder = this.dirOrder.filter((c) => c !== e.code);
+      this.dirOrder.push(e.code);
+    }
     const a = KEYMAP[e.code];
     if (a) {
       e.preventDefault();
@@ -62,6 +82,7 @@ export class InputManager {
 
   private onKeyUp = (e: KeyboardEvent) => {
     this.held.delete(e.code);
+    this.dirOrder = this.dirOrder.filter((c) => c !== e.code);
   };
 
   push(c: InputConsumer): void {
@@ -89,32 +110,29 @@ export class InputManager {
     this.touchDash = on;
   }
 
-  /** 8方向の移動ベクトルを更新（毎フレーム） */
+  /** 上下左右の移動方向を更新（毎フレーム）。斜め入力は、最後に押した方向／スティックの強い方の軸を採用 */
   update(): void {
-    let x = 0;
-    let y = 0;
-    const h = (c: string) => this.held.has(c);
-    if (h('ArrowLeft') || h('KeyA')) x -= 1;
-    if (h('ArrowRight') || h('KeyD')) x += 1;
-    if (h('ArrowUp') || h('KeyW')) y -= 1;
-    if (h('ArrowDown') || h('KeyS')) y += 1;
-    if (x === 0 && y === 0 && (Math.abs(this.stick.x) > 0.25 || Math.abs(this.stick.y) > 0.25)) {
-      // スティックを8方向に量子化（BW2風の8方向歩行）
-      const ang = Math.atan2(this.stick.y, this.stick.x);
-      const oct = Math.round(ang / (Math.PI / 4));
-      x = Math.round(Math.cos((oct * Math.PI) / 4));
-      y = Math.round(Math.sin((oct * Math.PI) / 4));
+    let dir: { x: number; y: number } | null = null;
+    for (let i = this.dirOrder.length - 1; i >= 0; i--) {
+      if (this.held.has(this.dirOrder[i])) {
+        dir = DIR_KEYS[this.dirOrder[i]];
+        break;
+      }
     }
-    if (x !== 0 && y !== 0) {
-      x *= Math.SQRT1_2;
-      y *= Math.SQRT1_2;
+    if (!dir) {
+      const ax = Math.abs(this.stick.x);
+      const ay = Math.abs(this.stick.y);
+      if (Math.max(ax, ay) > 0.3) dir = ax >= ay ? { x: Math.sign(this.stick.x), y: 0 } : { x: 0, y: Math.sign(this.stick.y) };
     }
-    this.move.x = this.enabled ? x : 0;
-    this.move.y = this.enabled ? y : 0;
+    this.dir4 = this.enabled ? dir : null;
+    this.move.x = this.dir4?.x ?? 0;
+    this.move.y = this.dir4?.y ?? 0;
   }
 
   clearHeld(): void {
     this.held.clear();
+    this.dirOrder = [];
+    this.dir4 = null;
     this.stick.x = 0;
     this.stick.y = 0;
     this.touchDash = false;

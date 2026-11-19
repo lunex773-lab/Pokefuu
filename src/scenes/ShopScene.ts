@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { UI } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import { itemIconKey } from '@/render/TextureFactory';
 import { wrapText } from '@/ui/Dialogue';
@@ -29,15 +30,16 @@ export class ShopScene extends Phaser.Scene {
     const shop = reg.shops.get(data.shopId);
     const s = this.ctx.session;
     const sfx = (id: string) => this.ctx.audio.sfx(id);
-    this.add.rectangle(0, 0, 1920, 1080, 0x05040a, 0.8).setOrigin(0);
+    this.add.rectangle(0, 0, UI.W, UI.H, 0x05040a, 0.8).setOrigin(0);
+    const dx = (UI.W - 1920) / 2;
     const g = this.add.graphics();
-    drawPanel(g, 200, 80, 900, 920);
-    drawPanel(g, 1120, 80, 600, 920);
-    label(this, 240, 110, shop?.name ?? 'お店', Theme.size.l, Theme.color.accentSoft);
-    this.moneyText = label(this, 1060, 124, '', Theme.size.s, Theme.color.gold).setOrigin(1, 0);
-    this.detail = label(this, 1150, 120, '', Theme.size.s);
+    drawPanel(g, dx + 200, 80, 900, 920);
+    drawPanel(g, dx + 1120, 80, 600, 920);
+    label(this, dx + 240, 110, shop?.name ?? 'お店', Theme.size.l, Theme.color.accentSoft);
+    this.moneyText = label(this, dx + 1060, 124, '', Theme.size.s, Theme.color.gold).setOrigin(1, 0);
+    this.detail = label(this, dx + 1150, 120, '', Theme.size.s);
     const ids = shop?.items ?? [];
-    this.list = new ListView(this, 230, 220, 840, 96, 7, sfx);
+    this.list = new ListView(this, dx + 230, 220, 840, 96, 7, sfx);
     const render = (keep: boolean) => {
       this.moneyText.setText(`所持金 ${s.inventory.money}円`);
       this.list.setItems(
@@ -58,14 +60,14 @@ export class ShopScene extends Phaser.Scene {
     this.list.onSelect(this.list.selected!, 0);
     this.list.onCancel = close;
     this.qtyBg = this.add.graphics().setDepth(10);
-    this.qty = new ListView(this, 1180, 640, 480, 86, 3, sfx);
+    this.qty = new ListView(this, dx + 1180, 640, 480, 86, 3, sfx);
     this.qty.setDepth(11).setVisible(false);
     this.list.onConfirm = (_it, i) => {
       if (i >= ids.length) return close();
       const id = ids[i];
       const price = reg.item(id).price ?? 0;
       this.qtyBg.clear();
-      drawPanel(this.qtyBg, 1150, 600, 540, 320, { alpha: 0.98, border: Theme.color.borderHi });
+      drawPanel(this.qtyBg, dx + 1150, 600, 540, 320, { alpha: 0.98, border: Theme.color.borderHi });
       this.qty.setVisible(true);
       this.qty.setItems([
         { text: '1個', right: `${price}円`, disabled: price > s.inventory.money },

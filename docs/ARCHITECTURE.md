@@ -9,7 +9,7 @@ project_build の「Claudeへの要求」に沿って設計しています。
 | SOLID原則 | サービスは単一責任（Inventory / Party / Player / Flags …）。スクリプトコマンドはレジストリ登録式（開放閉鎖） |
 | イベント駆動 | 型付き `EventBus`。実績・統計・HUD・サウンドはイベント購読で動き、互いを直接参照しない |
 | ScriptableObject / DataAsset 相当 | 型付き JSON ＋ `DataRegistry`（参照窓口）。`tests/data.test.ts` で参照切れを検出 |
-| マルチプラットフォーム | Web 技術で実装。入力は `InputManager` で抽象化、保存先は `StorageAdapter` で差し替え可能 |
+| マルチプラットフォーム | Web 技術で実装。入力は `InputManager` で抽象化、保存先は `StorageAdapter` で差し替え可能。画面は高さ1080固定・幅は端末の縦横比で決定（`src/config/Screen.ts`）し、UI はセーフエリアの内側に置く |
 | スマホ60FPS維持 | ワールド解像度（640×360）でライティング、画面外の光源は描かない、FPS が落ちたら自動で画面エフェクトを無効化 |
 | メモリ最適化 | マップは章ごとに分割ビルド・遅延読み込み（直近4枚のみキャッシュ）。音声ファイルを持たない手続き生成オーディオ |
 | アニメーション管理 | 人物スプライトは `TextureFactory` で一括生成・アニメ登録（キー規約 `<sprite>_walk_<dir>`） |

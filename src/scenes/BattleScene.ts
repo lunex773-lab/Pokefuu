@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameConfig } from '@/config/GameConfig';
+import { UI } from '@/config/Screen';
 import type { GameContext } from '@/core/GameContext';
 import type { GameSession } from '@/core/GameSession';
 import { BattleEngine, resonanceSucceeds, type BattleEvent, type BattleHost, type Combatant, type KaiiAction, type PlayerAction } from '@/domain/battle/BattleEngine';
@@ -25,8 +26,26 @@ export interface BattleRequest {
 }
 
 const STAT_NAME: Record<string, string> = { atk: '攻撃', def: '守り', spd: '素早さ', mnd: '精神' };
-const ENEMY_X = [560, 960, 1360];
 const ENEMY_Y = 330;
+/** 画面幅に合わせたレイアウト（iPhone 横向きなどの横長画面でも崩れないように） */
+const layout = () => {
+  const cmdW = 510;
+  const cmdX = UI.R - cmdW;
+  const cardsY = UI.B - 250;
+  return {
+    enemyX: [UI.CX - 400, UI.CX, UI.CX + 400],
+    cmdX,
+    cmdW,
+    cmdY: 520,
+    cmdH: UI.B - 520,
+    cardsX: UI.L,
+    cardsY,
+    msgX: UI.L,
+    msgY: cardsY - 190,
+    msgW: cmdX - 30 - UI.L,
+  };
+};
+
 
 interface EnemyView {
   sprite: Phaser.GameObjects.Image;
@@ -99,7 +118,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
     this.ctx.bus.emit('battle:start', { encounterId: req.encounterId, boss: req.boss });
 
     const back = this.s.state.player.position.mapId.startsWith('back');
-    this.add.image(960, 540, back ? TEX.backdropBack : TEX.backdropReality).setDisplaySize(1920, 1080);
+    this.add.image(UI.CX, UI.H / 2, back ? TEX.backdropBack : TEX.backdropReality).setDisplaySize(UI.W, UI.H);
     if (this.renderer.type === Phaser.WEBGL) {
       this.cameras.main.setPostPipeline(DistortPipeline);
       this.fx = this.cameras.main.getPostPipeline(DistortPipeline) as DistortPipeline;
@@ -120,6 +139,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
   // ------------------------------------------------------------ 表示構築
 
   private buildEnemies(): void {
+    const ENEMY_X = layout().enemyX;
     this.engine.enemies.forEach((c, i) => {
       if (!c) return;
       const sp = this.ctx.reg.species(c.kaii.speciesId);
@@ -146,7 +166,8 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
 
   private buildAllies(): void {
     for (let i = 0; i < 3; i++) {
-      const box = this.add.container(30 + i * 445, 800).setDepth(5);
+      const lay = layout();
+      const box = this.add.container(lay.cardsX + i * 445, lay.cardsY).setDepth(5);
       const bg = this.add.graphics();
       const icon = this.add.image(84, 130, TEX.wisp, 'f0').setScale(2);
       const name = label(this, 170, 22, '', Theme.size.s);
@@ -162,15 +183,17 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
 
   private buildPanels(): void {
     const g = this.add.graphics().setDepth(4);
-    drawPanel(g, 30, 610, 1320, 170, { alpha: 0.85 });
-    this.msgText = this.add.text(64, 640, '', textStyle(Theme.size.m)).setDepth(5);
+    const lay = layout();
+    drawPanel(g, lay.msgX, lay.msgY, lay.msgW, 170, { alpha: 0.85 });
+    this.msgText = this.add.text(lay.msgX + 34, lay.msgY + 30, '', textStyle(Theme.size.m)).setDepth(5);
     const cg = this.add.graphics().setDepth(4);
-    drawPanel(cg, 1380, 520, 510, 540, { alpha: 0.9, border: Theme.color.borderHi });
-    this.cmdTitle = label(this, 1410, 540, '', Theme.size.s, Theme.color.accentSoft).setDepth(5);
-    this.cmdSub = label(this, 1410, 584, '', Theme.size.xs, Theme.color.dim).setDepth(5);
-    this.list = new ListView(this, 1400, 630, 470, 82, 5, (id) => this.ctx.audio.sfx(id));
+    drawPanel(cg, lay.cmdX, lay.cmdY, lay.cmdW, lay.cmdH, { alpha: 0.9, border: Theme.color.borderHi });
+    this.cmdTitle = label(this, lay.cmdX + 30, lay.cmdY + 20, '', Theme.size.s, Theme.color.accentSoft).setDepth(5);
+    this.cmdSub = label(this, lay.cmdX + 30, lay.cmdY + 64, '', Theme.size.xs, Theme.color.dim).setDepth(5);
+    const rows = Math.max(3, Math.floor((lay.cmdH - 130) / 82));
+    this.list = new ListView(this, lay.cmdX + 20, lay.cmdY + 110, lay.cmdW - 40, 82, rows, (id) => this.ctx.audio.sfx(id));
     this.list.setDepth(6);
-    const zone = this.add.zone(0, 0, 1380, 1080).setOrigin(0).setInteractive().setDepth(0);
+    const zone = this.add.zone(0, 0, lay.cmdX, UI.H).setOrigin(0).setInteractive().setDepth(0);
     zone.on('pointerup', () => this.skipWait?.());
   }
 
@@ -230,7 +253,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
   }
 
   private msg(text: string, hold = 900): Promise<void> {
-    this.msgText.setText(wrapText(text, Theme.size.m, 1240));
+    this.msgText.setText(wrapText(text, Theme.size.m, layout().msgW - 80));
     const ms = hold / this.ctx.settings.textSpeed;
     return new Promise((res) => {
       const t = this.time.delayedCall(ms, () => done());
@@ -415,7 +438,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
 
   private floatNumber(id: string, text: string, color: string): void {
     const v = this.viewFor(id);
-    const x = v.enemy ? v.enemy.sprite.x : v.card ? v.card.box.x + 215 : 960;
+    const x = v.enemy ? v.enemy.sprite.x : v.card ? v.card.box.x + 215 : UI.CX;
     const y = v.enemy ? v.enemy.sprite.y - 60 : v.card ? v.card.box.y : 540;
     const t = this.add.text(x, y, text, textStyle(Theme.size.l, color, { stroke: '#000000', strokeThickness: 8 })).setOrigin(0.5).setDepth(50);
     this.tweens.add({ targets: t, y: y - 70, alpha: 0, duration: 900, ease: 'Cubic.out', onComplete: () => t.destroy() });
@@ -447,7 +470,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
         case 'use': {
           const v = this.viewFor(e.actor);
           if (v.enemy) this.tweens.add({ targets: v.enemy.sprite, scale: v.enemy.sprite.scale * 1.08, yoyo: true, duration: 120 });
-          if (v.card) this.tweens.add({ targets: v.card.box, y: 780, yoyo: true, duration: 120 });
+          if (v.card) this.tweens.add({ targets: v.card.box, y: v.card.box.y - 20, yoyo: true, duration: 120 });
           await this.msg(`${nm(e.actor)}の${e.skillName}！`, 650);
           break;
         }
@@ -556,7 +579,7 @@ export class BattleScene extends Phaser.Scene implements InputConsumer {
     const v = this.viewFor(targetId);
     if (!v.enemy) return;
     const sprite = v.enemy.sprite;
-    const charm = this.add.rectangle(960, 1000, 26, 46, 0xf0e8d0).setStrokeStyle(3, 0xc02030).setDepth(40);
+    const charm = this.add.rectangle(UI.CX, UI.B - 60, 26, 46, 0xf0e8d0).setStrokeStyle(3, 0xc02030).setDepth(40);
     this.ctx.audio.sfx('seal_try');
     await new Promise<void>((res) => this.tweens.add({ targets: charm, x: sprite.x, y: sprite.y, angle: 720, duration: 500, ease: 'Cubic.out', onComplete: () => res() }));
     const baseScale = sprite.scale;

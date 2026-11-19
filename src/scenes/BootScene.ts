@@ -12,7 +12,7 @@ export class BootScene extends Phaser.Scene {
 
   create(): void {
     const ctx = this.registry.get('ctx') as GameContext;
-    const t = this.add.text(960, 540, 'Loading…', { fontFamily: 'sans-serif', fontSize: '40px', color: '#8f88a0' }).setOrigin(0.5);
+    const t = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Loading…', { fontFamily: 'sans-serif', fontSize: '40px', color: '#8f88a0' }).setOrigin(0.5);
     void (async () => {
       await loadFonts();
       await ctx.loadSettings();
