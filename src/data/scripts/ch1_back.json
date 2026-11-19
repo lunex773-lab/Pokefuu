@@ -385,6 +385,23 @@
      {
       "cmd": "say",
       "text": "……何か楽譜があれば、弾けるかもしれない。"
+     },
+     {
+      "cmd": "say",
+      "speaker": "ナナシ",
+      "text": "がくふ……したの、きょうしつ。……とびらの ちかくの つくえ。"
+     },
+     {
+      "cmd": "setFlag",
+      "key": "score_hint",
+      "value": true
+     },
+     {
+      "cmd": "toast",
+      "text": "1階の教室の机に、楽譜があるらしい"
+     },
+     {
+      "cmd": "refreshMap"
      }
     ]
    }

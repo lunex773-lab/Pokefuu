@@ -324,7 +324,7 @@ describe('ゲームセッション（サービス群）', () => {
     expect(s.player.resonancePower).toBeGreaterThan(0.015);
   });
 
-  it('御守りは所持数ぶんだけ持たせられる', () => {
+  it('御守りは持ち物から渡す：1つを何体にも渡せない。外すと戻る', () => {
     const s = make();
     const a = s.party.create('kiritsu', 5);
     const b = s.party.create('honemi', 5);
@@ -332,7 +332,30 @@ describe('ゲームセッション（サービス群）', () => {
     s.party.recruit(b);
     s.inventory.add('charm_bell', 1);
     expect(s.party.equipCharm(a, 'charm_bell', s.inventory)).toBe(true);
+    expect(s.inventory.count('charm_bell')).toBe(0);
     expect(s.party.equipCharm(b, 'charm_bell', s.inventory)).toBe(false);
+    expect(b.charm).toBeUndefined();
+    // 外すと持ち物に戻り、別の怪異に渡せる
+    expect(s.party.equipCharm(a, undefined, s.inventory)).toBe(true);
+    expect(s.inventory.count('charm_bell')).toBe(1);
+    expect(s.party.equipCharm(b, 'charm_bell', s.inventory)).toBe(true);
+    // 付け替えると、前の御守りは持ち物に戻る
+    s.inventory.add('charm_thread', 1);
+    expect(s.party.equipCharm(b, 'charm_thread', s.inventory)).toBe(true);
+    expect(s.inventory.count('charm_bell')).toBe(1);
+    expect(s.inventory.count('charm_thread')).toBe(0);
+  });
+
+  it('古いセーブ（v2）：持ち物に残っていた御守りを、持たせた怪異の分だけ取り出す', () => {
+    const st = createInitialState('t', 'male') as unknown as Record<string, unknown>;
+    st.version = 2;
+    st.inventory = { charm_bell: 1 };
+    st.party = [{ uid: 'a', charm: 'charm_bell' }, { uid: 'b', charm: 'charm_bell' }];
+    st.storage = [];
+    const m = migrations[2](st) as unknown as { inventory: Record<string, number>; party: { charm?: string }[]; version: number };
+    expect(m.version).toBe(3);
+    expect(m.inventory.charm_bell).toBeUndefined();
+    expect(m.party.map((k) => k.charm)).toEqual(['charm_bell', undefined]);
   });
 });
 

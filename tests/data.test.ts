@@ -439,6 +439,15 @@ describe('第1章の裏層（現実の校舎と同じ間取り）', async () => 
     expect(kinds.filter((k) => k === 'midboss').length).toBeGreaterThanOrEqual(2);
   });
 
+  it('楽譜は見つけられる：きらめき・ピアノでの手がかり・手がかり後の▼目印', () => {
+    const score = obj('back_school_1f', 'score');
+    expect(score.glint).toBe(true);
+    expect(score.marker).toEqual({ flag: 'score_hint' });
+    const text = JSON.stringify(reg.script('back_piano').commands);
+    expect(text).toContain('score_hint');
+    expect(text).toContain('きょうしつ');
+  });
+
   it('間取りが現実の校舎と同じ（部屋の位置で迷わない）', () => {
     for (const [back, real] of [['back_school_2f', 'school_2f'], ['back_school_1f', 'school_1f']]) {
       const b = maps.get(back)!;

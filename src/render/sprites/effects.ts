@@ -188,6 +188,15 @@ export function buildItemIcon(icon: string, category: string): HTMLCanvasElement
   return pc.toCanvas();
 }
 
+/** 拾える物のきらめき（十字の小さな光） */
+export function buildGlintTexture(): HTMLCanvasElement {
+  const pc = new PixelCanvas(9, 9);
+  pc.hline(0, 8, 4, '#fff6c0');
+  pc.vline(4, 0, 8, '#fff6c0');
+  pc.rect(3, 3, 3, 3, '#ffffff');
+  return pc.toCanvas();
+}
+
 /** 次に行く場所の目印（▼） */
 export function buildArrowTexture(): HTMLCanvasElement {
   const pc = new PixelCanvas(9, 7);

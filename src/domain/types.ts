@@ -328,6 +328,8 @@ export interface MapObject {
   revealFlag?: string;
   /** この条件のあいだ、頭上に「▼」の目印を出す（次に行く場所の案内） */
   marker?: Condition;
+  /** 拾える大事な物：小さくきらめかせて、そこに何かあると分かるようにする（when のあいだ） */
+  glint?: boolean;
   sprite?: string;
 }
 

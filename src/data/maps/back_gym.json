@@ -105,7 +105,8 @@
    "script": "back_gym_book",
    "when": {
     "notFlag": "got_book"
-   }
+   },
+   "glint": true
   },
   {
    "id": "storage",

@@ -76,7 +76,8 @@
    "script": "back_randoseru",
    "when": {
     "notFlag": "got_mem_randoseru"
-   }
+   },
+   "glint": true
   },
   {
    "id": "score",
@@ -86,6 +87,10 @@
    "when": {
     "notItem": "score_piece",
     "notFlag": "piano_played"
+   },
+   "glint": true,
+   "marker": {
+    "flag": "score_hint"
    }
   },
   {
@@ -117,7 +122,8 @@
    "script": "back_notebook",
    "when": {
     "notFlag": "got_notebook"
-   }
+   },
+   "glint": true
   },
   {
    "id": "candle_save",
@@ -218,6 +224,25 @@
    "kind": "midboss",
    "when": {
     "notFlag": "dribble_done"
+   }
+  },
+  {
+   "x": 10,
+   "y": 3,
+   "label": "楽譜の切れ端",
+   "kind": "event",
+   "when": {
+    "all": [
+     {
+      "flag": "score_hint"
+     },
+     {
+      "notItem": "score_piece"
+     },
+     {
+      "notFlag": "piano_played"
+     }
+    ]
    }
   }
  ]

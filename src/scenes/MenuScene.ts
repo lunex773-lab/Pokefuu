@@ -290,9 +290,10 @@ export class MenuScene extends Phaser.Scene {
     } else if (op === '御守りを持たせる') {
       const charms = s.inventory.list((id) => reg.item(id).equip?.slot === 'kaiiCharm');
       const items: ListItem[] = [{ text: '外す' }, ...charms.map((c) => ({ text: reg.item(c.id).name, sub: reg.item(c.id).description, right: `×${c.qty}` }))];
-      const ci = await this.popup('御守り', items);
+      const now = k.charm ? reg.item(k.charm).name : 'なし';
+      const ci = await this.popup(`御守り（いま：${now}）`, items);
       if (ci === 0) s.party.equipCharm(k, undefined, s.inventory);
-      else if (ci > 0 && !s.party.equipCharm(k, charms[ci - 1].id, s.inventory)) await this.popup('他の怪異が使っている', [{ text: 'OK' }]);
+      else if (ci > 0 && !s.party.equipCharm(k, charms[ci - 1].id, s.inventory)) await this.popup('その御守りを持っていない', [{ text: 'OK' }]);
     }
     this.pageParty(true);
   }

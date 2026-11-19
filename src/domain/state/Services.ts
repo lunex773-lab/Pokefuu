@@ -203,14 +203,18 @@ export class PartyService {
     return kaiiStats(this.reg, k).hp;
   }
 
+  /**
+   * 怪異に御守りを持たせる（undefined で外す）。
+   * 御守りは持ち物から取り出して渡すので、1つの御守りを何体にも渡すことはできない。外すと持ち物に戻る。
+   */
   equipCharm(k: KaiiData, itemId: string | undefined, inv: InventoryService): boolean {
+    if (itemId === k.charm) return true;
     if (itemId) {
       const def = this.reg.item(itemId);
       if (def.equip?.slot !== 'kaiiCharm') return false;
-      // 同じ御守りを複数体に付けるには所持数が必要
-      const used = [...this.state.party, ...this.state.storage].filter((x) => x.charm === itemId && x.uid !== k.uid).length;
-      if (inv.count(itemId) <= used) return false;
+      if (!inv.remove(itemId, 1)) return false;
     }
+    if (k.charm) inv.add(k.charm, 1);
     const before = kaiiStats(this.reg, k).hp;
     k.charm = itemId;
     const after = kaiiStats(this.reg, k).hp;

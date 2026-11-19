@@ -12,6 +12,7 @@ import {
   buildArrowTexture,
   buildShadowBlob,
   buildWindowGlowTexture,
+  buildGlintTexture,
 } from './sprites/effects';
 import { buildDistortionSprite, buildKaiiSprite, buildWispSheet } from './sprites/kaii';
 import { buildTileAtlas, type TileAtlas } from './sprites/tiles';
@@ -29,6 +30,7 @@ export const TEX = {
   distortion: 'distortion',
   arrow: 'fx_arrow',
   windowGlow: 'fx_window_glow',
+  glint: 'fx_glint',
   backdropReality: 'bg_reality',
   backdropBack: 'bg_back',
 } as const;
@@ -107,6 +109,7 @@ export class TextureFactory {
     this.addCanvas(TEX.shadow, buildShadowBlob());
     this.addCanvas(TEX.arrow, buildArrowTexture());
     this.addCanvas(TEX.windowGlow, buildWindowGlowTexture());
+    this.addCanvas(TEX.glint, buildGlintTexture());
     const bw = Math.round(this.scene.scale.width / 2);
     this.addCanvas(TEX.backdropReality, buildBattleBackdrop(bw, 540, false));
     this.addCanvas(TEX.backdropBack, buildBattleBackdrop(bw, 540, true));

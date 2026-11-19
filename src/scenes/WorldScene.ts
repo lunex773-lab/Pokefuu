@@ -308,6 +308,13 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       this.tweens.add({ targets: glow, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.inOut' });
       this.markers.push(glow);
     }
+    // 拾える大事な物のきらめき（暗闇の上に描くので、夜や裏層でも見える）
+    for (const o of this.mapDef.interactables ?? []) {
+      if (!o.glint || !s.check(o.when) || (o.hidden && !this.isRevealed(o))) continue;
+      const m = this.add.image((o.x + 0.5) * T + 6, (o.y + 0.5) * T - 6, TEX.glint).setDepth(9645).setBlendMode(Phaser.BlendModes.ADD).setAlpha(0);
+      this.tweens.add({ targets: m, alpha: { from: 0, to: 0.95 }, scale: { from: 0.4, to: 1 }, yoyo: true, repeat: -1, duration: 650, repeatDelay: 900, ease: 'Sine.inOut' });
+      this.markers.push(m);
+    }
     for (const o of this.mapDef.interactables ?? []) {
       if (!o.hidden || !this.isRevealed(o) || !s.check(o.when)) continue;
       const m = this.add.image((o.x + 0.5) * T, (o.y + 0.5) * T, TEX.distortion).setDepth(9600).setBlendMode(Phaser.BlendModes.ADD).setScale(0.6);

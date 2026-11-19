@@ -62,7 +62,7 @@ export interface GameState {
 
 export function createInitialState(name: string, gender: Gender): GameState {
   return {
-    version: 2,
+    version: 3,
     player: {
       name,
       gender,
