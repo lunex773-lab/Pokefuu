@@ -112,6 +112,44 @@
    {
     "cmd": "say",
     "text": "体が鉛のように重い。怪異たちも、ひどく消耗しているようだ。"
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "ch1_entered_back"
+      },
+      {
+       "notFlag": "ch1_clear"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "（……あの踊り場の鏡。あそこから、もう一度裏側の学校へ行けるはずだ）"
+     }
+    ]
+   },
+   {
+    "cmd": "if",
+    "when": {
+     "all": [
+      {
+       "flag": "ch2_entered_back"
+      },
+      {
+       "notFlag": "ch2_clear"
+      }
+     ]
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "text": "（……夕凪の古い家、板の隙間。あそこから、もう一度裏側へ行けるはずだ）"
+     }
+    ]
    }
   ]
  },

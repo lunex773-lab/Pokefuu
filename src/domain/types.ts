@@ -34,6 +34,9 @@ export interface Condition {
   notItem?: string;
   chapter?: string[];
   partySizeGte?: number;
+  /** flags[key] が今日の日付（ゲーム内の日）と同じ＝今日すでに済ませた（markToday で記録） */
+  today?: string;
+  notToday?: string;
   /** その怪異と共鳴済み（図鑑で「共鳴済」） */
   recruited?: string;
   notRecruited?: string;
@@ -392,6 +395,27 @@ export interface MapDef {
   music?: string;
   /** 夜（night / midnight）の BGM。省略時は music と同じ */
   musicNight?: string;
+}
+
+// ---------------------------------------------------------------- アルバイト（ミニゲーム）
+
+/** 品出しミニゲームのアルバイト */
+export interface ParttimeJobDef {
+  id: string;
+  name: string;
+  /** 経過する時間 */
+  hours: number;
+  /** 基本給と、正しく並べた1個あたりの給料 */
+  base: number;
+  perItem: number;
+  /** 並べる商品の数と制限時間（秒） */
+  rounds: number;
+  seconds: number;
+  /** 棚（最大3つ） */
+  shelves: string[];
+  goods: { name: string; shelf: number }[];
+  /** 不気味な商品（どの棚に置いても数に入らない） */
+  strange?: { name: string; when?: Condition; chance: number; text: string };
 }
 
 // ---------------------------------------------------------------- 音楽（BGM）

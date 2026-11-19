@@ -1,0 +1,38 @@
+[
+ {
+  "id": "conbini",
+  "name": "ヨツバマートの品出し",
+  "hours": 4,
+  "base": 600,
+  "perItem": 150,
+  "rounds": 12,
+  "seconds": 30,
+  "shelves": ["食べ物", "飲み物", "日用品・雑誌"],
+  "goods": [
+   { "name": "おにぎり", "shelf": 0 },
+   { "name": "メロンパン", "shelf": 0 },
+   { "name": "カップ麺", "shelf": 0 },
+   { "name": "からあげ弁当", "shelf": 0 },
+   { "name": "チョコ菓子", "shelf": 0 },
+   { "name": "サンドイッチ", "shelf": 0 },
+   { "name": "牛乳", "shelf": 1 },
+   { "name": "缶コーヒー", "shelf": 1 },
+   { "name": "ラムネ", "shelf": 1 },
+   { "name": "緑茶", "shelf": 1 },
+   { "name": "スポーツドリンク", "shelf": 1 },
+   { "name": "いちごオレ", "shelf": 1 },
+   { "name": "週刊誌", "shelf": 2 },
+   { "name": "乾電池", "shelf": 2 },
+   { "name": "歯ブラシ", "shelf": 2 },
+   { "name": "ばんそうこう", "shelf": 2 },
+   { "name": "ビニール傘", "shelf": 2 },
+   { "name": "マンガ雑誌", "shelf": 2 }
+  ],
+  "strange": {
+   "name": "名札のない商品",
+   "when": { "flag": "ch1_entered_back" },
+   "chance": 0.35,
+   "text": "……棚に並べたはずの『名札のない商品』が、いつの間にか消えていた。伝票にも、そんな商品は載っていない。"
+  }
+ }
+]

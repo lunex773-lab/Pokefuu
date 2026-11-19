@@ -15,7 +15,7 @@ export const SCRIPT_COMMANDS = [
   // 施設・休息
   'shop', 'saveMenu', 'autosave', 'parttime', 'sleep', 'heal', 'rest', 'healFull',
   // 状態
-  'setFlag', 'clearFlag', 'incFlag', 'giveItem', 'takeItem', 'money', 'memory', 'setTime', 'advanceTime',
+  'setFlag', 'clearFlag', 'incFlag', 'markToday', 'giveItem', 'takeItem', 'money', 'memory', 'setTime', 'advanceTime',
   'setWeather', 'unlockWeather', 'chapter', 'playerExp', 'sanity', 'achievement', 'refreshMap', 'ending',
 ] as const;
 

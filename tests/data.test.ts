@@ -364,6 +364,59 @@ describe('イベントスクリプト', () => {
   });
 });
 
+describe('裏層で負けても詰まない', () => {
+  it('現実から裏層へ入る場所は、一度入ったあとは何度でも入り直せて、目印が出る', async () => {
+    const backMaps = new Set<string>();
+    const ids = mapIds();
+    const maps = await Promise.all(ids.map(loadMap));
+    for (const m of maps) if (m.layer === 'back') backMaps.add(m.id);
+    let entrances = 0;
+    for (const m of maps.filter((x) => x.layer === 'reality')) {
+      for (const o of m.interactables ?? []) {
+        const cmds = reg.script(o.script).commands;
+        const warpsBack = (list: ScriptCommand[]): boolean => {
+          let hit = false;
+          walk(list, (c) => {
+            if (c.cmd === 'warp' && backMaps.has(String(c.map))) hit = true;
+          });
+          return hit;
+        };
+        if (!warpsBack(cmds)) continue;
+        // 「〜_entered_back」のときに裏層へ行ける分岐がある
+        const reentry = cmds.find((c) => c.cmd === 'if' && String((c.when as Condition)?.flag ?? '').endsWith('_entered_back'));
+        if (!reentry) continue; // 初回イベントだけの入口（湊との踊り場など）は別の場所で入り直す
+        entrances++;
+        expect(warpsBack(reentry.then as ScriptCommand[]), `${m.id}:${o.id}`).toBe(true);
+        const sibling = (m.interactables ?? []).filter((x) => x.script === o.script);
+        expect(sibling.some((x) => !!x.marker), `${m.id}:${o.id} に目印がない`).toBe(true);
+      }
+    }
+    expect(entrances).toBeGreaterThanOrEqual(2);
+  });
+
+  it('負けて目覚めたとき、入り直す場所を思い出させる', () => {
+    const text = JSON.stringify(reg.script('on_defeat').commands);
+    expect(text).toContain('ch1_entered_back');
+    expect(text).toContain('ch2_entered_back');
+  });
+});
+
+describe('アルバイト', () => {
+  it('品出しの商品はすべて棚があり、1日1回になっている', () => {
+    for (const j of reg.data.parttime) {
+      expect(j.shelves.length).toBeGreaterThanOrEqual(2);
+      expect(j.shelves.length).toBeLessThanOrEqual(3);
+      for (const g of j.goods) expect(g.shelf >= 0 && g.shelf < j.shelves.length, `${j.id} ${g.name}`).toBe(true);
+    }
+    for (const s of reg.allScripts()) {
+      const text = JSON.stringify(s.commands);
+      if (!text.includes('"parttime"')) continue;
+      expect(text, s.id).toContain('markToday');
+      expect(text, s.id).toContain('"today"');
+    }
+  });
+});
+
 describe('世界観ルール', () => {
   it('タイプは World Bible の7感情', () => {
     expect(reg.data.types.map((t) => t.name).sort()).toEqual(['孤独', '恐怖', '怒り', '執着', '嫉妬', '絶望', '罪悪感'].sort());

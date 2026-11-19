@@ -7,6 +7,8 @@ import type { InputAction, InputConsumer } from '@/input/InputManager';
 import { ChoiceBox, DialogueBox, wrapText } from '@/ui/Dialogue';
 import { textStyle, Theme } from '@/ui/Theme';
 import { showResonance } from '@/ui/Resonance';
+import { runShelfGame } from '@/ui/ShelfGame';
+import type { ShelvingGame } from '@/domain/minigame/Shelving';
 import { drawPanel, Gauge, label } from '@/ui/Widgets';
 
 export const isTouchDevice = (): boolean => 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -338,5 +340,11 @@ export class UIScene extends Phaser.Scene {
   /** 共鳴：怪異の声を聞き、応える */
   resonance(spriteKey: string, name: string, prompt: string, options: string[]): Promise<number> {
     return showResonance(this, this.ctx.input, (id) => this.ctx.audio.sfx(id), spriteKey, name, prompt, options);
+  }
+
+  /** アルバイトの品出しミニゲーム */
+  shelfGame(game: ShelvingGame): Promise<void> {
+    this.closeDialogue();
+    return runShelfGame(this, game, this.ctx.input, (id) => this.ctx.audio.sfx(id));
   }
 }

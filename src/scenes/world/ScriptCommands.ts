@@ -1,6 +1,7 @@
 import { healFull, kaiiStats, MAX_EN } from '@/domain/creature/Kaii';
 import { SCRIPT_COMMANDS } from '@/domain/script/commands';
 import { formatText } from '@/domain/script/format';
+import { ShelvingGame } from '@/domain/minigame/Shelving';
 import type { ScriptRunner } from '@/domain/script/ScriptRunner';
 import type { Direction, ScriptCommand, WeatherId } from '@/domain/types';
 import type { WorldScene } from '../WorldScene';
@@ -139,20 +140,26 @@ export function registerScriptCommands(runner: ScriptRunner, w: WorldScene): voi
     await w.openMenu('save');
   });
   runner.register('autosave', async () => w.autosave());
+  // アルバイト：品出しミニゲームの出来で給料が決まる（1日1回は台本側で markToday / notToday を使う）
   runner.register('parttime', async (c) => {
     visual();
-    const hours = num(c.hours, 4);
-    const pay = num(c.pay, 2400);
-    await ui().fade('black', 500);
-    await ui().say(undefined, '……レジ打ち、品出し、掃除。');
-    s().clock.advance(hours * 60);
+    const job = w.ctx.reg.parttime.get(str(c.job, 'conbini'));
+    if (!job) return;
+    const strangeOk = !!job.strange && s().check(job.strange.when);
+    const game = new ShelvingGame(job, w.ctx.rng, strangeOk);
+    await ui().shelfGame(game);
+    const pay = game.pay();
+    await ui().fade('black', 400);
+    s().clock.advance(job.hours * 60);
     s().inventory.addMoney(pay);
+    if (game.sawStrange) s().player.addSanity(-3);
     w.ctx.bus.emit('parttime:done', { earned: pay });
     w.ctx.audio.sfx('item');
-    ui().closeDialogue();
     await ui().fade('clear', 500);
     ui().toast(`${pay}円 を受け取った`);
   });
+  // 「今日やった」を記録する（条件 today / notToday で1日1回にできる）
+  runner.register('markToday', (c) => s().flags.set(str(c.key), s().state.clock.day));
   runner.register('sleep', async () => {
     visual();
     await ui().fade('black', 800);

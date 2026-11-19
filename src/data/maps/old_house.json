@@ -62,7 +62,17 @@
    "id": "boarded",
    "x": 7,
    "y": 1,
-   "script": "old_house_boarded"
+   "script": "old_house_boarded",
+   "marker": {
+    "all": [
+     {
+      "flag": "ch2_entered_back"
+     },
+     {
+      "notFlag": "ch2_clear"
+     }
+    ]
+   }
   },
   {
    "id": "boarded2",

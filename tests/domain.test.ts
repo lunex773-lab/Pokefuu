@@ -17,6 +17,7 @@ import { formatText } from '@/domain/script/format';
 import { phaseAt } from '@/domain/world/Clock';
 import { noteToMidi, parseSequence, resolveAreaMusic, sequenceUnits } from '@/domain/audio/music';
 import { describeSkill, typeMatchups } from '@/domain/creature/describe';
+import { ShelvingGame } from '@/domain/minigame/Shelving';
 
 const reg = createRegistry();
 let uid = 0;
@@ -509,5 +510,55 @@ describe('技・相性の説明', () => {
     expect(m.weak.length + m.resist.length).toBeGreaterThan(0);
     for (const t of m.weak) expect(typeMultiplier(reg.data.typeChart, t, ['fear'])).toBeGreaterThan(1);
     for (const t of m.resist) expect(typeMultiplier(reg.data.typeChart, t, ['fear'])).toBeLessThan(1);
+  });
+});
+
+describe('アルバイト（品出しミニゲーム）', () => {
+  const job = reg.parttime.get('conbini')!;
+
+  it('決められた数の商品が出て、正しく並べた数で給料が決まる', () => {
+    const g = new ShelvingGame(job, new SeededRng(3), false);
+    expect(g.goods.length).toBe(job.rounds);
+    let i = 0;
+    while (!g.done) {
+      const cur = g.current!;
+      // 半分だけ正解する
+      g.answer(i++ % 2 === 0 ? cur.shelf : (cur.shelf + 1) % job.shelves.length);
+    }
+    expect(g.correct).toBe(Math.ceil(job.rounds / 2));
+    expect(g.pay()).toBe(job.base + g.correct * job.perItem);
+  });
+
+  it('全問正解でも以前の固定給（2400円）を超えない', () => {
+    const g = new ShelvingGame(job, new SeededRng(4), false);
+    while (!g.done) g.answer(g.current!.shelf);
+    expect(g.pay()).toBeLessThanOrEqual(2400);
+  });
+
+  it('不気味な商品は、どの棚に置いても数に入らない', () => {
+    let found = false;
+    for (let seed = 0; seed < 40 && !found; seed++) {
+      const g = new ShelvingGame(job, new SeededRng(seed), true);
+      const k = g.goods.findIndex((x) => x.shelf < 0);
+      if (k < 0) continue;
+      found = true;
+      while (!g.done) g.answer(g.current!.shelf < 0 ? 0 : g.current!.shelf);
+      expect(g.sawStrange).toBe(true);
+      expect(g.correct).toBe(job.rounds - 1);
+    }
+    expect(found).toBe(true);
+  });
+});
+
+describe('条件：今日やったかどうか', () => {
+  it('markToday で記録した日だけ today が真になる', () => {
+    const st = createInitialState('テスト', 'male');
+    const ctx = { state: st, phase: 'day' as const };
+    expect(evaluate({ today: 'parttime_day' }, ctx)).toBe(false);
+    expect(evaluate({ notToday: 'parttime_day' }, ctx)).toBe(true);
+    st.flags.parttime_day = st.clock.day;
+    expect(evaluate({ today: 'parttime_day' }, ctx)).toBe(true);
+    st.clock.day += 1;
+    expect(evaluate({ today: 'parttime_day' }, ctx)).toBe(false);
   });
 });

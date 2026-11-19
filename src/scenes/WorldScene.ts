@@ -198,7 +198,11 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
     const cam = this.cameras.main;
     const mw = this.map.widthPx;
     const mh = this.map.heightPx;
-    cam.setBounds(mw < viewW ? -(viewW - mw) / 2 : 0, mh < viewH ? -(viewH - mh) / 2 : 0, Math.max(mw, viewW), Math.max(mh, viewH));
+    // 画面上部の表示（場所・正気度・メニュー）の下にマップの最上段が隠れないよう、上に少し余白をとって見せられるようにする
+    const padTop = Math.ceil(120 / GameConfig.worldZoom);
+    const by = mh + padTop <= viewH ? -Math.max((viewH - mh) / 2, padTop) : -padTop;
+    const bh = mh + padTop <= viewH ? viewH : mh + padTop;
+    cam.setBounds(mw < viewW ? -(viewW - mw) / 2 : 0, by, Math.max(mw, viewW), bh);
     cam.startFollow(this.player.sprite, true, 0.18, 0.18, 0, 12);
     cam.centerOn(this.player.x, this.player.y);
     this.insideTriggers.clear();
@@ -290,6 +294,16 @@ export class WorldScene extends Phaser.Scene implements InputConsumer {
       const m = this.add.image((o.x + 0.5) * T, o.y * T - 4, TEX.arrow).setDepth(9650);
       this.tweens.add({ targets: m, y: m.y - 5, yoyo: true, repeat: -1, duration: 450, ease: 'Sine.inOut' });
       this.markers.push(m);
+      // 物そのものも淡く明滅させる（▼が画面上部の表示に隠れても分かるように。夜でも見える）
+      const glow = this.add
+        .image((o.x + 0.5) * T, (o.y + 0.5) * T, TEX.light)
+        .setBlendMode(Phaser.BlendModes.ADD)
+        .setTint(0xffe080)
+        .setScale(0.38)
+        .setDepth(9640)
+        .setAlpha(0.15);
+      this.tweens.add({ targets: glow, alpha: 0.55, yoyo: true, repeat: -1, duration: 900, ease: 'Sine.inOut' });
+      this.markers.push(glow);
     }
     for (const o of this.mapDef.interactables ?? []) {
       if (!o.hidden || !this.isRevealed(o) || !s.check(o.when)) continue;

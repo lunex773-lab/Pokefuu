@@ -12,6 +12,7 @@ import type {
   MemoryDef,
   MusicTrackDef,
   NpcSpriteDef,
+  ParttimeJobDef,
   RecipeDef,
   ScriptDef,
   ShopDef,
@@ -49,6 +50,7 @@ export interface GameData {
   npcSprites: NpcSpriteDef[];
   music: MusicTrackDef[];
   traits: TraitDef[];
+  parttime: ParttimeJobDef[];
 }
 
 export type MapLoader = (id: string) => Promise<MapDef>;
@@ -85,6 +87,7 @@ export class DataRegistry {
   readonly npcSprites: Map<string, NpcSpriteDef>;
   readonly music: Map<string, MusicTrackDef>;
   readonly traits: Map<string, TraitDef>;
+  readonly parttime: Map<string, ParttimeJobDef>;
   private scripts = new Map<string, ScriptDef>();
   private mapCache = new Map<string, MapDef>();
 
@@ -108,6 +111,7 @@ export class DataRegistry {
     this.npcSprites = indexBy(data.npcSprites, 'npcSprite');
     this.music = indexBy(data.music, 'music');
     this.traits = indexBy(data.traits, 'trait');
+    this.parttime = indexBy(data.parttime, 'parttime');
     this.tilesByChar = new Map();
     for (const t of data.tiles) {
       if (this.tilesByChar.has(t.char)) throw new Error(`[DataRegistry] duplicate tile char: ${t.char}`);

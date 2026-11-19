@@ -65,7 +65,9 @@
 
 ## 条件式（`when`）
 
-`flag` / `notFlag` / `flagGte` / `phase` / `notPhase` / `weather` / `notWeather` / `hasItem` / `notItem` / `chapter` / `partySizeGte` / `all` / `any`
+`flag` / `notFlag` / `flagGte` / `phase` / `notPhase` / `weather` / `notWeather` / `hasItem` / `notItem` / `chapter` / `partySizeGte` / `recruited` / `notRecruited` / `today` / `notToday` / `all` / `any`
+
+`today` / `notToday` は「その日にもう済ませたか」。台本で `{ "cmd": "markToday", "key": "parttime_day" }` と記録し、`{ "today": "parttime_day" }` で1日1回の制限をかける。
 
 ```json
 { "all": [ { "flag": "class_done" }, { "phase": ["evening", "night"] } ] }
@@ -87,7 +89,7 @@
 使えるコマンドの一覧は `src/domain/script/commands.ts`、実装は `src/scenes/world/ScriptCommands.ts` にあります。
 主なもの：`say` `choice` `if` `call` `end` `fade` `wait` `shake` `flash` `distort` `sfx` `title` `toast`
 `warp` `moveNpc` `hideNpc` `battle` `recruit` `resonanceTalk` `shop` `saveMenu` `autosave` `sleep` `parttime`
-`setFlag` `incFlag` `giveItem` `takeItem` `memory` `setTime` `setWeather` `sanity` `playerExp` `refreshMap` `music`
+`setFlag` `incFlag` `markToday` `giveItem` `takeItem` `memory` `setTime` `setWeather` `sanity` `playerExp` `refreshMap` `music`
 
 `{name}` は主人公の名前に置き換わります。
 
@@ -107,6 +109,7 @@
 | `json/memories.json` / `glossary.json` / `chapters.json` / `endings.json` | 記憶片・用語辞典・章・エンディング |
 | `json/npcSprites.json` | 人物の見た目（髪型・服の色など）→ ドット絵を自動生成 |
 | `json/music.json` | BGM（下記） |
+| `json/parttime.json` | アルバイトの品出しミニゲーム（棚・商品・制限時間・給料。不気味な商品の出る条件） |
 
 ## BGM を追加する（`json/music.json`）
 

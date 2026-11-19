@@ -17,26 +17,45 @@
   "id": "conbini_manager",
   "commands": [
    {
+    "cmd": "if",
+    "when": {
+     "today": "parttime_day"
+    },
+    "then": [
+     {
+      "cmd": "say",
+      "speaker": "店長",
+      "text": "今日はもう上がっていいよ、{name}さん。また明日シフトお願いね。"
+     },
+     {
+      "cmd": "end"
+     }
+    ]
+   },
+   {
     "cmd": "say",
     "speaker": "店長",
-    "text": "お、{name}さん。今日もシフト入れる？ 4時間で2400円だよ。"
+    "text": "お、{name}さん。今日もシフト入れる？ 品出しを手伝ってくれたら、並べた分だけ色をつけるよ。"
    },
    {
     "cmd": "choice",
-    "prompt": "アルバイトする？（4時間経過）",
+    "prompt": "アルバイトする？（1日1回・4時間経過）",
     "options": [
      {
       "text": "働く",
       "then": [
        {
+        "cmd": "markToday",
+        "key": "parttime_day"
+       },
+       {
         "cmd": "parttime",
-        "hours": 4,
-        "pay": 2400
+        "job": "conbini"
        },
        {
         "cmd": "say",
         "speaker": "店長",
-        "text": "お疲れさま！ 助かったよ。"
+        "text": "お疲れさま！ 助かったよ。また明日もよろしくね。"
        }
       ]
      },

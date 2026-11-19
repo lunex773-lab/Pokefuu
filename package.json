@@ -1,7 +1,7 @@
 {
   "name": "pokefuu",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Project Phantom（仮）— Psychological Horror Creature RPG",
   "type": "module",
   "scripts": {
